@@ -110,6 +110,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (max-width: 600px) {
   .hero__bg iframe { transform: translate(-50%, -50%) scale(2.8); }
 }
+/* Hero overlay system:
+   - ::after = full vignette + bottom fade to black bg
+   - ::before = solid bottom curtain to hide YouTube progress bar
+   - .hero__bg-shield = transparent click/touch shield over iframe
+   - .hero__bg-center-mask = subtle dark veil at center to hide YT's giant Play button
+     when autoplay is blocked (mobile Safari, etc.) */
 .hero__bg::after {
   content: "";
   position: absolute; inset: 0;
@@ -117,6 +123,33 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     radial-gradient(ellipse at center, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.7) 100%),
     linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 50%, var(--bg) 100%);
   z-index: 1;
+}
+.hero__bg::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 30%, var(--bg) 75%, var(--bg) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+@media (max-width: 900px) {
+  .hero__bg::before { height: 100px; }
+}
+.hero__bg-center-mask {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  /* size of YT's giant centered Play button + halo */
+  width: 220px; height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0) 80%);
+  z-index: 1;
+  pointer-events: none;
+  filter: blur(20px);
+}
+@media (max-width: 600px) {
+  .hero__bg-center-mask { width: 280px; height: 200px; }
 }
 /* fully transparent click/scroll/touch shield over the YT iframe so no controls
    surface or get tapped if the inflate-scale ever leaves a sliver visible */
@@ -460,7 +493,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .info-headline em { font-style: normal; color: var(--fg-dim); font-weight: 900; }
 .info-headline .yellow { color: var(--yellow); }
-.info-portrait { grid-area: portrait; align-self: stretch; }
+.info-portrait { grid-area: portrait; align-self: start; }
 .info-portrait__frame {
   position: sticky;
   top: 100px;
@@ -918,8 +951,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
   .marquee { padding: 28px 0; }
   .marquee__track { gap: 44px; animation-duration: 35s; }
-  .logo { font-size: 16px; height: 26px; }
+  .logo { font-size: 16px; height: 32px; }
   .logo.upper { font-size: 12px; }
+  /* mobile: keep image logos generously sized so they're recognisable */
+  .logo--img { height: 36px; padding: 0 4px; }
+  .logo--img img { max-height: 36px; }
 
   .films { grid-template-columns: 1fr; gap: 22px; }
   .film__caption { padding: 12px 2px 0; }
@@ -1020,6 +1056,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       allow="autoplay; encrypted-media"
       title="Showreel background"
       tabindex="-1"></iframe>
+    <div class="hero__bg-center-mask" aria-hidden="true"></div>
     <div class="hero__bg-shield"></div>
   </div>
   <h1 class="hero__title">
@@ -1148,7 +1185,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       <h4>Kontakt</h4>
       <a href="tel:+4901746379751">0049 0174 637 9751</a>
       <a href="#" class="foot__copy" id="copyEmail" title="Click to copy">
-        nikokarasek.tv@gmail.com
+        <span class="__cf_email__" data-cfemail="0f61666460646e7d6e7c6a64217b794f68626e6663216c6062">[email&#160;protected]</span>
         <span class="foot__copy-tag" id="copyTag">Copy</span>
       </a>
       <h4 class="foot__col-h2">Social Media</h4>
@@ -1181,7 +1218,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ---------- DATA ---------- */
 const ROTATING_WORDS = ["Reportagen", "Fernsehen", "Russland Experte", "Keynote Speaker"];
 
