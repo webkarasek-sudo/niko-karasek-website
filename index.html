@@ -1,0 +1,1454 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Niko Karasek — Reportagen, Fernsehen, Russland Experte</title>
+<style>
+/* ============ TOKENS ============ */
+:root {
+  --bg: #000000;
+  --bg-2: #0d0d0d;
+  --bg-3: #161616;
+  --card: #1a1a1a;
+  --fg: #ffffff;
+  --fg-dim: #b8b8b8;
+  --fg-mute: #6e6e6e;
+  --line: #262626;
+  --yellow: #f5f000;
+  --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--fg); }
+body {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* ============ NAV ============ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 32px;
+}
+.nav__brand {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  background: var(--bg);
+  padding: 4px 8px;
+}
+.nav__right { display: flex; align-items: center; gap: 12px; }
+.nav__menu-pill {
+  display: flex;
+  background: #fff;
+  color: #000;
+  border-radius: 999px;
+  padding: 6px;
+  gap: 4px;
+}
+.nav__menu-pill button {
+  padding: 8px 18px;
+  border-radius: 999px;
+  color: #000;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  transition: background 0.25s, color 0.25s;
+}
+.nav__hamburger { display: none; }
+.nav__menu-pill button:hover { background: rgba(0,0,0,0.06); }
+.nav__menu-pill button.active { background: #000; color: #fff; }
+.nav__menu-pill button.active:hover { background: #000; }
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 60px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero__bg {
+  position: absolute; inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero__bg iframe {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 177.78vh;
+  min-width: 100%;
+  height: 56.25vw;
+  min-height: 100%;
+  /* Inflate to crop YouTube's player chrome (bottom bar, title) out of view */
+  transform: translate(-50%, -50%) scale(1.35);
+  border: 0;
+  pointer-events: none;
+}
+.hero__bg::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at center, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.7) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 50%, var(--bg) 100%);
+  z-index: 1;
+}
+.hero__title {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+.hero__title .yellow { color: var(--yellow); }
+.hero__name { display: block; }
+.rotating { display: block; vertical-align: top; }
+.rotating.out .rotate-letter {
+  animation: letterOut 0.4s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+  animation-delay: calc(var(--d, 0ms) * 0.3);
+}
+@keyframes letterOut {
+  0%   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  100% { opacity: 0; transform: translateY(-0.4em); filter: blur(6px); }
+}
+.hero__title .word { display: inline-block; white-space: nowrap; }
+.letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.5em);
+  filter: blur(8px);
+  animation: letterIn 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes letterIn {
+  0%   { opacity: 0; transform: translateY(0.5em); filter: blur(8px); }
+  60%  { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+.hero__reel {
+  margin-top: 28px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards;
+  animation-delay: 1.4s;
+}
+.hero__reel-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  font-weight: 600;
+}
+.hero__reel-btn {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 1.5px solid var(--fg);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+}
+.hero__reel-btn:hover { background: var(--fg); }
+.hero__reel-btn:hover::after { border-left-color: #000; }
+.hero__reel-btn::after {
+  content: "";
+  border-style: solid;
+  border-width: 8px 0 8px 13px;
+  border-color: transparent transparent transparent var(--fg);
+  margin-left: 4px;
+  transition: border-color 0.3s;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ MARQUEE ============ */
+.marquee {
+  padding: 56px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: scroll 45s linear infinite;
+  gap: 80px;
+  align-items: center;
+}
+.marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.logo {
+  flex: 0 0 auto;
+  height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: var(--fg-dim);
+  opacity: 0.55;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  text-transform: lowercase;
+}
+.logo.upper { text-transform: uppercase; letter-spacing: 0.04em; font-size: 14px; }
+.logo.thin { font-weight: 600; font-size: 16px; letter-spacing: 0.02em; }
+.logo.serif-y { font-family: Georgia, serif; font-style: italic; font-weight: 400; font-size: 18px; }
+.logo:hover { opacity: 1; color: var(--fg); }
+.logo--img { height: 40px; padding: 0 6px; }
+.logo--img img {
+  height: 100%; width: auto;
+  max-height: 40px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.logo--img:hover img { opacity: 1; transform: scale(1.05); }
+
+/* ============ LIGHTBOX ============ */
+.lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s;
+  padding: 24px;
+}
+.lightbox.in { opacity: 1; }
+.lightbox__inner {
+  position: relative;
+  width: min(1200px, 100%);
+  aspect-ratio: 16/9;
+}
+.lightbox__inner iframe {
+  width: 100%; height: 100%;
+  border: 0;
+  background: #000;
+}
+.lightbox__yt-fallback {
+  position: absolute;
+  bottom: -44px; left: 0;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.lightbox__yt-fallback:hover {
+  color: #000;
+  background: var(--yellow);
+  border-color: var(--yellow);
+}
+.lightbox__close {
+  position: absolute;
+  top: -44px; right: -4px;
+  width: 36px; height: 36px;
+  background: var(--yellow);
+  color: #000;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ============ SECTIONS ============ */
+.section { padding: 60px 32px; }
+.section__title {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: clamp(28px, 3.5vw, 40px);
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+  color: var(--fg);
+}
+
+/* ============ FILMS GRID ============ */
+.films {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.film {
+  position: relative;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(.2,.7,.1,1), transform 0.9s cubic-bezier(.2,.7,.1,1);
+}
+.film.in { opacity: 1; transform: translateY(0); }
+.film__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--card);
+  transition: transform 0.5s cubic-bezier(.2,.7,.1,1);
+}
+.film:hover .film__media { transform: scale(1.03); }
+.film__placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #1a1a1a 0 14px, #222 14px 28px);
+}
+.film__placeholder span {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+  font-weight: 600;
+}
+.film__broadcaster {
+  position: absolute;
+  top: 10px; left: 10px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  border-radius: 2px;
+  z-index: 2;
+}
+.film__broadcaster.arte::before { content: "arte"; }
+.film__broadcaster.ntv::before { content: "n-tv"; }
+.film__broadcaster.ard::before { content: "ARD"; letter-spacing: 0.08em; }
+.film__broadcaster.zdf::before { content: "ZDF"; letter-spacing: 0.06em; }
+.film__broadcaster.galileo::before { content: "Galileo"; text-transform: none; }
+.film__broadcaster.sterntv::before { content: "Stern TV"; text-transform: none; }
+
+.film__media img.film__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.film__runtime {
+  position: absolute;
+  bottom: 10px; right: 10px;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border-radius: 2px;
+  z-index: 2;
+  font-variant-numeric: tabular-nums;
+}
+.film__play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.85);
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 3;
+  opacity: 0.85;
+  transition: opacity 0.3s, background 0.3s;
+}
+.film:hover .film__play { opacity: 1; background: rgba(0,0,0,0.7); }
+.film__play::after {
+  content: "";
+  border-style: solid;
+  border-width: 6px 0 6px 9px;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 2px;
+}
+.film__caption { padding: 12px 4px 0; }
+.film__title {
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--fg);
+  letter-spacing: -0.005em;
+  margin-bottom: 4px;
+}
+.film__year { font-size: 11px; color: var(--fg-mute); font-weight: 600; }
+
+/* ============ INFO ============ */
+.info-section { padding: 100px 32px 80px; }
+.info-grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  grid-template-areas:
+    "eyebrow   eyebrow"
+    "headline  portrait"
+    "story     portrait"
+    "stats     stats"
+    "timeline  timeline";
+  gap: 48px 56px;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+.info-eyebrow {
+  grid-area: eyebrow;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.info-eyebrow__dot { width: 8px; height: 8px; background: var(--yellow); border-radius: 50%; }
+.info-headline {
+  grid-area: headline;
+  font-weight: 900;
+  font-size: clamp(36px, 4.6vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+.info-headline em { font-style: normal; color: var(--fg-dim); font-weight: 900; }
+.info-headline .yellow { color: var(--yellow); }
+.info-portrait { grid-area: portrait; align-self: stretch; }
+.info-portrait__frame {
+  position: sticky;
+  top: 100px;
+  aspect-ratio: 4/5;
+  background:
+    radial-gradient(ellipse at 50% 30%, #2a2520 0%, transparent 60%),
+    repeating-linear-gradient(45deg, #1a1a1a 0 14px, #222 14px 28px);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.info-portrait__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(.2,.7,.1,1);
+}
+.info-portrait__frame:hover .info-portrait__img { transform: scale(1.04); }
+.info-portrait__placeholder {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--fg-mute);
+  font-weight: 700;
+}
+.info-portrait__tag {
+  position: absolute;
+  bottom: 16px; left: 16px;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.info-portrait__tag .dot {
+  width: 7px; height: 7px;
+  background: var(--yellow);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--yellow);
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.info-story { grid-area: story; max-width: 56ch; }
+.info-lede {
+  font-size: 20px;
+  line-height: 1.55;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 24px;
+  text-wrap: pretty;
+}
+.info-lede strong { font-weight: 900; }
+.info-body {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--fg-dim);
+  margin-bottom: 20px;
+  text-wrap: pretty;
+}
+.info-body em {
+  font-style: normal;
+  color: var(--yellow);
+  font-weight: 700;
+  background: linear-gradient(180deg, transparent 60%, rgba(245,240,0,0.18) 60%);
+  padding: 0 2px;
+}
+.info-stats {
+  grid-area: stats;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 32px 0;
+  margin-top: 16px;
+}
+.info-stats li {
+  padding: 8px 24px;
+  border-left: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.info-stats li:first-child { border-left: 0; padding-left: 0; }
+.info-stats__num {
+  font-weight: 900;
+  font-size: clamp(48px, 6vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--yellow);
+}
+.info-stats__label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  line-height: 1.4;
+}
+.info-timeline {
+  grid-area: timeline;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 8px;
+}
+.info-timeline__row {
+  display: grid;
+  grid-template-columns: 80px 220px 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding-left 0.4s cubic-bezier(.2,.7,.1,1), background 0.3s;
+  cursor: default;
+}
+.info-timeline__row:hover {
+  padding-left: 16px;
+  background: linear-gradient(90deg, rgba(245,240,0,0.04), transparent 40%);
+}
+.info-timeline__year {
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: var(--fg-mute);
+  font-variant-numeric: tabular-nums;
+}
+.info-timeline__city {
+  font-weight: 900;
+  font-size: clamp(22px, 2.4vw, 32px);
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+.info-timeline__line {
+  height: 1px;
+  background: linear-gradient(to right, var(--line), transparent);
+}
+.info-timeline__note {
+  font-size: 13px;
+  color: var(--fg-dim);
+  font-weight: 600;
+  text-align: right;
+}
+.info-timeline__row.active .info-timeline__year { color: var(--yellow); }
+.info-timeline__row.active .info-timeline__city { color: var(--yellow); }
+
+.info-section .info-eyebrow,
+.info-section .info-headline,
+.info-section .info-portrait,
+.info-section .info-story,
+.info-section .info-stats,
+.info-section .info-timeline {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(.2,.7,.1,1), transform 0.9s cubic-bezier(.2,.7,.1,1);
+}
+.info-section.in .info-eyebrow { opacity: 1; transform: none; transition-delay: 0ms; }
+.info-section.in .info-headline { opacity: 1; transform: none; transition-delay: 100ms; }
+.info-section.in .info-portrait { opacity: 1; transform: none; transition-delay: 250ms; }
+.info-section.in .info-story { opacity: 1; transform: none; transition-delay: 350ms; }
+.info-section.in .info-stats { opacity: 1; transform: none; transition-delay: 450ms; }
+.info-section.in .info-timeline { opacity: 1; transform: none; transition-delay: 550ms; }
+
+/* ============ FOOTER ============ */
+.foot {
+  background: var(--yellow);
+  color: #000;
+  padding: 56px 32px 28px;
+  margin-top: 64px;
+  position: relative;
+  overflow: hidden;
+}
+.foot__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1.4fr 1.6fr;
+  gap: 48px;
+  align-items: start;
+}
+.foot__brand {
+  font-weight: 900;
+  font-size: 40px;
+  letter-spacing: -0.04em;
+  color: #000;
+  line-height: 1;
+}
+.foot__col h4 {
+  font-family: ui-monospace, "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  color: #000;
+}
+.foot__col-h2 { margin-top: 28px; }
+.foot__col a, .foot__col p {
+  font-family: ui-monospace, "JetBrains Mono", monospace;
+  font-size: 12px;
+  line-height: 1.85;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #000;
+  display: block;
+  position: relative;
+  width: fit-content;
+  transition: padding-left 0.3s cubic-bezier(.2,.7,.1,1);
+}
+.foot__col a::before {
+  content: "";
+  position: absolute;
+  left: -14px; top: 50%;
+  width: 0; height: 2px;
+  background: #000;
+  transition: width 0.3s cubic-bezier(.2,.7,.1,1);
+}
+.foot__col a:hover { padding-left: 14px; }
+.foot__col a:hover::before { width: 10px; }
+
+.foot__media { align-self: end; }
+.foot__media-frame {
+  aspect-ratio: 16/9;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.foot__media-placeholder {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, #1a1a1a 0 14px, #222 14px 28px);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.6s cubic-bezier(.2,.7,.1,1);
+}
+.foot__media-frame:hover .foot__media-placeholder { transform: scale(1.04); }
+.foot__media-gif {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: transform 0.6s cubic-bezier(.2,.7,.1,1);
+}
+.foot__media-frame:hover .foot__media-gif { transform: scale(1.04); }
+.foot__media-placeholder span {
+  font-family: ui-monospace, "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6e6e6e;
+  font-weight: 600;
+}
+.foot__media-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--yellow);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 3;
+  transition: transform 0.3s;
+}
+.foot__media-frame:hover .foot__media-play { transform: translate(-50%, -50%) scale(1.1); }
+.foot__media-play::after {
+  content: "";
+  border-style: solid;
+  border-width: 8px 0 8px 12px;
+  border-color: transparent transparent transparent #000;
+  margin-left: 3px;
+}
+.foot__media-meta {
+  position: absolute;
+  z-index: 2;
+  bottom: 10px; left: 10px;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  padding: 6px 10px;
+  font-family: ui-monospace, "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+.foot__media-meta .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 0 6px var(--yellow);
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+.foot__copy { position: relative; }
+.foot__copy-tag {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 8px;
+  background: #000;
+  color: var(--yellow);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.25s, transform 0.25s;
+  vertical-align: middle;
+}
+.foot__copy:hover .foot__copy-tag { opacity: 1; transform: translateY(0); }
+.foot__copy-tag.show { opacity: 1 !important; transform: translateY(0); }
+
+.foot__legal { display: flex; gap: 18px; justify-content: center; }
+.foot__legal a {
+  font-family: ui-monospace, "JetBrains Mono", monospace;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #000;
+  position: relative;
+}
+.foot__legal a:hover { text-decoration: underline; }
+
+.foot__bottom {
+  margin-top: 40px;
+  padding-top: 22px;
+  border-top: 1.5px solid #000;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  font-family: ui-monospace, "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  position: relative;
+  z-index: 1;
+}
+.foot__bottom > :nth-child(3) { text-align: right; }
+.foot__grid { position: relative; z-index: 1; }
+
+@media (max-width: 1024px) {
+  .nav { padding: 18px 24px; }
+  .section { padding: 56px 24px; }
+  .info-section { padding: 80px 24px 64px; }
+  .info-grid { gap: 36px 40px; }
+  .films { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .hero { padding: 110px 24px 56px; }
+  .marquee { padding: 40px 0; }
+  .marquee__track { gap: 56px; }
+  .foot__grid { grid-template-columns: auto 1fr 1fr; gap: 32px; }
+  .foot__media { grid-column: 1 / -1; }
+  .foot__media-frame { max-width: 640px; margin-left: auto; }
+}
+
+@media (max-width: 900px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "eyebrow"
+      "headline"
+      "portrait"
+      "story"
+      "stats"
+      "timeline";
+    gap: 32px;
+  }
+  .info-portrait__frame { position: static; aspect-ratio: 16/10; max-height: 420px; }
+  .info-stats { grid-template-columns: repeat(3, 1fr); padding: 24px 0; }
+  .info-stats li { padding: 4px 16px; }
+  .info-timeline__row {
+    grid-template-columns: 70px 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px 16px;
+  }
+  .info-timeline__year { grid-column: 1; grid-row: 1 / 3; align-self: start; padding-top: 4px; }
+  .info-timeline__city { grid-column: 2; grid-row: 1; }
+  .info-timeline__line { display: none; }
+  .info-timeline__note { grid-column: 2; grid-row: 2; text-align: left; }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 14px; }
+  .nav__hamburger { display: flex !important; }
+  .nav { padding: 14px 16px; }
+  .nav__brand { font-size: 22px; padding: 2px 6px; }
+  .nav__menu-pill {
+    position: fixed;
+    top: 64px; left: 16px; right: 16px;
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 10px;
+    gap: 4px;
+    transform: translateY(-12px) scale(0.98);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.3s cubic-bezier(.2,.7,.1,1);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+  }
+  .nav__menu-pill.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .nav__menu-pill button {
+    padding: 14px 18px;
+    text-align: left;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+  .nav__hamburger {
+    width: 44px; height: 44px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px;
+    background: var(--yellow);
+    border-radius: 50%;
+  }
+  .nav__hamburger span {
+    display: block;
+    width: 18px; height: 2px;
+    background: #000;
+    transition: transform 0.3s, opacity 0.2s;
+  }
+  .nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav__hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .hero { padding: 92px 16px 48px; min-height: 92vh; }
+  .hero__title { font-size: clamp(40px, 12vw, 56px); line-height: 1.02; }
+  .hero__reel { margin-top: 24px; gap: 12px; }
+  .hero__reel-btn { width: 56px; height: 56px; }
+  .hero__reel-btn::after { border-width: 7px 0 7px 11px; }
+  .hero__reel-label { font-size: 10px; letter-spacing: 0.24em; }
+
+  .section { padding: 48px 16px; }
+  .section__title { font-size: clamp(26px, 7.5vw, 32px); margin-bottom: 22px; }
+
+  .marquee { padding: 28px 0; }
+  .marquee__track { gap: 44px; animation-duration: 35s; }
+  .logo { font-size: 16px; height: 26px; }
+  .logo.upper { font-size: 12px; }
+
+  .films { grid-template-columns: 1fr; gap: 22px; }
+  .film__caption { padding: 12px 2px 0; }
+  .film__title { font-size: 15px; }
+  .film__broadcaster { top: 8px; left: 8px; padding: 3px 7px; font-size: 9px; }
+  .film__runtime { bottom: 8px; right: 8px; padding: 3px 7px; font-size: 10px; }
+  .film__play { width: 44px; height: 44px; }
+
+  .info-section { padding: 56px 16px 48px; }
+  .info-grid { gap: 24px; }
+  .info-eyebrow { padding-top: 16px; font-size: 10px; letter-spacing: 0.18em; }
+  .info-headline { font-size: clamp(30px, 8vw, 40px); line-height: 1.05; }
+  .info-portrait__frame { aspect-ratio: 4/5; max-height: none; }
+  .info-lede { font-size: 16px; line-height: 1.5; }
+  .info-body { font-size: 14px; line-height: 1.65; }
+  .info-stats { grid-template-columns: 1fr; gap: 0; padding: 16px 0; }
+  .info-stats li {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .info-stats li:first-child { border-top: 0; }
+  .info-stats__num { font-size: 44px; min-width: 90px; }
+  .info-stats__label { font-size: 10px; letter-spacing: 0.14em; }
+  .info-timeline__city { font-size: 22px; }
+  .info-timeline__row { padding: 16px 0; }
+  .info-timeline__row:hover { padding-left: 0; background: none; }
+
+  .foot { padding: 40px 16px 20px; }
+  .foot__grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .foot__brand { grid-column: 1 / -1; font-size: 32px; }
+  .foot__media-frame { max-width: none; margin-left: 0; }
+  .foot__bottom {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    text-align: left;
+  }
+  .foot__bottom > :nth-child(3) { text-align: left; }
+  .foot__legal { justify-content: flex-start; flex-wrap: wrap; }
+}
+
+@media (max-width: 380px) {
+  .hero__title { font-size: 38px; }
+  .info-headline { font-size: 28px; }
+  .section__title { font-size: 24px; }
+  .info-stats__num { font-size: 38px; min-width: 76px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav__brand">NK</div>
+  <div class="nav__right">
+    <div class="nav__menu-pill" id="navPill">
+      <button data-target="filme" class="active">Filme</button>
+      <button data-target="info">Info</button>
+      <button data-target="experte">Experte</button>
+      <button data-target="kontakt">Kontakt</button>
+    </div>
+    <button class="nav__hamburger" id="hamburger" aria-label="Menü">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true">
+    <iframe
+      src="https://www.youtube.com/embed/ExM137zUBKA?autoplay=1&mute=1&controls=0&loop=1&playlist=ExM137zUBKA&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&disablekb=1"
+      allow="autoplay; encrypted-media"
+      title="Showreel background"
+      tabindex="-1"></iframe>
+  </div>
+  <h1 class="hero__title">
+    <span class="hero__name" id="heroName"></span>
+    <span class="rotating" id="rotatingWord"></span>
+  </h1>
+  <div class="hero__reel">
+    <button class="hero__reel-btn" id="showreelBtn" aria-label="Play showreel"></button>
+    <div class="hero__reel-label">Showreel · 2026</div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<section class="marquee">
+  <div class="marquee__track" id="marqueeTrack"></div>
+</section>
+
+<!-- ============ FILMS ============ -->
+<section class="section" id="filme">
+  <h2 class="section__title">Meine Filme</h2>
+  <div class="films" id="filmsGrid"></div>
+</section>
+
+<!-- ============ INFO ============ -->
+<section class="section info-section" id="info">
+  <div class="info-grid">
+    <div class="info-eyebrow">
+      <span class="info-eyebrow__dot"></span>
+      <span>Info · About</span>
+    </div>
+
+    <h2 class="info-headline">
+      Sechs Jahre <em>Moskau</em>.<br/>
+      Heute <em>Hamburg</em>.<br/>
+      Immer <span class="yellow">unterwegs</span>.
+    </h2>
+
+    <div class="info-portrait">
+      <div class="info-portrait__frame">
+        <img class="info-portrait__img" src="assets/portrait.webp" alt="Niko Karasek vor dem Kreml in Moskau" />
+        <div class="info-portrait__tag">
+          <span class="dot"></span> auf Sendung
+        </div>
+      </div>
+    </div>
+
+    <div class="info-story">
+      <p class="info-lede">
+        Mein Name ist <strong>Niko Karasek</strong>. Bis Ende 2022 habe ich
+        für sechs Jahre in Russland gelebt und von dort als freier
+        Journalist und Reporter für alle deutschen Fernsehsender über die
+        wichtigsten politischen und gesellschaftlichen Themen berichtet.
+      </p>
+      <p class="info-body">
+        Mit dem Beginn des russischen Angriffskriegs in der Ukraine begann
+        für mich eine Zeit, die von <em>Repressalien und Einschränkungen
+        meiner Arbeit</em> gekennzeichnet war.
+      </p>
+      <p class="info-body">
+        Seit Dezember 2022 lebe ich in Hamburg, fokussiere mich aber
+        weiterhin auf die Situation in Russland, der Ukraine und anderen
+        Ländern Osteuropas. Außerdem trete ich als Experte für
+        Internationale Politik auf und drehe Reportagen und Dokumentationen
+        über gesellschaftliche Themen aus aller Welt.
+      </p>
+    </div>
+
+    <ul class="info-stats">
+      <li>
+        <div class="info-stats__num">6</div>
+        <div class="info-stats__label">Jahre<br/>in Russland</div>
+      </li>
+      <li>
+        <div class="info-stats__num">2022</div>
+        <div class="info-stats__label">Rückkehr<br/>nach Deutschland</div>
+      </li>
+      <li>
+        <div class="info-stats__num">∞</div>
+        <div class="info-stats__label">Themen<br/>aus aller Welt</div>
+      </li>
+    </ul>
+
+    <div class="info-timeline">
+      <div class="info-timeline__row">
+        <span class="info-timeline__year">2016</span>
+        <span class="info-timeline__city">Moskau</span>
+        <span class="info-timeline__line"></span>
+        <span class="info-timeline__note">Korrespondent — Russland &amp; GUS</span>
+      </div>
+      <div class="info-timeline__row">
+        <span class="info-timeline__year">2022</span>
+        <span class="info-timeline__city">Kyjiw / Front</span>
+        <span class="info-timeline__line"></span>
+        <span class="info-timeline__note">Reportagen aus dem Kriegsgebiet</span>
+      </div>
+      <div class="info-timeline__row active">
+        <span class="info-timeline__year">heute</span>
+        <span class="info-timeline__city">Hamburg</span>
+        <span class="info-timeline__line"></span>
+        <span class="info-timeline__note">Dokumentationen, Speaker, TV-Experte</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERTS ============ -->
+<section class="section" id="experte">
+  <h2 class="section__title">Experte &amp; Speaker</h2>
+  <div class="films" id="expertsGrid"></div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot" id="kontakt">
+  <div class="foot__grid">
+    <div class="foot__brand">NK</div>
+
+    <div class="foot__col">
+      <h4>Sitemap</h4>
+      <a href="#filme" data-nav="filme">Filme</a>
+      <a href="#experte" data-nav="experte">Experte / Speaker</a>
+      <a href="#info" data-nav="info">Info</a>
+      <a href="#kontakt" data-nav="kontakt">Kontakt</a>
+    </div>
+
+    <div class="foot__col">
+      <h4>Kontakt</h4>
+      <a href="tel:+4901746379751">0049 0174 637 9751</a>
+      <a href="#" class="foot__copy" id="copyEmail" title="Click to copy">
+        nikokarasek.tv@gmail.com
+        <span class="foot__copy-tag" id="copyTag">Copy</span>
+      </a>
+      <h4 class="foot__col-h2">Social Media</h4>
+      <a href="https://www.facebook.com/niko.karasek" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://www.instagram.com/nikokarasek" target="_blank" rel="noopener">Instagram</a>
+    </div>
+
+    <div class="foot__media">
+      <div class="foot__media-frame">
+        <div class="foot__media-placeholder">
+          <span>still 16:9 — feldarbeit</span>
+        </div>
+        <img class="foot__media-gif" src="assets/footer.gif" alt="Behind the scenes" />
+        <div class="foot__media-play"></div>
+        <div class="foot__media-meta">
+          <span class="dot"></span>
+          <span>Behind the scenes · 2024</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot__bottom">
+    <span>© 2026 Niko Karasek</span>
+    <span class="foot__legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Impressum</a>
+    </span>
+    <span>Hamburg · 53.5511° N, 9.9937° E</span>
+  </div>
+</footer>
+
+<script>
+/* ---------- DATA ---------- */
+const ROTATING_WORDS = ["Reportagen", "Fernsehen", "Russland Experte", "Keynote Speaker"];
+
+const LOGOS = [
+  { text: "n-tv", cls: "" },
+  { text: "arte", cls: "" },
+  { text: "ARD", cls: "upper" },
+  { text: "ZDF", cls: "upper" },
+  { text: "NDR", cls: "upper" },
+  { text: "MDR", cls: "upper" },
+  { text: "RBB", cls: "upper" },
+  { text: "phoenix", cls: "thin" },
+  { text: "DW", cls: "upper" },
+  { text: "ProSieben", cls: "thin" },
+  { text: "Spiegel TV", cls: "serif-y" },
+  { text: "3sat", cls: "" },
+];
+
+const FILMS = [
+  { title: "Putins Helfer", year: "2023", broadcaster: "zdf", runtime: "44:49", img: "assets/films/01_putins_helfer.avif", yt: "dGIUKCFdQJ0" },
+  { title: "Im Land des Feindes", year: "2022", broadcaster: "arte", runtime: "32:01", img: "assets/films/02_im_land_des_feindes.avif", yt: "" },
+  { title: "10 Fragen an eine politische Gefangene", year: "2024", broadcaster: "galileo", runtime: "11:32", img: "assets/films/03_politische_gefangene.webp", yt: "EtEYaXDx0IY" },
+  { title: "Russland: Denunzieren um jeden Preis", year: "2022", broadcaster: "arte", runtime: "12:33", img: "assets/films/04_denunzieren.webp", yt: "Kxf7oJbs4FQ" },
+  { title: "Teilmobilmachung in Russland", year: "2022", broadcaster: "galileo", runtime: "9:13", img: "assets/films/05_teilmobilmachung.webp", yt: "C7kgXe8R0vM" },
+  { title: "Russland: Putins leise Gegnerin", year: "2024", broadcaster: "arte", runtime: "12:33", img: "assets/films/06_putins_gegnerin.webp", yt: "f0agKxLEgWI" },
+  { title: "Stroganina: das sibirische Sushi", year: "2017", broadcaster: "galileo", runtime: "10:37", img: "assets/films/07_sibirisches_sushi.webp", yt: "QE5tX6_O7Y4" },
+  { title: "Einblicke in Russlands Troll-Armee", year: "2020", broadcaster: "ntv", runtime: "7:58", img: "assets/films/08_troll_armee.webp", yt: "hiGwpXndwLk" },
+  { title: "Der härteste Knast Russlands", year: "2019", broadcaster: "galileo", runtime: "14:12", img: "assets/films/09_haertester_knast.webp", yt: "PCqZw9QnCA8" },
+];
+
+const EXPERTS = [
+  { title: "Russland-Experte bei ntv", outlet: "NTV", runtime: "4:44", broadcaster: "ntv", img: "assets/experts/01_russland_experte_ntv.webp", yt: "fR6aUz2VrTo" },
+  { title: "Die Zukunft des Journalismus", outlet: "Arte", runtime: "9:54", broadcaster: "arte", img: "assets/experts/02_zukunft_journalismus.webp", yt: "CfZGnVX3dSk" },
+  { title: "Bei Stern TV mit Marina Owsjannikowa", outlet: "Stern TV (RTL)", runtime: "9:17", broadcaster: "sterntv", img: "assets/experts/03_stern_tv.webp", yt: "mzv5JJlje5I" },
+];
+
+const SHOWREEL_YT = "ExM137zUBKA";
+
+/* ---------- HELPERS ---------- */
+function el(tag, attrs = {}, children = []) {
+  const e = document.createElement(tag);
+  for (const k in attrs) {
+    if (k === "class") e.className = attrs[k];
+    else if (k === "style") e.setAttribute("style", attrs[k]);
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2).toLowerCase(), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  (Array.isArray(children) ? children : [children]).forEach((c) => {
+    if (c == null) return;
+    e.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+  });
+  return e;
+}
+
+function buildLetters(text, baseDelay, stagger, opts = {}) {
+  const frag = document.createDocumentFragment();
+  const tokens = text.split(/(\s+)/);
+  let charIndex = 0;
+  tokens.forEach((tok) => {
+    if (tok === "") return;
+    if (/^\s+$/.test(tok)) {
+      frag.appendChild(document.createTextNode(" "));
+      return;
+    }
+    const word = el("span", { class: "word" + (opts.yellow ? " yellow" : "") });
+    [...tok].forEach((ch) => {
+      const d = baseDelay + charIndex * stagger;
+      const letter = el(
+        "span",
+        {
+          class: "letter" + (opts.rotateClass ? " rotate-letter" : ""),
+          style: "--d:" + d + "ms",
+        },
+        ch
+      );
+      word.appendChild(letter);
+      charIndex++;
+    });
+    frag.appendChild(word);
+  });
+  return frag;
+}
+
+/* ---------- NAV ---------- */
+(function nav() {
+  const pill = document.getElementById("navPill");
+  const buttons = pill.querySelectorAll("button");
+  const hamburger = document.getElementById("hamburger");
+
+  function go(id) {
+    const target = document.getElementById(id);
+    if (target) window.scrollTo({ top: target.offsetTop - 40, behavior: "smooth" });
+  }
+
+  buttons.forEach((b) => {
+    b.addEventListener("click", (e) => {
+      e.preventDefault();
+      buttons.forEach((bb) => bb.classList.remove("active"));
+      b.classList.add("active");
+      pill.classList.remove("open");
+      hamburger.classList.remove("open");
+      go(b.dataset.target);
+    });
+  });
+
+  hamburger.addEventListener("click", () => {
+    pill.classList.toggle("open");
+    hamburger.classList.toggle("open");
+  });
+
+  document.querySelectorAll("[data-nav]").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      go(a.dataset.nav);
+    });
+  });
+})();
+
+/* ---------- HERO TITLE + ROTATING WORD ---------- */
+(function hero() {
+  const heroName = document.getElementById("heroName");
+  heroName.appendChild(buildLetters("Niko Karasek", 200, 45));
+
+  const rotatingHost = document.getElementById("rotatingWord");
+  let idx = 0;
+  let firstRun = true;
+  let timeoutHold = null;
+  let timeoutSwap = null;
+  const initialDelay = 1500;
+  const holdMs = 3000;
+  const exitMs = 500;
+
+  function renderWord() {
+    rotatingHost.innerHTML = "";
+    rotatingHost.classList.remove("out");
+    const stride = firstRun ? 45 : 35;
+    const baseDelay = firstRun ? 250 : 0;
+    rotatingHost.appendChild(
+      buildLetters(ROTATING_WORDS[idx], baseDelay, stride, {
+        yellow: true,
+        rotateClass: true,
+      })
+    );
+    firstRun = false;
+  }
+
+  function tick() {
+    timeoutHold = setTimeout(() => {
+      rotatingHost.classList.add("out");
+      timeoutSwap = setTimeout(() => {
+        idx = (idx + 1) % ROTATING_WORDS.length;
+        renderWord();
+        tick();
+      }, exitMs);
+    }, holdMs);
+  }
+
+  renderWord();
+  setTimeout(tick, initialDelay);
+})();
+
+/* ---------- MARQUEE ---------- */
+const LOGO_FILES = [
+  { src: "assets/logos/zdf.svg", alt: "ZDF" },
+  { src: "assets/logos/arte.svg", alt: "Arte" },
+  { src: "assets/logos/ntv.svg", alt: "n-tv" },
+  { src: "assets/logos/ard.svg", alt: "ARD" },
+  { src: "assets/logos/mdr.svg", alt: "MDR" },
+  { src: "assets/logos/stern-tv.avif", alt: "Stern TV" },
+];
+(function marquee() {
+  const track = document.getElementById("marqueeTrack");
+  const doubled = LOGO_FILES.concat(LOGO_FILES).concat(LOGO_FILES);
+  doubled.forEach((l) => {
+    const wrap = el("div", { class: "logo logo--img" });
+    wrap.appendChild(el("img", { src: l.src, alt: l.alt }));
+    track.appendChild(wrap);
+  });
+})();
+
+/* ---------- LIGHTBOX ---------- */
+function openLightbox(ytId) {
+  if (!ytId) return;
+  const overlay = el("div", { class: "lightbox", onclick: closeLightbox });
+  const inner = el("div", { class: "lightbox__inner", onclick: (e) => e.stopPropagation() });
+  const iframe = el("iframe", {
+    src: "https://www.youtube.com/embed/" + ytId + "?autoplay=1&rel=0",
+    allow: "autoplay; encrypted-media; fullscreen",
+    allowfullscreen: "true",
+    frameborder: "0",
+  });
+  const close = el("button", { class: "lightbox__close", onclick: closeLightbox, "aria-label": "Close" }, "\u00d7");
+  const yt = el("a", {
+    class: "lightbox__yt-fallback",
+    href: "https://www.youtube.com/watch?v=" + ytId,
+    target: "_blank",
+    rel: "noopener",
+  }, "▶ Auf YouTube öffnen");
+  inner.appendChild(iframe);
+  inner.appendChild(close);
+  inner.appendChild(yt);
+  overlay.appendChild(inner);
+  document.body.appendChild(overlay);
+  document.body.style.overflow = "hidden";
+  requestAnimationFrame(() => overlay.classList.add("in"));
+}
+function closeLightbox() {
+  const lb = document.querySelector(".lightbox");
+  if (!lb) return;
+  lb.classList.remove("in");
+  document.body.style.overflow = "";
+  setTimeout(() => lb.remove(), 250);
+}
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
+document.getElementById("showreelBtn").addEventListener("click", () => openLightbox(SHOWREEL_YT));
+
+/* ---------- FILM/EXPERT CARDS ---------- */
+function buildFilmCard(item, index) {
+  const media = el("div", { class: "film__media" }, [
+    el("div", { class: "film__broadcaster " + item.broadcaster }),
+    el("div", { class: "film__placeholder" }, [el("span", {}, "still 16:9")]),
+  ]);
+  if (item.img) {
+    const img = el("img", { class: "film__img", src: item.img, alt: item.title, loading: "lazy" });
+    media.appendChild(img);
+  }
+  media.appendChild(el("div", { class: "film__runtime" }, item.runtime));
+  media.appendChild(el("div", { class: "film__play" }));
+  const card = el("article", { class: "film" }, [
+    media,
+    el("div", { class: "film__caption" }, [
+      el("div", { class: "film__title" }, item.title),
+      el("div", { class: "film__year" }, item.year || item.outlet || ""),
+    ]),
+  ]);
+  if (item.yt) {
+    card.style.cursor = "pointer";
+    card.addEventListener("click", () => openLightbox(item.yt));
+  }
+  return card;
+}
+
+(function films() {
+  const grid = document.getElementById("filmsGrid");
+  FILMS.forEach((f, i) => grid.appendChild(buildFilmCard(f, i)));
+})();
+
+(function experts() {
+  const grid = document.getElementById("expertsGrid");
+  EXPERTS.forEach((e, i) =>
+    grid.appendChild(
+      buildFilmCard({ ...e, year: e.outlet }, i)
+    )
+  );
+})();
+
+/* ---------- SCROLL REVEAL ---------- */
+(function reveal() {
+  // films + experts
+  document.querySelectorAll(".film").forEach((node, i) => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setTimeout(() => node.classList.add("in"), (i % 3) * 100);
+            io.unobserve(node);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
+    );
+    io.observe(node);
+  });
+
+  // info section
+  const info = document.querySelector(".info-section");
+  if (info) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            info.classList.add("in");
+            io.unobserve(info);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    io.observe(info);
+  }
+})();
+
+/* ---------- COPY EMAIL ---------- */
+(function copy() {
+  const link = document.getElementById("copyEmail");
+  const tag = document.getElementById("copyTag");
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const email = "nikokarasek.tv@gmail.com";
+    const done = () => {
+      tag.textContent = "Copied!";
+      tag.classList.add("show");
+      setTimeout(() => {
+        tag.classList.remove("show");
+        setTimeout(() => (tag.textContent = "Copy"), 250);
+      }, 1800);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(done).catch(() => {
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = email;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); done(); } catch (e2) {}
+        document.body.removeChild(ta);
+      });
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = email;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); done(); } catch (e2) {}
+      document.body.removeChild(ta);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
