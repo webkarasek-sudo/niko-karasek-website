@@ -4,6 +4,75 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Niko Karasek — Reportagen, Fernsehen, Russland Experte</title>
+<meta name="description" content="Niko Karasek — freier Journalist und Reporter. Sechs Jahre Moskau, heute Hamburg. Reportagen und Dokumentationen für deutsche Fernsehsender, Experte für Russland, die Ukraine und Osteuropa." />
+<meta name="author" content="Niko Karasek" />
+<link rel="canonical" href="https://www.nikokarasek.com/" />
+
+<!-- Open Graph / social sharing -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Niko Karasek" />
+<meta property="og:title" content="Niko Karasek — Reportagen, Fernsehen, Russland-Experte" />
+<meta property="og:description" content="Freier Journalist und Reporter. Sechs Jahre Moskau, heute Hamburg. Reportagen und Dokumentationen für deutsche Fernsehsender." />
+<meta property="og:url" content="https://www.nikokarasek.com/" />
+<meta property="og:locale" content="de_DE" />
+<meta property="og:image" content="https://www.nikokarasek.com/assets/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Niko Karasek — Reportagen, Fernsehen, Russland-Experte" />
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Niko Karasek — Reportagen, Fernsehen, Russland-Experte" />
+<meta name="twitter:description" content="Freier Journalist und Reporter. Sechs Jahre Moskau, heute Hamburg." />
+<meta name="twitter:image" content="https://www.nikokarasek.com/assets/og-image.jpg" />
+
+<!-- Structured data: Person + WebSite (SEO rich results + AI/GEO citability) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.nikokarasek.com/#person",
+      "name": "Niko Karasek",
+      "jobTitle": "Journalist und Fernsehreporter",
+      "description": "Freier Journalist und Reporter. Sechs Jahre in Russland gelebt und berichtet, seit Ende 2022 in Hamburg. Dreht Reportagen und Dokumentationen für deutsche Fernsehsender, Experte für Russland, die Ukraine und Osteuropa.",
+      "url": "https://www.nikokarasek.com/",
+      "image": "https://www.nikokarasek.com/assets/og-image.jpg",
+      "email": "nikokarasek.tv@gmail.com",
+      "telephone": "+4901746379751",
+      "nationality": "DE",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Hamburg",
+        "addressCountry": "DE"
+      },
+      "knowsAbout": [
+        "Russland",
+        "Ukraine",
+        "Osteuropa",
+        "Internationale Politik",
+        "Reportage",
+        "Dokumentarfilm",
+        "Fernsehjournalismus"
+      ],
+      "knowsLanguage": ["de", "ru", "en"],
+      "sameAs": [
+        "https://www.facebook.com/niko.karasek",
+        "https://www.instagram.com/nikokarasek"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.nikokarasek.com/#website",
+      "url": "https://www.nikokarasek.com/",
+      "name": "Niko Karasek",
+      "inLanguage": "de-DE",
+      "publisher": { "@id": "https://www.nikokarasek.com/#person" }
+    }
+  ]
+}
+</script>
 <style>
 /* ============ TOKENS ============ */
 :root {
@@ -13,13 +82,143 @@
   --card: #1a1a1a;
   --fg: #ffffff;
   --fg-dim: #b8b8b8;
-  --fg-mute: #6e6e6e;
+  --fg-mute: #9a9a9a;
   --line: #262626;
   --yellow: #f5f000;
+  --block-radius: 24px;
+  --block-inset: 32px;
   --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+/* ===== LIGHT THEME ===== */
+html[data-theme="light"] {
+  --bg: #f7f6f2;
+  --bg-2: #efeee9;
+  --bg-3: #e7e5df;
+  --card: #ecebe6;
+  --fg: #0f0f0f;
+  --fg-dim: #474745;
+  --fg-mute: #66655f;
+  --line: #dedcd5;
+  /* accent block color for light theme (the former yellow blocks) */
+  --accent: #141414;
+  --on-accent: #f6f5f1;
+  --on-accent-dim: rgba(255,255,255,0.66);
+  --on-accent-line: rgba(255,255,255,0.16);
+}
+html[data-theme="light"][data-accent="blue"] { --accent: #1F35C7; }
+html[data-theme="light"][data-accent="terracotta"] { --accent: #D9533B; }
+html, body { transition: background-color 0.35s ease, color 0.35s ease; }
+/* nav contact button + hamburger pick up accent in light theme */
+html[data-theme="light"] .nav__contact { background: var(--accent); color: var(--on-accent); }
+html[data-theme="light"] .nav__hamburger { background: var(--accent); }
+html[data-theme="light"] .nav__hamburger span { background: var(--on-accent); }
+/* film placeholder stripes */
+html[data-theme="light"] .film__placeholder { background: repeating-linear-gradient(45deg, #e7e5df 0 14px, #efeee9 14px 28px); }
+/* hero video corner brackets invert for the light theme */
+html[data-theme="light"] .hero__reel-corner { border-color: var(--fg); }
+/* press-bar logos: render dark on the light page (keep internal detail, no blobs) */
+html[data-theme="light"] .logo--img img { filter: invert(1); }
+html[data-theme="light"] .logo--img.is-dark img { filter: brightness(0); }
+html[data-theme="light"] .logo--img.is-color img { filter: grayscale(1) brightness(0.5) contrast(1.1); }
+
+/* ===== LIGHT THEME: yellow blocks become dark accent blocks ===== */
+html[data-theme="light"] .foot { background: var(--accent); color: var(--on-accent); }
+html[data-theme="light"] .foot__brand { color: var(--on-accent); }
+html[data-theme="light"] .foot__col h2 { color: var(--on-accent-dim); }
+html[data-theme="light"] .foot__col a,
+html[data-theme="light"] .foot__col p { color: var(--on-accent); }
+html[data-theme="light"] .foot__bottom { border-top-color: var(--on-accent-line); color: var(--on-accent-dim); }
+html[data-theme="light"] .foot__legal a { color: var(--on-accent-dim); }
+html[data-theme="light"] .foot__social a { color: var(--on-accent); opacity: 0.6; }
+html[data-theme="light"] .foot__social a:hover { opacity: 1; }
+/* buttons on the dark footer */
+html[data-theme="light"] .cta--primary { background: var(--on-accent); color: #141414; }
+html[data-theme="light"] .cta--primary:hover { background: #fff; }
+html[data-theme="light"] .cta--ghost { color: var(--on-accent); border-color: var(--on-accent-line); }
+html[data-theme="light"] .cta--ghost:hover { color: var(--on-accent); border-color: var(--on-accent); background: rgba(255,255,255,0.06); }
+html[data-theme="light"] .foot__tel { color: var(--on-accent); }
+/* info panel becomes a dark accent block */
+html[data-theme="light"] .infb { background: var(--accent); }
+html[data-theme="light"] .infb__title,
+html[data-theme="light"] .infb__corner,
+html[data-theme="light"] .infb__yr-k { color: var(--on-accent); }
+html[data-theme="light"] .infb__mute,
+html[data-theme="light"] .infb__text,
+html[data-theme="light"] .infb__yr-plus,
+html[data-theme="light"] .infb__yr-v { color: var(--on-accent-dim); }
+html[data-theme="light"] .infb__years { border-top-color: var(--on-accent-line); }
+html[data-theme="light"] .infb__yr { border-bottom-color: var(--on-accent-line); }
+html[data-theme="light"] .infb__yr.on { background: linear-gradient(90deg, rgba(255,255,255,.08), transparent 55%); }
+html[data-theme="light"] .infb__yr.on .infb__yr-plus,
+html[data-theme="light"] .infb__yr.on .infb__yr-v { color: var(--on-accent); }
+
+/* theme toggle adapts */
+html[data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: #0f0f0f; }
+html[data-theme="light"] .theme-toggle__sun { display: none; }
+html[data-theme="light"] .theme-toggle__moon { display: block; }
+
+/* theme toggle button */
+.theme-toggle {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.28);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #fff; cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
+}
+.theme-toggle:hover { transform: translateY(-1px); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle__moon { display: none; }
+
+/* language dropdown */
+.lang { position: relative; }
+.lang__btn {
+  display: flex; align-items: center; gap: 7px;
+  height: 42px; padding: 0 14px; border-radius: 999px;
+  background: rgba(0,0,0,0.28);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #fff; font-weight: 800; font-size: 13px; letter-spacing: 0.04em;
+  cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.lang__flag { font-size: 15px; line-height: 1; }
+.lang__chev { width: 13px; height: 13px; opacity: 0.7; transition: transform 0.2s; }
+.lang.open .lang__chev { transform: rotate(180deg); }
+.lang__menu {
+  position: absolute; top: 52px; right: 0; min-width: 178px;
+  list-style: none; margin: 0; padding: 8px;
+  background: rgba(18,18,18,0.94);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  display: flex; flex-direction: column; gap: 2px;
+  opacity: 0; transform: translateY(-8px); pointer-events: none;
+  transition: opacity 0.2s, transform 0.22s cubic-bezier(.2,.7,.1,1);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  z-index: 210;
+}
+.lang.open .lang__menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.lang__menu button {
+  display: flex; align-items: center; gap: 11px; width: 100%;
+  padding: 10px 12px; border-radius: 10px;
+  color: rgba(255,255,255,0.85); font-weight: 700; font-size: 14px; text-align: left;
+  cursor: pointer; transition: background 0.2s, color 0.2s;
+}
+.lang__menu button span { font-size: 17px; line-height: 1; }
+.lang__menu button:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.lang__menu button.active { background: #fff; color: #000; }
+html[data-theme="light"] .lang__btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: #0f0f0f; }
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
 html, body { background: var(--bg); color: var(--fg); }
 body {
   font-family: var(--sans);
@@ -34,6 +233,24 @@ img { display: block; max-width: 100%; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 
 /* ============ NAV ============ */
+/* ---- Accessibility: visible keyboard focus + skip link ---- */
+:focus-visible {
+  outline: 2px solid #000;
+  box-shadow: 0 0 0 4px var(--yellow);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+.skip-link {
+  position: fixed; left: 16px; top: -80px;
+  z-index: 300;
+  background: var(--yellow); color: #000;
+  padding: 12px 20px; border-radius: 10px;
+  font-family: var(--sans); font-weight: 800; font-size: 14px;
+  text-decoration: none;
+  transition: top 0.22s cubic-bezier(.2,.7,.1,1);
+}
+.skip-link:focus-visible { top: 16px; }
+
 .nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 100;
@@ -50,28 +267,57 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   padding: 4px 8px;
   mix-blend-mode: difference;
 }
-.nav__right { display: flex; align-items: center; gap: 12px; }
+.nav__right { display: flex; align-items: center; gap: 10px; }
+/* visible contact button */
+.nav__contact {
+  padding: 11px 22px; border-radius: 999px;
+  background: var(--yellow); color: #000;
+  font-weight: 800; font-size: 13px; letter-spacing: 0.02em;
+  transition: transform 0.2s, background 0.2s;
+}
+.nav__contact:hover { transform: translateY(-1px); }
+/* menu dropdown — collapsed into the hamburger at every screen size */
 .nav__menu-pill {
-  display: flex;
-  background: #fff;
-  color: #000;
-  border-radius: 999px;
-  padding: 6px;
-  gap: 4px;
+  position: fixed;
+  top: 78px; right: 16px;
+  min-width: 220px;
+  display: flex; flex-direction: column;
+  background: rgba(18,18,18,0.94);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+  border-radius: 18px;
+  padding: 10px;
+  gap: 2px;
+  transform: translateY(-12px) scale(0.98);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s, transform 0.28s cubic-bezier(.2,.7,.1,1);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  z-index: 200;
 }
+.nav__menu-pill.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 .nav__menu-pill button {
-  padding: 8px 18px;
-  border-radius: 999px;
-  color: #000;
-  font-weight: 800;
-  font-size: 13px;
-  letter-spacing: 0.02em;
-  transition: background 0.25s, color 0.25s;
+  padding: 12px 16px; border-radius: 12px;
+  color: rgba(255,255,255,0.82);
+  font-weight: 800; font-size: 14px; text-align: left;
+  transition: background 0.2s, color 0.2s;
 }
-.nav__hamburger { display: none; }
-.nav__menu-pill button:hover { background: rgba(0,0,0,0.06); }
-.nav__menu-pill button.active { background: #000; color: #fff; }
-.nav__menu-pill button.active:hover { background: #000; }
+.nav__menu-pill button:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.nav__menu-pill button.active { background: #fff; color: #000; }
+.nav__hamburger {
+  width: 44px; height: 44px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 5px;
+  background: var(--yellow);
+  border-radius: 50%;
+}
+.nav__hamburger span {
+  display: block; width: 18px; height: 2px; background: #000;
+  transition: transform 0.3s, opacity 0.2s;
+}
+.nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav__hamburger.open span:nth-child(2) { opacity: 0; }
+.nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ============ HERO ============ */
 .hero {
@@ -79,12 +325,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 120px 24px 60px;
+  padding: 124px 32px 56px;
   overflow: hidden;
-  isolation: isolate;
 }
 .hero__bg {
   position: absolute; inset: 0;
@@ -194,37 +436,136 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
+/* scroll-triggered per-letter reveal for big headings */
+.section__title .word { display: inline-block; white-space: nowrap; }
+.section__title .rletter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.5em);
+  filter: blur(8px);
+}
+.section__title.in .rletter {
+  animation: letterIn 0.85s cubic-bezier(0.2, 0.7, 0.1, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .section__title .rletter { opacity: 1; transform: none; filter: none; }
+}
+
+/* ---- Masthead: name-logo + role lines (top-left) ---- */
+.hero__masthead {
+  flex: 0 0 auto;
+}
+.hero__masthead .hero__roles {
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards;
+  animation-delay: 1s;
+}
+.hero__logo .letter { will-change: transform, filter, opacity; }
+.hero__logo {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+.hero__roles {
+  list-style: none;
+  margin-top: 14px;
+  display: flex; flex-wrap: wrap; align-items: center;
+}
+.hero__roles li {
+  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--fg-dim);
+}
+.hero__roles li:not(:last-child)::after {
+  content: "·"; margin: 0 12px; color: var(--fg-mute); font-weight: 700;
+}
+.hero__type::after {
+  content: "▌"; margin-left: 2px;
+  animation: caretBlink 1s steps(1, end) infinite;
+}
+@keyframes caretBlink { 50% { opacity: 0; } }
+
+/* AAA 2.2.2 / 1.4.6: stop all auto-motion when the OS asks for reduced motion,
+   and make sure animated-in content is visible (not stuck at opacity:0) */
+@media (prefers-reduced-motion: reduce) {
+  .letter, .rletter, .hero__logo .letter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .marquee__track { animation: none !important; }
+  .hero__type::after { animation: none !important; }
+}
+
+/* ---- Stage centers the showreel ---- */
+.hero__stage {
+  flex: 1 1 auto;
+  display: flex; align-items: center; justify-content: center;
+  padding: 28px 0;
+}
+
+/* ---- Showreel block ---- */
 .hero__reel {
-  margin-top: 28px;
-  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  position: relative;
+  width: min(1180px, 86vw);
+  cursor: pointer;
+  display: block;
   opacity: 0;
   animation: fadeUp 1s ease forwards;
-  animation-delay: 1.4s;
+  animation-delay: 0.35s;
 }
-.hero__reel-label {
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--fg-dim);
-  font-weight: 600;
+.hero__reel-frame { position: relative; aspect-ratio: 16 / 9; background: #0a0a0a; }
+.hero__reel-screen {
+  position: absolute; inset: 0; overflow: hidden;
+  background: #0a0a0a url("assets/films/02_im_land_des_feindes.avif") center/cover no-repeat;
 }
-.hero__reel-btn {
-  width: 64px; height: 64px;
-  border-radius: 50%;
-  border: 1.5px solid var(--fg);
+.hero__reel-screen iframe {
+  position: absolute; top: 50%; left: 50%;
+  width: 100%; height: 100%;
+  transform: translate(-50%, -50%) scale(1.32);
+  border: 0; pointer-events: none;
+  opacity: 1;
+}
+.hero__reel-shield { position: absolute; inset: 0; z-index: 2; background: transparent; }
+.hero__reel-frame::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+  transition: background 0.4s;
+}
+.hero__reel:hover .hero__reel-frame::after {
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.32) 100%);
+}
+.hero__reel-corner { position: absolute; width: 17px; height: 17px; z-index: 3; border: 1.5px solid #fff; pointer-events: none; }
+.hero__reel-corner--tl { top: -10px; left: -10px; border-right: 0; border-bottom: 0; }
+.hero__reel-corner--tr { top: -10px; right: -10px; border-left: 0; border-bottom: 0; }
+.hero__reel-corner--bl { bottom: -10px; left: -10px; border-right: 0; border-top: 0; }
+.hero__reel-corner--br { bottom: -10px; right: -10px; border-left: 0; border-top: 0; }
+.hero__reel-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 3;
+  width: 84px; height: 84px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.9);
+  background: rgba(0,0,0,0.25); backdrop-filter: blur(2px);
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.3s;
+  transition: transform 0.3s, background 0.3s, border-color 0.3s;
 }
-.hero__reel-btn:hover { background: var(--fg); }
-.hero__reel-btn:hover::after { border-left-color: #000; }
-.hero__reel-btn::after {
-  content: "";
-  border-style: solid;
-  border-width: 8px 0 8px 13px;
-  border-color: transparent transparent transparent var(--fg);
-  margin-left: 4px;
-  transition: border-color 0.3s;
+.hero__reel:hover .hero__reel-play {
+  background: rgba(0,0,0,0.55); border-color: #fff;
+  transform: translate(-50%, -50%) scale(1.06);
 }
+.hero__reel-play::after {
+  content: ""; border-style: solid;
+  border-width: 9px 0 9px 15px;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 5px; transition: border-color 0.3s;
+}
+.hero__reel:hover .hero__reel-play::after { border-left-color: #fff; }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -245,7 +586,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   gap: 80px;
   align-items: center;
 }
-.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee:hover .marquee__track,
+.marquee:focus-within .marquee__track { animation-play-state: paused; }
 @keyframes scroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -457,7 +799,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .film__year { font-size: 11px; color: var(--fg-mute); font-weight: 600; }
 
 /* ============ INFO ============ */
-.info-section { padding: 100px 32px 80px; }
+.info-section { padding: 100px var(--block-inset) 80px; }
 .info-grid {
   display: grid;
   grid-template-columns: 7fr 5fr;
@@ -523,6 +865,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   position: absolute;
   bottom: 16px; left: 16px;
   display: flex; align-items: center; gap: 8px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.info-portrait__loc {
+  position: absolute;
+  top: 16px; right: 16px;
   background: rgba(0,0,0,0.7);
   backdrop-filter: blur(8px);
   padding: 8px 14px;
@@ -646,35 +1000,239 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .info-timeline__row.active .info-timeline__year { color: var(--yellow); }
 .info-timeline__row.active .info-timeline__city { color: var(--yellow); }
 
-.info-section .info-eyebrow,
-.info-section .info-headline,
-.info-section .info-portrait,
-.info-section .info-story,
-.info-section .info-stats,
-.info-section .info-timeline {
+/* ============ INFO — CINEMATIC (festival poster) ============ */
+.infb {
+  background: var(--yellow);
+  border-radius: var(--block-radius);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+  margin: 0 auto;
+  min-height: 700px;
+  align-items: stretch;
+}
+.infb__img { position: relative; overflow: hidden; min-height: 440px; border-radius: 16px; }
+.infb__img img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 28%;
+  filter: contrast(1.1) saturate(0.82) brightness(0.96);
+}
+.infb__img::after {
+  content: "";
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(150deg, rgba(10,14,22,0.28) 0%, transparent 42%, transparent 70%, rgba(245,240,0,0.10) 100%);
+  mix-blend-mode: multiply;
+}
+.infb__grain {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,.4), transparent 30%, transparent 60%, rgba(0,0,0,.55));
+}
+.infb__corner {
+  position: absolute; z-index: 2;
+  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.18em; color: #fff;
+  background: rgba(0,0,0,.5); backdrop-filter: blur(6px);
+  padding: 7px 12px;
+}
+.infb__corner--tl { top: 24px; left: 24px; }
+.infb__corner--bl { bottom: 24px; left: 24px; }
+.infb__panel {
+  background: transparent;
+  padding: 6px 0;
+  display: flex; flex-direction: column;
+  gap: 22px;
+}
+.infb__ey {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.22em;
+  color: rgba(0,0,0,.55);
+}
+.infb__ey i { width: 8px; height: 8px; background: #000; border-radius: 50%; }
+.infb__title {
+  font-weight: 900;
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1.02; letter-spacing: -0.03em;
+  color: #000;
+}
+.infb__mute { color: rgba(0,0,0,.4); }
+.infb__hl { color: #000; }
+.infb__text {
+  font-size: 15px; line-height: 1.65;
+  color: rgba(0,0,0,.74); max-width: 42ch;
+  text-wrap: pretty;
+}
+.infb__bottom {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  align-items: end;
+}
+.infb__cta {
+  background: #141414; color: #fff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  min-height: 116px;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
+  transition: transform 0.3s cubic-bezier(.2,.7,.1,1), background 0.3s;
+}
+.infb__cta:hover { transform: translateY(-3px); background: #1e1e1e; }
+.infb__cta-tag {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.infb__cta-main {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  font-weight: 800; font-size: 19px; letter-spacing: -0.01em;
+}
+.infb__cta-main svg { width: 19px; height: 19px; flex: none; transition: transform 0.3s; }
+.infb__cta:hover .infb__cta-main svg { transform: translate(2px, -2px); }
+.infb__years {
+  display: flex; flex-direction: column;
+  border-top: 1px solid rgba(0,0,0,.2);
+  margin-top: 8px;
+}
+.infb__yr {
+  display: grid;
+  grid-template-columns: 22px 96px 1fr;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 2px;
+  border-bottom: 1px solid rgba(0,0,0,.2);
+  transition: padding-left 0.3s cubic-bezier(.2,.7,.1,1);
+}
+.infb__yr:last-child { border-bottom: 0; }
+.infb__yr:hover { padding-left: 10px; }
+.infb__yr-plus {
+  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 17px; font-weight: 700; line-height: 1;
+  color: rgba(0,0,0,.55);
+}
+.infb__yr-k {
+  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 17px; font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #000;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+.infb__yr-v {
+  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.18em;
+  color: rgba(0,0,0,.6);
+}
+.infb__yr.on .infb__yr-plus,
+.infb__yr.on .infb__yr-v { color: #000; }
+.infb__yr.on { background: linear-gradient(90deg, rgba(0,0,0,.06), transparent 55%); }
+
+@media (max-width: 860px) {
+  .infb { grid-template-columns: 1fr; padding: 22px; gap: 26px; min-height: 0; }
+  .infb__img { min-height: 300px; aspect-ratio: 16/11; }
+  .infb__panel { padding: 4px 4px 8px; }
+  .infb__bottom { grid-template-columns: 1fr; gap: 18px; }
+}
+
+.info-section .infb__img,
+.info-section .infb__panel {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.9s cubic-bezier(.2,.7,.1,1), transform 0.9s cubic-bezier(.2,.7,.1,1);
 }
-.info-section.in .info-eyebrow { opacity: 1; transform: none; transition-delay: 0ms; }
-.info-section.in .info-headline { opacity: 1; transform: none; transition-delay: 100ms; }
-.info-section.in .info-portrait { opacity: 1; transform: none; transition-delay: 250ms; }
-.info-section.in .info-story { opacity: 1; transform: none; transition-delay: 350ms; }
-.info-section.in .info-stats { opacity: 1; transform: none; transition-delay: 450ms; }
-.info-section.in .info-timeline { opacity: 1; transform: none; transition-delay: 550ms; }
+.info-section.in .infb__img { opacity: 1; transform: none; transition-delay: 120ms; }
+.info-section.in .infb__panel { opacity: 1; transform: none; transition-delay: 280ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .info-section .infb__img,
+  .info-section .infb__panel { opacity: 1; transform: none; transition: none; }
+}
+
+/* ============ FOOTER CTA ============ */
+.foot__intro { display: flex; flex-direction: column; gap: 26px; align-items: flex-start; }
+.foot__social { display: flex; flex-direction: row; gap: 6px; justify-self: center; }
+.foot__social a {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #000; opacity: 0.55;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.foot__social a:hover { transform: translateY(-2px); opacity: 1; }
+.foot__social svg { width: 19px; height: 19px; }
+.foot__cta {
+  display: flex; flex-direction: column; align-items: stretch; gap: 14px;
+  width: 100%; max-width: 500px;
+}
+.cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 22px 32px; border-radius: 999px;
+  font-family: var(--sans); font-weight: 800;
+  font-size: 19px; letter-spacing: -0.01em;
+  text-decoration: none;
+  border: none; cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.25s cubic-bezier(.2,.7,.1,1), background 0.25s, color 0.25s, border-color 0.25s;
+}
+.cta--primary.copied { background: #16a34a; color: #fff; }
+.cta__ic { display: inline-flex; }
+.cta__ic svg { width: 21px; height: 21px; }
+.cta__copyhint {
+  display: inline-flex; margin-left: auto; padding-left: 14px;
+  opacity: 0.5; transition: opacity 0.2s;
+}
+.cta__copyhint svg { width: 17px; height: 17px; }
+.cta--primary:hover .cta__copyhint { opacity: 0.9; }
+.cta--primary.copied .cta__copyhint { display: none; }
+.cta--ghost.copied { border-color: #16a34a; color: #16a34a; }
+.foot__tel {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 4px; padding: 6px 8px;
+  font-family: var(--sans); font-weight: 800;
+  font-size: 17px; letter-spacing: -0.01em;
+  color: #000; text-decoration: none;
+  align-self: flex-start;
+  background: transparent; border: none; cursor: pointer;
+  border-radius: 999px;
+  transition: opacity 0.2s, color 0.2s;
+}
+.foot__tel svg { width: 19px; height: 19px; }
+.foot__tel:hover { text-decoration: underline; }
+.foot__tel.copied { text-decoration: none; color: #16a34a; }
+.cta svg { width: 21px; height: 21px; flex: none; }
+.cta--primary { background: #000; color: var(--yellow); }
+.cta--primary:hover { transform: translateY(-3px); background: #141414; }
+.cta--ghost {
+  background: transparent; color: #000;
+  border: 1.5px solid rgba(0,0,0,0.35);
+}
+.cta--ghost:hover { transform: translateY(-3px); border-color: #000; background: rgba(0,0,0,0.06); }
+.cta:focus-visible { outline: 2px solid #000; box-shadow: 0 0 0 4px rgba(0,0,0,0.25); }
+@media (prefers-reduced-motion: reduce) {
+  .cta:hover { transform: none; }
+}
+@media (max-width: 560px) {
+  .foot__cta { flex-direction: column; }
+  .cta { width: 100%; justify-content: center; }
+}
 
 /* ============ FOOTER ============ */
 .foot {
   background: var(--yellow);
   color: #000;
-  padding: 56px 32px 28px;
-  margin-top: 64px;
+  padding: 56px 48px 28px;
+  margin: 64px var(--block-inset) var(--block-inset);
+  border-radius: var(--block-radius);
   position: relative;
   overflow: hidden;
 }
 .foot__grid {
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1.4fr 1.6fr;
+  grid-template-columns: minmax(auto, 520px) 1fr;
   gap: 48px;
   align-items: start;
 }
@@ -685,22 +1243,22 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: #000;
   line-height: 1;
 }
-.foot__col h4 {
+.foot__col h2 {
   font-family: ui-monospace, "JetBrains Mono", monospace;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   margin-bottom: 14px;
-  color: #000;
+  color: rgba(0,0,0,0.42);
 }
 .foot__col-h2 { margin-top: 28px; }
 .foot__col a, .foot__col p {
   font-family: ui-monospace, "JetBrains Mono", monospace;
-  font-size: 12px;
-  line-height: 1.85;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  line-height: 1.9;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #000;
   display: block;
@@ -727,7 +1285,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   100% { transform: translateY(0); }
 }
 
-.foot__media { align-self: end; }
+.foot__media { align-self: end; max-width: 340px; width: 100%; margin-left: auto; }
 .foot__media-frame {
   aspect-ratio: 16/9;
   background: #000;
@@ -825,12 +1383,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .foot__copy:hover .foot__copy-tag { opacity: 1; transform: translateY(0); }
 .foot__copy-tag.show { opacity: 1 !important; transform: translateY(0); }
 
-.foot__legal { display: flex; gap: 18px; justify-content: center; }
+.foot__legal { display: flex; gap: 18px; justify-content: flex-end; }
 .foot__legal a {
   font-family: ui-monospace, "JetBrains Mono", monospace;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: #000;
+  color: rgba(0,0,0,0.42);
   position: relative;
 }
 .foot__legal a:hover { text-decoration: underline; }
@@ -838,7 +1396,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .foot__bottom {
   margin-top: 40px;
   padding-top: 22px;
-  border-top: 1.5px solid #000;
+  border-top: 1.5px solid rgba(0,0,0,0.05);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -849,22 +1407,23 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   letter-spacing: 0.14em;
   position: relative;
   z-index: 1;
+  color: rgba(0,0,0,0.42);
 }
-.foot__bottom > :nth-child(3) { text-align: right; }
+.foot__bottom > .foot__legal { text-align: right; }
 .foot__grid { position: relative; z-index: 1; }
 
 @media (max-width: 1024px) {
   .nav { padding: 18px 24px; }
+  :root { --block-inset: 24px; }
   .section { padding: 56px 24px; }
-  .info-section { padding: 80px 24px 64px; }
+  .info-section { padding: 80px var(--block-inset) 64px; }
   .info-grid { gap: 36px 40px; }
   .films { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .hero { padding: 110px 24px 56px; }
   .marquee { padding: 40px 0; }
   .marquee__track { gap: 56px; }
-  .foot__grid { grid-template-columns: auto 1fr 1fr; gap: 32px; }
-  .foot__media { grid-column: 1 / -1; }
-  .foot__media-frame { max-width: 640px; margin-left: auto; }
+  .foot__grid { grid-template-columns: minmax(auto, 440px) 1fr; gap: 40px; }
+  .foot__media-frame { max-width: 340px; margin-left: auto; }
 }
 
 @media (max-width: 900px) {
@@ -894,6 +1453,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 @media (max-width: 640px) {
+  :root { --block-inset: 16px; }
   body { font-size: 14px; }
   .nav__hamburger { display: flex !important; }
   .nav { padding: 14px 16px; }
@@ -939,12 +1499,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .nav__hamburger.open span:nth-child(2) { opacity: 0; }
   .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  .hero { padding: 92px 16px 48px; min-height: 92vh; }
-  .hero__title { font-size: clamp(44px, 13vw, 72px); line-height: 1.02; font-weight: 900; }
-  .hero__reel { margin-top: 24px; gap: 12px; }
-  .hero__reel-btn { width: 56px; height: 56px; }
-  .hero__reel-btn::after { border-width: 7px 0 7px 11px; }
-  .hero__reel-label { font-size: 10px; letter-spacing: 0.24em; }
+  .hero { padding: 112px 16px 40px; min-height: 92vh; }
+  .hero__reel { width: 92vw; gap: 14px; }
+  .hero__reel-play { width: 60px; height: 60px; }
+  .hero__reel-play::after { border-width: 7px 0 7px 12px; }
+  .hero__reel-corner { width: 20px; height: 20px; }
 
   .section { padding: 48px 16px; }
   .section__title { font-size: clamp(26px, 7.5vw, 32px); margin-bottom: 22px; }
@@ -964,7 +1523,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .film__runtime { bottom: 8px; right: 8px; padding: 3px 7px; font-size: 10px; }
   .film__play { width: 44px; height: 44px; }
 
-  .info-section { padding: 56px 16px 48px; }
+  .info-section { padding: 56px var(--block-inset) 48px; }
   .info-grid { gap: 24px; }
   .info-eyebrow { padding-top: 16px; font-size: 10px; letter-spacing: 0.18em; }
   .info-headline { font-size: clamp(30px, 8vw, 40px); line-height: 1.05; }
@@ -1018,54 +1577,111 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     gap: 12px;
     text-align: left;
   }
-  .foot__bottom > :nth-child(3) { text-align: left; }
+  .foot__bottom > .foot__legal { text-align: left; }
   .foot__legal { justify-content: flex-start; flex-wrap: wrap; }
+  .foot__social { justify-self: start; }
+}
+
+/* ===== Responsive polish — current components ===== */
+@media (max-width: 1024px) {
+  .hero__reel { width: min(92vw, 780px); }
+}
+@media (max-width: 860px) {
+  .nav__contact { display: none; }                 /* Kontakt lives in the hamburger menu */
+  .foot__grid { grid-template-columns: 1fr; gap: 30px 28px; }
+  .foot__intro { grid-column: 1 / -1; }
+  .foot__cta { max-width: 500px; }
+  .foot__media { max-width: 420px; margin-left: 0; }
+}
+@media (max-width: 640px) {
+  .hero__masthead .hero__roles { display: none; } /* keep the bar compact on phones */
+  .nav__right { gap: 8px; }
+  .lang__code, .lang__chev { display: none; }      /* flag-only language pill */
+  .lang__btn { padding: 0; width: 42px; justify-content: center; gap: 0; }
+  .hero__logo { font-size: clamp(22px, 6.5vw, 30px); }
+}
+@media (max-width: 480px) {
+  .foot__grid { grid-template-columns: 1fr; gap: 26px; }
+  .foot__brand { grid-column: auto; }
+  .cta { font-size: 15px; padding: 16px 22px; }
+  .foot__cta { max-width: none; }
 }
 
 @media (max-width: 380px) {
-  .hero__title { font-size: 44px; font-weight: 900; }
+  .hero__logo { font-size: 24px; }
   .info-headline { font-size: 28px; }
   .section__title { font-size: 24px; }
   .info-stats__num { font-size: 38px; width: 84px; flex: 0 0 84px; }
 }
 </style>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script>(function(){try{var m=localStorage.getItem('nk-theme');if(m==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();</script>
 </head>
 <body>
 
+<a class="skip-link" href="#main" data-i18n="skip">Zum Inhalt springen</a>
+
 <!-- ============ NAV ============ -->
 <nav class="nav">
-  <div class="nav__brand">NK</div>
+  <div class="hero__masthead nav__brand">
+    <h1 class="hero__logo" id="heroLogo">Niko Karasek</h1>
+    <ul class="hero__roles">
+      <li data-i18n="role.reportagen">Reportagen</li>
+      <li data-i18n="role.fernsehen">Fernsehen</li>
+      <li><span class="hero__type" id="roleType"></span></li>
+    </ul>
+  </div>
   <div class="nav__right">
-    <div class="nav__menu-pill" id="navPill">
-      <button data-target="filme" class="active">Filme</button>
-      <button data-target="info">Info</button>
-      <button data-target="experte">Experte</button>
-      <button data-target="kontakt">Kontakt</button>
+    <div class="lang" id="langPick">
+      <button class="lang__btn" id="langBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Sprache">
+        <span class="lang__flag" id="langFlag">🇩🇪</span><span class="lang__code" id="langCode">DE</span>
+        <svg class="lang__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <ul class="lang__menu" id="langMenu" role="listbox">
+        <li><button type="button" role="option" data-lang="de"><span>🇩🇪</span>Deutsch</button></li>
+        <li><button type="button" role="option" data-lang="en"><span>🇬🇧</span>English</button></li>
+        <li><button type="button" role="option" data-lang="es"><span>🇪🇸</span>Español</button></li>
+        <li><button type="button" role="option" data-lang="fr"><span>🇫🇷</span>Français</button></li>
+      </ul>
     </div>
-    <button class="nav__hamburger" id="hamburger" aria-label="Menü">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Helles oder dunkles Design" aria-pressed="false">
+      <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a class="nav__contact" href="#kontakt" data-nav="kontakt" data-i18n="nav.kontakt">Kontakt</a>
+    <div class="nav__menu-pill" id="navPill">
+      <button data-target="main" class="active" aria-current="true" data-i18n="nav.start">Start</button>
+      <button data-target="filme" data-i18n="nav.filme">Filme</button>
+      <button data-target="info" data-i18n="nav.info">Info</button>
+      <button data-target="experte" data-i18n="nav.experte">Experte</button>
+      <button data-target="kontakt" data-i18n="nav.kontakt">Kontakt</button>
+    </div>
+    <button class="nav__hamburger" id="hamburger" aria-label="Menü" aria-expanded="false" aria-controls="navPill">
       <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
 
 <!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="hero__bg" aria-hidden="true">
-    <iframe
-      src="https://www.youtube.com/embed/ExM137zUBKA?autoplay=1&mute=1&controls=0&loop=1&playlist=ExM137zUBKA&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&color=white"
-      allow="autoplay; encrypted-media"
-      title="Showreel background"
-      tabindex="-1"></iframe>
-    <div class="hero__bg-center-mask" aria-hidden="true"></div>
-    <div class="hero__bg-shield"></div>
-  </div>
-  <h1 class="hero__title">
-    <span class="hero__name" id="heroName"></span>
-    <span class="rotating" id="rotatingWord"></span>
-  </h1>
-  <div class="hero__reel">
-    <button class="hero__reel-btn" id="showreelBtn" aria-label="Play showreel"></button>
-    <div class="hero__reel-label">Showreel · 2026</div>
+<section class="hero" data-screen-label="Hero" id="main" tabindex="-1">
+  <div class="hero__stage">
+    <div class="hero__reel" id="showreelBtn" role="button" tabindex="0" aria-label="Showreel abspielen">
+      <div class="hero__reel-frame">
+        <div class="hero__reel-screen">
+          <iframe
+            src="https://www.youtube.com/embed/ExM137zUBKA?autoplay=1&mute=1&controls=0&loop=1&playlist=ExM137zUBKA&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&color=white"
+            allow="autoplay; encrypted-media"
+            title="Showreel"
+            tabindex="-1"></iframe>
+        </div>
+        <div class="hero__reel-shield"></div>
+        <span class="hero__reel-corner hero__reel-corner--tl"></span>
+        <span class="hero__reel-corner hero__reel-corner--tr"></span>
+        <span class="hero__reel-corner hero__reel-corner--bl"></span>
+        <span class="hero__reel-corner hero__reel-corner--br"></span>
+        <div class="hero__reel-play"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1076,87 +1692,37 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 <!-- ============ FILMS ============ -->
 <section class="section" id="filme">
-  <h2 class="section__title">Meine Filme</h2>
+  <h2 class="section__title" data-i18n="sec.filme">Meine Filme</h2>
   <div class="films" id="filmsGrid"></div>
 </section>
 
 <!-- ============ INFO ============ -->
 <section class="section info-section" id="info">
-  <div class="info-grid">
-    <div class="info-eyebrow">
-      <span class="info-eyebrow__dot"></span>
-      <span>Info · About</span>
+  <div class="infb">
+    <div class="infb__img">
+      <img src="assets/portrait.webp" alt="Niko Karasek" />
+      <div class="infb__grain"></div>
+      <span class="infb__corner infb__corner--tl" data-i18n="info.corner1">Info</span>
+      <span class="infb__corner infb__corner--bl" data-i18n="info.corner2">Reporter · Dok · TV</span>
     </div>
 
-    <h2 class="info-headline">
-      Sechs Jahre <em>Moskau</em>.<br/>
-      Heute <em>Hamburg</em>.<br/>
-      Immer <span class="yellow">unterwegs</span>.
-    </h2>
-
-    <div class="info-portrait">
-      <div class="info-portrait__frame">
-        <img class="info-portrait__img" src="assets/portrait.webp" alt="Niko Karasek vor dem Kreml in Moskau" />
-        <div class="info-portrait__tag">
-          <span class="dot"></span> auf Sendung
-        </div>
+    <div class="infb__panel">
+      <h2 class="infb__title" data-i18n-html="info.title">
+        Sechs Jahre <span class="infb__mute">Moskau.</span><br/>
+        Heute Hamburg.
+      </h2>
+      <div class="infb__years">
+        <div class="infb__yr"><span class="infb__yr-plus">+</span><span class="infb__yr-k">2016</span><span class="infb__yr-v" data-i18n="info.yr1">Moskau · Russland</span></div>
+        <div class="infb__yr"><span class="infb__yr-plus">+</span><span class="infb__yr-k">2023</span><span class="infb__yr-v" data-i18n="info.yr2">Kyjiw · Ukraine</span></div>
+        <div class="infb__yr on"><span class="infb__yr-plus">+</span><span class="infb__yr-k" data-i18n="info.yr3k">Heute</span><span class="infb__yr-v" data-i18n="info.yr3v">Hamburg · Welt</span></div>
       </div>
-    </div>
-
-    <div class="info-story">
-      <p class="info-lede">
-        Mein Name ist <strong>Niko Karasek</strong>. Bis Ende 2022 habe ich
-        für sechs Jahre in Russland gelebt und von dort als freier
-        Journalist und Reporter für alle deutschen Fernsehsender über die
-        wichtigsten politischen und gesellschaftlichen Themen berichtet.
-      </p>
-      <p class="info-body">
-        Mit dem Beginn des russischen Angriffskriegs in der Ukraine begann
-        für mich eine Zeit, die von <em>Repressalien und Einschränkungen
-        meiner Arbeit</em> gekennzeichnet war.
-      </p>
-      <p class="info-body">
-        Seit Dezember 2022 lebe ich in Hamburg, fokussiere mich aber
-        weiterhin auf die Situation in Russland, der Ukraine und anderen
-        Ländern Osteuropas. Außerdem trete ich als Experte für
-        Internationale Politik auf und drehe Reportagen und Dokumentationen
-        über gesellschaftliche Themen aus aller Welt.
-      </p>
-    </div>
-
-    <ul class="info-stats">
-      <li>
-        <div class="info-stats__num">6</div>
-        <div class="info-stats__label">Jahre<br/>in Russland</div>
-      </li>
-      <li>
-        <div class="info-stats__num">2022</div>
-        <div class="info-stats__label">Rückkehr<br/>nach Deutschland</div>
-      </li>
-      <li>
-        <div class="info-stats__num">∞</div>
-        <div class="info-stats__label">Themen<br/>aus aller Welt</div>
-      </li>
-    </ul>
-
-    <div class="info-timeline">
-      <div class="info-timeline__row">
-        <span class="info-timeline__year">2016</span>
-        <span class="info-timeline__city">Moskau</span>
-        <span class="info-timeline__line"></span>
-        <span class="info-timeline__note">Korrespondent — Russland &amp; GUS</span>
-      </div>
-      <div class="info-timeline__row">
-        <span class="info-timeline__year">2022</span>
-        <span class="info-timeline__city">Kyjiw / Front</span>
-        <span class="info-timeline__line"></span>
-        <span class="info-timeline__note">Reportagen aus dem Kriegsgebiet</span>
-      </div>
-      <div class="info-timeline__row active">
-        <span class="info-timeline__year">heute</span>
-        <span class="info-timeline__city">Hamburg</span>
-        <span class="info-timeline__line"></span>
-        <span class="info-timeline__note">Dokumentationen, Speaker, TV-Experte</span>
+      <div class="infb__bottom">
+        <p class="infb__text" data-i18n="info.text">
+          Bis Ende 2022 habe ich für sechs Jahre in Russland gelebt und von dort
+          als freier Journalist für alle deutschen Fernsehsender berichtet. Seit
+          Dezember 2022 lebe ich in Hamburg und drehe Reportagen und
+          Dokumentationen aus aller Welt — der Fokus bleibt Osteuropa.
+        </p>
       </div>
     </div>
   </div>
@@ -1164,33 +1730,30 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 <!-- ============ EXPERTS ============ -->
 <section class="section" id="experte">
-  <h2 class="section__title">Experte &amp; Speaker</h2>
+  <h2 class="section__title" data-i18n="sec.experte">Experte &amp; Speaker</h2>
   <div class="films" id="expertsGrid"></div>
 </section>
 
 <!-- ============ FOOTER ============ -->
 <footer class="foot" id="kontakt">
   <div class="foot__grid">
-    <div class="foot__brand">NK</div>
-
-    <div class="foot__col">
-      <h4>Sitemap</h4>
-      <a href="#filme" data-nav="filme">Filme</a>
-      <a href="#experte" data-nav="experte">Experte / Speaker</a>
-      <a href="#info" data-nav="info">Info</a>
-      <a href="#kontakt" data-nav="kontakt">Kontakt</a>
-    </div>
-
-    <div class="foot__col">
-      <h4>Kontakt</h4>
-      <a href="tel:+4901746379751">0049 0174 637 9751</a>
-      <a href="#" class="foot__copy" id="copyEmail" title="Click to copy">
-        <span class="__cf_email__" data-cfemail="0f61666460646e7d6e7c6a64217b794f68626e6663216c6062">[email&#160;protected]</span>
-        <span class="foot__copy-tag" id="copyTag">Copy</span>
-      </a>
-      <h4 class="foot__col-h2">Social Media</h4>
-      <a href="https://www.facebook.com/niko.karasek" target="_blank" rel="noopener">Facebook</a>
-      <a href="https://www.instagram.com/nikokarasek" target="_blank" rel="noopener">Instagram</a>
+    <div class="foot__intro">
+      <div class="foot__brand">NK</div>
+      <div class="foot__cta">
+        <button class="cta cta--primary" id="ctaCopyEmail" type="button" aria-label="E-Mail-Adresse kopieren: nikokarasek.tv@gmail.com" title="Klicken zum Kopieren">
+          <span class="cta__ic" id="ctaCopyIcon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></span>
+          <span class="cta__label" id="ctaCopyLabel">nikokarasek.tv@gmail.com</span>
+          <span class="cta__copyhint" id="ctaCopyHint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+        </button>
+        <button class="cta cta--ghost" id="ctaCopyPhone" type="button" title="Klicken zum Kopieren">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span id="ctaCopyPhoneLabel">+49 174 637 9751</span>
+        </button>
+        <button class="cta cta--ghost" id="ctaVcard" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></svg>
+          <span data-i18n="foot.save">Kontakt speichern</span>
+        </button>
+      </div>
     </div>
 
     <div class="foot__media">
@@ -1199,26 +1762,50 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
           <span>still 16:9 — feldarbeit</span>
         </div>
         <img class="foot__media-gif" src="assets/footer.gif" alt="Behind the scenes" />
-        <div class="foot__media-meta">
-          <span class="dot"></span>
-          <span>Behind the scenes</span>
-        </div>
       </div>
     </div>
   </div>
 
   <div class="foot__bottom">
-    <span>© 2026 Niko Karasek</span>
+    <span>© 2026 Niko Karasek · Hamburg</span>
+    <div class="foot__social" aria-label="Social Media">
+      <a href="https://www.facebook.com/niko.karasek" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/nikokarasek" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/niko-karasek" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.3 8.65 21 11 21 14.1V21h-4v-6.1c0-1.45-.03-3.3-2-3.3s-2.3 1.57-2.3 3.2V21H9z"/></svg>
+      </a>
+    </div>
     <span class="foot__legal">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Use</a>
-      <a href="#">Impressum</a>
+      <a href="Impressum.html" data-i18n="legal.impressum">Impressum</a>
+      <a href="Datenschutz.html" data-i18n="legal.datenschutz">Datenschutzerklärung</a>
     </span>
-    <span>Hamburg · 53.5511° N, 9.9937° E</span>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+/* ---------- LENIS SMOOTH SCROLL ---------- */
+const lenis = (function initLenis() {
+  if (typeof Lenis === "undefined") return null;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return null;
+  const l = new Lenis({
+    duration: 1.1,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    touchMultiplier: 1.6,
+  });
+  function raf(time) {
+    l.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+  return l;
+})();
+
 /* ---------- DATA ---------- */
 const ROTATING_WORDS = ["Reportagen", "Fernsehen", "Russland Experte", "Keynote Speaker"];
 
@@ -1255,6 +1842,22 @@ const EXPERTS = [
   { title: "Bei Stern TV mit Marina Owsjannikowa", outlet: "Stern TV (RTL)", runtime: "9:17", broadcaster: "sterntv", img: "assets/experts/03_stern_tv.webp", yt: "mzv5JJlje5I" },
 ];
 
+/* Translations for film / expert titles (German title = key). DE falls back to the key. */
+const FILM_T = {
+  "Putins Helfer": { en: "Putin's Helpers", es: "Los ayudantes de Putin", fr: "Les complices de Poutine" },
+  "Im Land des Feindes": { en: "In the Land of the Enemy", es: "En el país del enemigo", fr: "Au pays de l'ennemi" },
+  "10 Fragen an eine politische Gefangene": { en: "10 Questions for a Political Prisoner", es: "10 preguntas a una presa política", fr: "10 questions à une prisonnière politique" },
+  "Russland: Denunzieren um jeden Preis": { en: "Russia: Denouncing at Any Cost", es: "Rusia: denunciar a cualquier precio", fr: "Russie : dénoncer à tout prix" },
+  "Teilmobilmachung in Russland": { en: "Partial Mobilisation in Russia", es: "Movilización parcial en Rusia", fr: "Mobilisation partielle en Russie" },
+  "Russland: Putins leise Gegnerin": { en: "Russia: Putin's Quiet Opponent", es: "Rusia: la silenciosa opositora de Putin", fr: "Russie : l'opposante discrète de Poutine" },
+  "Stroganina: das sibirische Sushi": { en: "Stroganina: The Siberian Sushi", es: "Stroganina: el sushi siberiano", fr: "Stroganina : le sushi sibérien" },
+  "Einblicke in Russlands Troll-Armee": { en: "Inside Russia's Troll Army", es: "Dentro del ejército de troles de Rusia", fr: "Au cœur de l'armée de trolls russe" },
+  "Der härteste Knast Russlands": { en: "Russia's Toughest Prison", es: "La cárcel más dura de Rusia", fr: "La prison la plus dure de Russie" },
+  "Russland-Experte bei ntv": { en: "Russia Expert on ntv", es: "Experto en Rusia en ntv", fr: "Expert de la Russie sur ntv" },
+  "Die Zukunft des Journalismus": { en: "The Future of Journalism", es: "El futuro del periodismo", fr: "L'avenir du journalisme" },
+  "Bei Stern TV mit Marina Owsjannikowa": { en: "On Stern TV with Marina Ovsyannikova", es: "En Stern TV con Marina Ovsiánnikova", fr: "Sur Stern TV avec Marina Ovsiannikova" }
+};
+
 const SHOWREEL_YT = "ExM137zUBKA";
 
 /* ---------- HELPERS ---------- */
@@ -1289,7 +1892,7 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
       const letter = el(
         "span",
         {
-          class: "letter" + (opts.rotateClass ? " rotate-letter" : ""),
+          class: (opts.rletter ? "rletter" : "letter") + (opts.rotateClass ? " rotate-letter" : ""),
           style: "--d:" + d + "ms",
         },
         ch
@@ -1302,6 +1905,15 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
   return frag;
 }
 
+/* ---------- HERO LOGO LETTER REVEAL ---------- */
+(function heroLogo() {
+  const host = document.getElementById("heroLogo");
+  if (!host) return;
+  const text = host.textContent.trim();
+  host.textContent = "";
+  host.appendChild(buildLetters(text, 200, 60));
+})();
+
 /* ---------- NAV ---------- */
 (function nav() {
   const pill = document.getElementById("navPill");
@@ -1310,23 +1922,36 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
 
   function go(id) {
     const target = document.getElementById(id);
-    if (target) window.scrollTo({ top: target.offsetTop - 40, behavior: "smooth" });
+    if (!target) return;
+    if (lenis) lenis.scrollTo(target, { offset: -40 });
+    else window.scrollTo({ top: target.offsetTop - 40, behavior: "smooth" });
   }
 
   buttons.forEach((b) => {
     b.addEventListener("click", (e) => {
       e.preventDefault();
-      buttons.forEach((bb) => bb.classList.remove("active"));
+      buttons.forEach((bb) => { bb.classList.remove("active"); bb.removeAttribute("aria-current"); });
       b.classList.add("active");
+      b.setAttribute("aria-current", "true");
       pill.classList.remove("open");
       hamburger.classList.remove("open");
+      hamburger.setAttribute("aria-expanded", "false");
       go(b.dataset.target);
     });
   });
 
   hamburger.addEventListener("click", () => {
-    pill.classList.toggle("open");
+    const open = pill.classList.toggle("open");
     hamburger.classList.toggle("open");
+    hamburger.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!pill.classList.contains("open")) return;
+    if (pill.contains(e.target) || hamburger.contains(e.target)) return;
+    pill.classList.remove("open");
+    hamburger.classList.remove("open");
+    hamburger.setAttribute("aria-expanded", "false");
   });
 
   document.querySelectorAll("[data-nav]").forEach((a) => {
@@ -1337,47 +1962,31 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
   });
 })();
 
-/* ---------- HERO TITLE + ROTATING WORD ---------- */
-(function hero() {
-  const heroName = document.getElementById("heroName");
-  heroName.appendChild(buildLetters("Niko Karasek", 200, 45));
-
-  const rotatingHost = document.getElementById("rotatingWord");
-  let idx = 0;
-  let firstRun = true;
-  let timeoutHold = null;
-  let timeoutSwap = null;
-  const initialDelay = 1500;
-  const holdMs = 3000;
-  const exitMs = 500;
-
-  function renderWord() {
-    rotatingHost.innerHTML = "";
-    rotatingHost.classList.remove("out");
-    const stride = firstRun ? 45 : 35;
-    const baseDelay = firstRun ? 250 : 0;
-    rotatingHost.appendChild(
-      buildLetters(ROTATING_WORDS[idx], baseDelay, stride, {
-        yellow: true,
-        rotateClass: true,
-      })
-    );
-    firstRun = false;
+/* ---------- HERO ---------- */
+/* Hero masthead now lives in the nav; showreel frame opens the lightbox via
+   the #showreelBtn click handler defined below. */
+(function roleTyper() {
+  const el = document.getElementById("roleType");
+  if (!el) return;
+  let words = ["Russland-Experte", "Keynote Speaker"];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let t = null;
+  function run() {
+    clearTimeout(t);
+    if (reduce) { el.textContent = words[0]; return; }
+    let wi = 0, ci = 0, deleting = false;
+    function step() {
+      const w = words[wi];
+      ci += deleting ? -1 : 1;
+      el.textContent = w.slice(0, ci);
+      if (!deleting && ci === w.length) { deleting = true; t = setTimeout(step, 1700); return; }
+      if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; t = setTimeout(step, 350); return; }
+      t = setTimeout(step, deleting ? 45 : 95);
+    }
+    step();
   }
-
-  function tick() {
-    timeoutHold = setTimeout(() => {
-      rotatingHost.classList.add("out");
-      timeoutSwap = setTimeout(() => {
-        idx = (idx + 1) % ROTATING_WORDS.length;
-        renderWord();
-        tick();
-      }, exitMs);
-    }, holdMs);
-  }
-
-  renderWord();
-  setTimeout(tick, initialDelay);
+  window.__setRoleWords = function (w) { if (Array.isArray(w) && w.length) { words = w; run(); } };
+  run();
 })();
 
 /* ---------- MARQUEE ---------- */
@@ -1403,14 +2012,12 @@ const LOGO_FILES = [
 })();
 
 /* ---------- FOOTER LINK WAVE: split each link's text into per-character spans ---------- */
-(function footerWave() {
+window.__footerWave = function footerWave() {
   document.querySelectorAll(".foot__col a").forEach((a) => {
-    if (a.dataset.waved) return;
-    // skip links that contain nested elements (e.g. the email + Copy badge) — wrapping their text breaks layout
-    if (a.children.length > 0) return;
+    // skip links that contain non-text (element) children, e.g. a badge
+    if (a.querySelector(":scope > :not(.wch)")) return;
     const text = a.textContent;
-    if (!text) return;
-    a.dataset.waved = "1";
+    if (!text || !text.trim()) return;
     a.textContent = "";
     [...text].forEach((ch, i) => {
       const span = document.createElement("span");
@@ -1420,11 +2027,14 @@ const LOGO_FILES = [
       a.appendChild(span);
     });
   });
-})();
+};
+window.__footerWave();
 
 /* ---------- LIGHTBOX ---------- */
+let lbLastFocused = null;
 function openLightbox(ytId) {
   if (!ytId) return;
+  lbLastFocused = document.activeElement;
   const overlay = el("div", { class: "lightbox", onclick: closeLightbox });
   const inner = el("div", { class: "lightbox__inner", onclick: (e) => e.stopPropagation() });
   const iframe = el("iframe", {
@@ -1446,17 +2056,34 @@ function openLightbox(ytId) {
   overlay.appendChild(inner);
   document.body.appendChild(overlay);
   document.body.style.overflow = "hidden";
-  requestAnimationFrame(() => overlay.classList.add("in"));
+  if (lenis) lenis.stop();
+  requestAnimationFrame(() => { overlay.classList.add("in"); close.focus(); });
+  overlay.addEventListener("keydown", (e) => {
+    if (e.key !== "Tab") return;
+    const f = overlay.querySelectorAll('a[href], button, iframe');
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
 }
 function closeLightbox() {
   const lb = document.querySelector(".lightbox");
   if (!lb) return;
   lb.classList.remove("in");
   document.body.style.overflow = "";
+  if (lenis) lenis.start();
   setTimeout(() => lb.remove(), 250);
+  if (lbLastFocused && typeof lbLastFocused.focus === "function") { lbLastFocused.focus(); lbLastFocused = null; }
 }
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
-document.getElementById("showreelBtn").addEventListener("click", () => openLightbox(SHOWREEL_YT));
+(function showreelKeys() {
+  const btn = document.getElementById("showreelBtn");
+  btn.addEventListener("click", () => openLightbox(SHOWREEL_YT));
+  btn.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(SHOWREEL_YT); }
+  });
+})();
 
 /* ---------- FILM/EXPERT CARDS ---------- */
 function buildFilmCard(item, index) {
@@ -1473,13 +2100,20 @@ function buildFilmCard(item, index) {
   const card = el("article", { class: "film" }, [
     media,
     el("div", { class: "film__caption" }, [
-      el("div", { class: "film__title" }, item.title),
+      el("div", { class: "film__title", "data-ititle": item.title }, item.title),
       el("div", { class: "film__year" }, item.year || item.outlet || ""),
     ]),
   ]);
   if (item.yt) {
     card.style.cursor = "pointer";
-    card.addEventListener("click", () => openLightbox(item.yt));
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", item.title + " – Video abspielen");
+    const open = () => openLightbox(item.yt);
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+    });
   }
   return card;
 }
@@ -1500,6 +2134,22 @@ function buildFilmCard(item, index) {
 
 /* ---------- SCROLL REVEAL ---------- */
 (function reveal() {
+  // big section headings: reveal on scroll (letter-splitting handled by i18n applyLang)
+  document.querySelectorAll(".section__title").forEach((node) => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            node.classList.add("in");
+            io.unobserve(node);
+          }
+        });
+      },
+      { threshold: 0.4, rootMargin: "0px 0px -8% 0px" }
+    );
+    io.observe(node);
+  });
+
   // films + experts
   document.querySelectorAll(".film").forEach((node, i) => {
     const io = new IntersectionObserver(
@@ -1534,10 +2184,167 @@ function buildFilmCard(item, index) {
   }
 })();
 
+/* ---------- HERO VIDEO: kick autoplay on first user gesture (fallback) ---------- */
+(function heroVideoKick() {
+  const frame = document.querySelector(".hero__reel-screen iframe");
+  if (!frame) return;
+  let done = false;
+  function kick() {
+    if (done) return;
+    done = true;
+    // reassigning src within a user gesture forces a fresh (muted) autoplay attempt
+    const src = frame.getAttribute("src");
+    frame.setAttribute("src", src);
+    cleanup();
+  }
+  function cleanup() {
+    ["scroll", "touchstart", "pointerdown", "keydown"].forEach((ev) =>
+      window.removeEventListener(ev, kick, { passive: true })
+    );
+  }
+  ["scroll", "touchstart", "pointerdown", "keydown"].forEach((ev) =>
+    window.addEventListener(ev, kick, { passive: true, once: false })
+  );
+})();
+
+/* ---------- THEME TOGGLE ---------- */
+(function theme() {
+  const t = document.getElementById("themeToggle");
+  if (!t) return;
+  function isLight() { return document.documentElement.getAttribute("data-theme") === "light"; }
+  t.setAttribute("aria-pressed", isLight() ? "true" : "false");
+  t.addEventListener("click", () => {
+    const next = isLight() ? "dark" : "light";
+    if (next === "light") document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+    t.setAttribute("aria-pressed", next === "light" ? "true" : "false");
+    try { localStorage.setItem("nk-theme", next); } catch (e) {}
+  });
+})();
+
+/* ---------- COPY PHONE ---------- */
+(function ctaCopyPhone() {
+  const btn = document.getElementById("ctaCopyPhone");
+  const label = document.getElementById("ctaCopyPhoneLabel");
+  if (!btn || !label) return;
+  const phone = "+49 174 637 9751";
+  const defaultLabel = label.textContent;
+  let resetT = null;
+  function copyText(t) {
+    function fallback() {
+      return new Promise((res, rej) => {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+          document.body.appendChild(ta); ta.focus(); ta.select();
+          const ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          ok ? res() : rej();
+        } catch (e) { rej(e); }
+      });
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(t).catch(fallback);
+    }
+    return fallback();
+  }
+  btn.addEventListener("click", () => {
+    copyText(phone).then(() => {
+      btn.classList.add("copied");
+      label.textContent = (window.__i18nT && window.__i18nT("copied")) || "Kopiert!";
+      clearTimeout(resetT);
+      resetT = setTimeout(() => {
+        btn.classList.remove("copied");
+        label.textContent = defaultLabel;
+      }, 2000);
+    });
+  });
+})();
+
+/* ---------- VCARD (Kontakt-Karte) ---------- */
+(function vcard() {
+  const btn = document.getElementById("ctaVcard");
+  if (!btn) return;
+  const vcf = [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    "N:Karasek;Niko;;;",
+    "FN:Niko Karasek",
+    "ORG:Niko Karasek — Journalist & Reporter",
+    "TITLE:Freier Journalist, Fernsehreporter, Russland-Experte",
+    "TEL;TYPE=CELL,VOICE:+491746379751",
+    "EMAIL;TYPE=INTERNET:nikokarasek.tv@gmail.com",
+    "URL:https://www.nikokarasek.com",
+    "ADR;TYPE=WORK:;;;Hamburg;;;Deutschland",
+    "END:VCARD"
+  ].join("\r\n");
+  btn.addEventListener("click", () => {
+    const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Niko-Karasek.vcf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+})();
+
 /* ---------- COPY EMAIL ---------- */
+(function ctaCopyEmail() {
+  const btn = document.getElementById("ctaCopyEmail");
+  const label = document.getElementById("ctaCopyLabel");
+  const icon = document.getElementById("ctaCopyIcon");
+  if (!btn || !label) return;
+  const email = "nikokarasek.tv@gmail.com";
+  const mailSvg = icon ? icon.innerHTML : "";
+  const defaultLabel = label.textContent;
+  const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  let resetT = null;
+  function copyText(t) {
+    function fallback() {
+      return new Promise((res, rej) => {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = t;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.focus(); ta.select();
+          const ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          ok ? res() : rej();
+        } catch (e) { rej(e); }
+      });
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(t).catch(fallback);
+    }
+    return fallback();
+  }
+  btn.addEventListener("click", () => {
+    copyText(email).then(() => {
+      btn.classList.add("copied");
+      if (icon) icon.innerHTML = checkSvg;
+      label.textContent = (window.__i18nT && window.__i18nT("copied")) || "Kopiert!";
+      clearTimeout(resetT);
+      resetT = setTimeout(() => {
+        btn.classList.remove("copied");
+        if (icon) icon.innerHTML = mailSvg;
+        label.textContent = defaultLabel;
+      }, 2200);
+    }).catch(() => {
+      label.textContent = email;
+    });
+  });
+})();
+
+/* ---------- COPY EMAIL (footer link) ---------- */
 (function copy() {
   const link = document.getElementById("copyEmail");
   const tag = document.getElementById("copyTag");
+  if (!link || !tag) return;
   link.addEventListener("click", (e) => {
     e.preventDefault();
     const email = "nikokarasek.tv@gmail.com";
@@ -1568,6 +2375,135 @@ function buildFilmCard(item, index) {
       document.body.removeChild(ta);
     }
   });
+})();
+
+/* ---------- I18N (DE / EN / ES / FR) ---------- */
+(function i18n() {
+  const DICT = {
+    de: {
+      "skip": "Zum Inhalt springen",
+      "nav.start": "Start", "nav.filme": "Filme", "nav.info": "Info", "nav.experte": "Experte", "nav.kontakt": "Kontakt",
+      "role.reportagen": "Reportagen", "role.fernsehen": "Fernsehen",
+      "sec.filme": "Meine Filme", "sec.experte": "Experte & Speaker",
+      "info.title": 'Sechs Jahre <span class="infb__mute">Moskau.</span><br/> Heute Hamburg.',
+      "info.corner1": "Info", "info.corner2": "Reporter · Dok · TV",
+      "info.yr1": "Moskau · Russland", "info.yr2": "Kyjiw · Ukraine", "info.yr3k": "Heute", "info.yr3v": "Hamburg · Welt",
+      "info.text": "Bis Ende 2022 habe ich für sechs Jahre in Russland gelebt und von dort als freier Journalist für alle deutschen Fernsehsender berichtet. Seit Dezember 2022 lebe ich in Hamburg und drehe Reportagen und Dokumentationen aus aller Welt — der Fokus bleibt Osteuropa.",
+      "foot.sitemap": "Sitemap", "foot.social": "Social Media", "foot.experteLink": "Experte / Speaker", "foot.save": "Kontakt speichern",
+      "legal.impressum": "Impressum", "legal.datenschutz": "Datenschutzerklärung",
+      "copied": "Kopiert!",
+      typeWords: ["Russland-Experte", "Keynote Speaker"]
+    },
+    en: {
+      "skip": "Skip to content",
+      "nav.start": "Start", "nav.filme": "Films", "nav.info": "About", "nav.experte": "Expert", "nav.kontakt": "Contact",
+      "role.reportagen": "Reporting", "role.fernsehen": "Television",
+      "sec.filme": "My Films", "sec.experte": "Expert & Speaker",
+      "info.title": 'Six years <span class="infb__mute">Moscow.</span><br/> Now Hamburg.',
+      "info.corner1": "About", "info.corner2": "Reporter · Doc · TV",
+      "info.yr1": "Moscow · Russia", "info.yr2": "Kyiv · Ukraine", "info.yr3k": "Now", "info.yr3v": "Hamburg · World",
+      "info.text": "Until the end of 2022 I lived in Russia for six years, reporting from there as a freelance journalist for all German TV networks. Since December 2022 I have been based in Hamburg, filming reports and documentaries from all over the world — with a continued focus on Eastern Europe.",
+      "foot.sitemap": "Sitemap", "foot.social": "Social Media", "foot.experteLink": "Expert / Speaker", "foot.save": "Save contact",
+      "legal.impressum": "Imprint", "legal.datenschutz": "Privacy Policy",
+      "copied": "Copied!",
+      typeWords: ["Russia Expert", "Keynote Speaker"]
+    },
+    es: {
+      "skip": "Saltar al contenido",
+      "nav.start": "Inicio", "nav.filme": "Reportajes", "nav.info": "Perfil", "nav.experte": "Experto", "nav.kontakt": "Contacto",
+      "role.reportagen": "Reportajes", "role.fernsehen": "Televisión",
+      "sec.filme": "Mis reportajes", "sec.experte": "Experto y conferenciante",
+      "info.title": 'Seis años <span class="infb__mute">Moscú.</span><br/> Ahora Hamburgo.',
+      "info.corner1": "Perfil", "info.corner2": "Reportero · Doc · TV",
+      "info.yr1": "Moscú · Rusia", "info.yr2": "Kyiv · Ucrania", "info.yr3k": "Ahora", "info.yr3v": "Hamburgo · Mundo",
+      "info.text": "Hasta finales de 2022 viví seis años en Rusia, desde donde informé como periodista independiente para todas las cadenas de televisión alemanas. Desde diciembre de 2022 vivo en Hamburgo y realizo reportajes y documentales de todo el mundo, manteniendo el foco en Europa del Este.",
+      "foot.sitemap": "Mapa del sitio", "foot.social": "Redes sociales", "foot.experteLink": "Experto / Conferenciante", "foot.save": "Guardar contacto",
+      "legal.impressum": "Aviso legal", "legal.datenschutz": "Política de privacidad",
+      "copied": "¡Copiado!",
+      typeWords: ["Experto en Rusia", "Conferenciante"]
+    },
+    fr: {
+      "skip": "Aller au contenu",
+      "nav.start": "Accueil", "nav.filme": "Reportages", "nav.info": "Profil", "nav.experte": "Expert", "nav.kontakt": "Contact",
+      "role.reportagen": "Reportages", "role.fernsehen": "Télévision",
+      "sec.filme": "Mes reportages", "sec.experte": "Expert & conférencier",
+      "info.title": "Six ans <span class=\"infb__mute\">Moscou.</span><br/> Aujourd’hui Hambourg.",
+      "info.corner1": "Profil", "info.corner2": "Reporter · Doc · TV",
+      "info.yr1": "Moscou · Russie", "info.yr2": "Kyiv · Ukraine", "info.yr3k": "Aujourd’hui", "info.yr3v": "Hambourg · Monde",
+      "info.text": "Jusqu’à fin 2022, j’ai vécu six ans en Russie, d’où j’ai travaillé comme journaliste indépendant pour toutes les chaînes de télévision allemandes. Depuis décembre 2022, je vis à Hambourg et je réalise des reportages et des documentaires du monde entier — avec un intérêt constant pour l’Europe de l’Est.",
+      "foot.sitemap": "Plan du site", "foot.social": "Réseaux sociaux", "foot.experteLink": "Expert / Conférencier", "foot.save": "Enregistrer le contact",
+      "legal.impressum": "Mentions légales", "legal.datenschutz": "Politique de confidentialité",
+      "copied": "Copié !",
+      typeWords: ["Expert de la Russie", "Conférencier"]
+    }
+  };
+  const FLAGS = { de: "🇩🇪", en: "🇬🇧", es: "🇪🇸", fr: "🇫🇷" };
+  const CODES = { de: "DE", en: "EN", es: "ES", fr: "FR" };
+  let current = "de";
+  try { const s = localStorage.getItem("nk-lang"); if (s && DICT[s]) current = s; } catch (e) {}
+
+  const langPick = document.getElementById("langPick");
+  const langBtn = document.getElementById("langBtn");
+  const langMenu = document.getElementById("langMenu");
+  const langFlag = document.getElementById("langFlag");
+  const langCode = document.getElementById("langCode");
+
+  window.__i18nT = function (k) { return (DICT[current] && DICT[current][k] != null) ? DICT[current][k] : (DICT.de[k] || ""); };
+
+  function applyLang(lang) {
+    if (!DICT[lang]) lang = "de";
+    current = lang;
+    const d = DICT[lang];
+    document.querySelectorAll("[data-i18n]").forEach((node) => {
+      const key = node.getAttribute("data-i18n");
+      const val = d[key] != null ? d[key] : (DICT.de[key] || "");
+      if (node.classList.contains("section__title")) {
+        node.textContent = "";
+        node.appendChild(buildLetters(val, 0, 45, { rletter: true }));
+      } else {
+        node.textContent = val;
+      }
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach((node) => {
+      const key = node.getAttribute("data-i18n-html");
+      node.innerHTML = d[key] != null ? d[key] : (DICT.de[key] || "");
+    });
+    document.querySelectorAll("[data-ititle]").forEach((node) => {
+      const key = node.getAttribute("data-ititle");
+      const tr = (typeof FILM_T !== "undefined") ? FILM_T[key] : null;
+      node.textContent = (lang === "de" || !tr || !tr[lang]) ? key : tr[lang];
+    });
+    document.documentElement.lang = lang;
+    if (langFlag) langFlag.textContent = FLAGS[lang];
+    if (langCode) langCode.textContent = CODES[lang];
+    if (langMenu) langMenu.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
+    if (window.__setRoleWords) window.__setRoleWords(d.typeWords);
+    if (window.__footerWave) window.__footerWave();
+    try { localStorage.setItem("nk-lang", lang); } catch (e) {}
+  }
+
+  if (langBtn && langPick) {
+    langBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = langPick.classList.toggle("open");
+      langBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    langMenu.querySelectorAll("button").forEach((b) => {
+      b.addEventListener("click", () => {
+        applyLang(b.dataset.lang);
+        langPick.classList.remove("open");
+        langBtn.setAttribute("aria-expanded", "false");
+      });
+    });
+    document.addEventListener("click", (e) => {
+      if (langPick.classList.contains("open") && !langPick.contains(e.target)) {
+        langPick.classList.remove("open");
+        langBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  applyLang(current);
 })();
 </script>
 

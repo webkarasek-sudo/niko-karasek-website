@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Impressum — Niko Karasek</title>
+<meta name="robots" content="noindex" />
+<style>
+:root {
+  --bg: #000; --fg: #fff; --fg-dim: #b3b3b3; --fg-mute: #6e6e6e;
+  --yellow: #f5f000;
+  --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", monospace;
+  --block-radius: 24px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--sans); font-size: 16px; line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid #000; box-shadow: 0 0 0 4px var(--yellow); outline-offset: 2px; border-radius: 3px; }
+
+.wrap { max-width: 820px; margin: 0 auto; padding: 56px 24px 120px; }
+
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 64px;
+}
+.brand { font-weight: 900; font-size: 22px; letter-spacing: -0.02em; }
+.back {
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  text-decoration: none; color: var(--fg-dim);
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: color 0.25s;
+}
+.back:hover { color: var(--yellow); }
+.back svg { width: 15px; height: 15px; }
+
+.eyebrow {
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--yellow);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.eyebrow i { width: 8px; height: 8px; background: var(--yellow); border-radius: 50%; }
+h1 {
+  font-weight: 900; font-size: clamp(40px, 7vw, 68px);
+  line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 48px;
+}
+
+h2 {
+  font-weight: 800; font-size: 21px; letter-spacing: -0.01em;
+  margin: 44px 0 14px;
+}
+p { color: var(--fg-dim); margin-bottom: 14px; text-wrap: pretty; }
+strong { color: var(--fg); font-weight: 700; }
+.block { margin-bottom: 8px; }
+.label {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-mute);
+  margin: 26px 0 6px;
+}
+.fill {
+  background: rgba(245,240,0,0.14);
+  border-bottom: 1px dashed rgba(245,240,0,0.6);
+  color: var(--yellow); padding: 1px 5px; border-radius: 3px;
+  font-style: normal;
+}
+.note {
+  margin-top: 56px; padding: 22px 24px;
+  background: rgba(245,240,0,0.07);
+  border: 1px solid rgba(245,240,0,0.25);
+  border-radius: 14px;
+  font-size: 14px; color: var(--fg-dim);
+}
+.note strong { color: var(--yellow); }
+hr { border: 0; border-top: 1px solid #1c1c1c; margin: 40px 0; }
+a.inline { color: var(--yellow); text-decoration: none; border-bottom: 1px solid rgba(245,240,0,0.4); }
+a.inline:hover { border-bottom-color: var(--yellow); }
+.updated { margin-top: 56px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-mute); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Niko Karasek</div>
+    <a class="back" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      Zurück
+    </a>
+  </div>
+
+  <div class="eyebrow"><i></i>Rechtliches</div>
+  <h1>Impressum</h1>
+
+  <p>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG).</p>
+
+  <h2>Diensteanbieter</h2>
+  <div class="block">
+    <p><strong>Niko Karasek</strong><br/>
+    c/o <span class="fill">[Name der zustellungsbevollmächtigten Person / Firma]</span><br/>
+    <span class="fill">[Straße und Hausnummer]</span><br/>
+    <span class="fill">[PLZ Ort]</span></p>
+  </div>
+
+  <h2>Kontakt</h2>
+  <p>
+    Telefon: <a class="inline" href="tel:+4901746379751">0049 0174 637 9751</a><br/>
+    E-Mail: <a class="inline" href="mailto:nikokarasek.tv@gmail.com">nikokarasek.tv@gmail.com</a>
+  </p>
+
+  <h2>Umsatzsteuer-ID</h2>
+  <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:<br/>
+  <span class="fill">[USt-IdNr., falls vorhanden — sonst diesen Abschnitt löschen]</span></p>
+
+  <h2>Redaktionell verantwortlich</h2>
+  <p>Verantwortlich für journalistisch-redaktionelle Inhalte gemäß § 18 Abs. 2 Medienstaatsvertrag (MStV):</p>
+  <p><strong>Niko Karasek</strong><br/>
+  c/o <span class="fill">[Anschrift wie oben]</span></p>
+
+  <hr/>
+
+  <h2>Haftung für Inhalte</h2>
+  <p>Als Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+
+  <h2>Haftung für Links</h2>
+  <p>Dieses Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
+
+  <h2>Urheberrecht</h2>
+  <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+
+  <div class="note">
+    <strong>Bitte ausfüllen:</strong> Aus Datenschutz- bzw. Sicherheitsgründen muss hier keine private Wohnanschrift stehen — zulässig ist eine c/o-Adresse (z. B. Anwalt, Agentur, Redaktion) oder die Adresse eines Impressum-Dienstleisters. Ein reines Postfach genügt jedoch nicht; es muss eine ladungsfähige Anschrift sein. Wenn keine USt-IdNr. vorhanden ist, kann dieser Abschnitt entfernt werden.
+  </div>
+
+  <div class="updated">Stand: Juni 2026</div>
+</div>
+</body>
+</html>
