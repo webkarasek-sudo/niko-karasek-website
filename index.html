@@ -160,7 +160,7 @@ html[data-theme="light"] .theme-toggle__moon { display: block; }
 
 /* theme toggle button */
 .theme-toggle {
-  width: 42px; height: 42px; border-radius: 50%;
+  width: 44px; height: 44px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   background: rgba(0,0,0,0.28);
   -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
@@ -176,7 +176,7 @@ html[data-theme="light"] .theme-toggle__moon { display: block; }
 .lang { position: relative; }
 .lang__btn {
   display: flex; align-items: center; gap: 7px;
-  height: 42px; padding: 0 14px; border-radius: 999px;
+  height: 44px; padding: 0 14px; border-radius: 999px;
   background: rgba(0,0,0,0.28);
   -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.14);
@@ -267,7 +267,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   padding: 4px 8px;
   mix-blend-mode: difference;
 }
-.nav__right { display: flex; align-items: center; gap: 10px; }
+.nav__right { display: flex; align-items: center; gap: 12px; }
 /* visible contact button */
 .nav__contact {
   padding: 11px 22px; border-radius: 999px;
@@ -1143,7 +1143,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 @media (max-width: 860px) {
   .infb { grid-template-columns: 1fr; padding: 22px; gap: 26px; min-height: 0; }
-  .infb__img { min-height: 300px; aspect-ratio: 16/11; }
+  /* width must be the definite dimension here — otherwise aspect-ratio + min-height
+     compute the width from the height (300*16/11=436px) and the photo overflows the
+     phone's right edge. Locking width:100% keeps it inside the yellow block. */
+  .infb__img { width: 100%; min-height: 0; aspect-ratio: 4 / 3; }
   .infb__panel { padding: 4px 4px 8px; }
   .infb__bottom { grid-template-columns: 1fr; gap: 18px; }
 }
@@ -1508,7 +1511,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .nav__hamburger.open span:nth-child(2) { opacity: 0; }
   .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  .hero { padding: 108px 16px 26px; min-height: 86svh; }
+  .hero { padding: 100px 16px 22px; min-height: 74svh; }
   .hero__reel { width: 92vw; gap: 14px; }
   .hero__reel-play { width: 60px; height: 60px; }
   .hero__reel-play::after { border-width: 7px 0 7px 12px; }
@@ -1608,9 +1611,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   /* keep the bar compact: hide the static role words but KEEP the animated typewriter line under the name */
   .hero__masthead .hero__roles { display: flex; margin-top: 11px; }
   .hero__masthead .hero__roles li:not(:last-child) { display: none; }
-  .nav__right { gap: 8px; }
+  .nav__right { gap: 12px; }
   .lang__code, .lang__chev { display: none; }      /* flag-only language pill */
-  .lang__btn { padding: 0; width: 42px; justify-content: center; gap: 0; }
+  .lang__btn { padding: 0; width: 44px; justify-content: center; gap: 0; }
   .hero__logo { font-size: clamp(22px, 6.5vw, 30px); }
 }
 @media (max-width: 480px) {
@@ -2112,8 +2115,9 @@ const LOGO_FILES = [
 /* ---------- HERO REEL: force clean playback, loop a short segment ---------- */
 (function heroReelLoop() {
   const REEL_START = 6, REEL_DUR = 10; /* loop seconds 6 → 16 */
-  let player = null, guard = null;
-  function hidePoster() { const p = document.getElementById("heroReelPoster"); if (p) p.classList.add("is-hidden"); }
+  const REEL_REVEAL = REEL_START + 2.5; /* keep the poster up until YT's title/play-button chrome has faded */
+  let player = null, guard = null, posterHidden = false;
+  function hidePoster() { if (posterHidden) return; posterHidden = true; const p = document.getElementById("heroReelPoster"); if (p) p.classList.add("is-hidden"); }
   function init() {
     if (!window.YT || !window.YT.Player) return;
     try {
@@ -2121,7 +2125,9 @@ const LOGO_FILES = [
         events: {
           onReady: function (e) { try { e.target.mute(); e.target.seekTo(REEL_START, true); e.target.playVideo(); } catch (_) {} },
           onStateChange: function (e) {
-            if (e.data === YT.PlayerState.PLAYING) { hidePoster(); }
+            /* do NOT reveal on PLAYING — YouTube still overlays its title and big
+               play/replay button for the first ~3s. The guard reveals once we're
+               safely into the clip. */
             if (e.data === YT.PlayerState.ENDED) { try { e.target.seekTo(REEL_START, true); e.target.playVideo(); } catch (_) {} }
           }
         }
@@ -2132,7 +2138,7 @@ const LOGO_FILES = [
       if (!player || !player.getCurrentTime) return;
       try {
         const t = player.getCurrentTime();
-        if (t > REEL_START) hidePoster();
+        if (t >= REEL_REVEAL) hidePoster();
         if (t >= REEL_START + REEL_DUR || t < REEL_START - 1) { player.seekTo(REEL_START, true); player.playVideo(); }
       } catch (_) {}
     }, 400);
