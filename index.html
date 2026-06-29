@@ -296,14 +296,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   z-index: 200;
 }
 .nav__menu-pill.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-.nav__menu-pill button {
+.nav__menu-pill button,
+.nav__menu-pill a {
   padding: 12px 16px; border-radius: 12px;
   color: rgba(255,255,255,0.82);
   font-weight: 800; font-size: 14px; text-align: left;
   transition: background 0.2s, color 0.2s;
 }
-.nav__menu-pill button:hover { background: rgba(255,255,255,0.1); color: #fff; }
-.nav__menu-pill button.active { background: #fff; color: #000; }
+.nav__menu-pill button:hover,
+.nav__menu-pill a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.nav__menu-pill button.active,
+.nav__menu-pill a.active { background: #fff; color: #000; }
 .nav__hamburger {
   width: 44px; height: 44px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -573,24 +576,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ============ MARQUEE ============ */
 .marquee {
-  padding: 56px 0;
+  padding: 44px 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   position: relative;
   overflow: hidden;
 }
+/* Static press bar — logos sit still, centered, wrapping as needed */
 .marquee__track {
   display: flex;
-  width: max-content;
-  animation: scroll 45s linear infinite;
-  gap: 80px;
+  flex-wrap: wrap;
+  width: auto;
+  gap: 28px 56px;
   align-items: center;
-}
-.marquee:hover .marquee__track,
-.marquee:focus-within .marquee__track { animation-play-state: paused; }
-@keyframes scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  justify-content: center;
 }
 .logo {
   flex: 0 0 auto;
@@ -1011,6 +1010,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   margin: 0 auto;
   min-height: 700px;
   align-items: stretch;
+  overflow: hidden; /* keep the portrait fully inside the yellow block */
 }
 .infb__img { position: relative; overflow: hidden; min-height: 440px; border-radius: 16px; }
 .infb__img img {
@@ -1499,7 +1499,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .nav__hamburger.open span:nth-child(2) { opacity: 0; }
   .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  .hero { padding: 112px 16px 40px; min-height: 92vh; }
+  .hero { padding: 108px 16px 26px; min-height: 86svh; }
   .hero__reel { width: 92vw; gap: 14px; }
   .hero__reel-play { width: 60px; height: 60px; }
   .hero__reel-play::after { border-width: 7px 0 7px 12px; }
@@ -1508,8 +1508,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .section { padding: 48px 16px; }
   .section__title { font-size: clamp(26px, 7.5vw, 32px); margin-bottom: 22px; }
 
-  .marquee { padding: 28px 0; }
-  .marquee__track { gap: 44px; animation-duration: 35s; }
+  .marquee { padding: 20px 0 24px; }
+  .marquee__track { gap: 16px 30px; }
+  .logo--img { height: 30px; padding: 0 2px; }
+  .logo--img img { max-height: 30px; }
   .logo { font-size: 16px; height: 32px; }
   .logo.upper { font-size: 12px; }
   /* mobile: keep image logos generously sized so they're recognisable */
@@ -1594,7 +1596,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .foot__media { max-width: 420px; margin-left: 0; }
 }
 @media (max-width: 640px) {
-  .hero__masthead .hero__roles { display: none; } /* keep the bar compact on phones */
+  /* keep the bar compact: hide the static role words but KEEP the animated typewriter line under the name */
+  .hero__masthead .hero__roles { display: flex; margin-top: 5px; }
+  .hero__masthead .hero__roles li:not(:last-child) { display: none; }
   .nav__right { gap: 8px; }
   .lang__code, .lang__chev { display: none; }      /* flag-only language pill */
   .lang__btn { padding: 0; width: 42px; justify-content: center; gap: 0; }
@@ -1613,8 +1617,65 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .section__title { font-size: 24px; }
   .info-stats__num { font-size: 38px; width: 84px; flex: 0 0 84px; }
 }
+/* ===== FILME: Raster/Karte toggle + inline map ===== */
+.filme__head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:32px}
+.filme__head .section__title{margin-bottom:0}
+.viewtoggle{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--bg-2)}
+.viewtoggle__btn{padding:9px 18px;border-radius:999px;font-weight:800;font-size:13px;letter-spacing:.02em;color:var(--fg-dim);transition:background .2s,color .2s}
+.viewtoggle__btn.active{background:var(--yellow);color:#000}
+html[data-theme="light"] .viewtoggle__btn.active{background:var(--accent);color:var(--on-accent)}
+.filmmap{position:relative;width:100%;aspect-ratio:16/9;max-height:80vh;min-height:440px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--block-radius);overflow:hidden}
+.filmmap[hidden]{display:none}
+.filmmap__svg{width:100%;height:100%;display:block}
+.geo-land{fill:var(--bg-3);stroke:#2c2c2c;stroke-width:.6px;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+html[data-theme="light"] .geo-land{fill:#e4e2db;stroke:#cdcbc3}
+.geo-grat{fill:none;stroke:rgba(255,255,255,.05);stroke-width:.6px;vector-effect:non-scaling-stroke}
+html[data-theme="light"] .geo-grat{stroke:rgba(0,0,0,.06)}
+.pin{cursor:pointer}
+.pin__hit{fill:transparent}
+.pin__pulse{fill:var(--yellow);opacity:0;transform-origin:center;animation:pinPulse 2.6s ease-out infinite}
+html[data-theme="light"] .pin__pulse{fill:var(--accent)}
+.pin:nth-of-type(2) .pin__pulse{animation-delay:.6s}
+.pin:nth-of-type(3) .pin__pulse{animation-delay:1.2s}
+@keyframes pinPulse{0%{r:5px;opacity:.55}100%{r:22px;opacity:0}}
+.pin__dot{fill:var(--yellow);stroke:var(--bg-2);stroke-width:2px;transition:r .2s}
+html[data-theme="light"] .pin__dot{fill:var(--accent)}
+.pin:hover .pin__dot,.pin.is-active .pin__dot{r:7px}
+.pin__ring{fill:none;stroke:var(--yellow);stroke-width:1.4px;opacity:0;transition:opacity .2s}
+html[data-theme="light"] .pin__ring{stroke:var(--accent)}
+.pin.is-active .pin__ring{opacity:1}
+.pin__label{font-family:ui-monospace,"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;fill:var(--fg);paint-order:stroke;stroke:var(--bg-2);stroke-width:3.5px;stroke-linejoin:round;pointer-events:none;opacity:.92}
+.pin.tbc .pin__dot{fill:var(--bg-3);stroke:var(--yellow);stroke-width:2px}
+html[data-theme="light"] .pin.tbc .pin__dot{stroke:var(--accent);fill:#e4e2db}
+.pin.tbc .pin__pulse{opacity:0!important;animation:none}
+@media (prefers-reduced-motion: reduce){.pin__pulse{animation:none;opacity:0}}
+.filmmap__hint{position:absolute;left:18px;top:16px;z-index:2;font-family:ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-mute);pointer-events:none}
+.filmmap__playbig{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;transition:transform .3s;z-index:2}
+.filmmap__playbig::after{content:"";border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent #000;margin-left:4px}
+.filmmap__media{position:relative;aspect-ratio:16/9;background:var(--bg-3);overflow:hidden;cursor:pointer}
+.filmmap__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.filmmap__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.5))}
+.filmmap__media:hover .filmmap__playbig{transform:translate(-50%,-50%) scale(1.08)}
+.filmmap__panel{position:absolute;top:0;right:0;height:100%;width:min(360px,88%);background:var(--card);border-left:1px solid var(--line);transform:translateX(26px);opacity:0;visibility:hidden;pointer-events:none;transition:transform .45s cubic-bezier(.2,.7,.1,1),opacity .32s ease,visibility 0s linear .45s;z-index:4;display:flex;flex-direction:column;overflow-y:auto;box-shadow:-30px 0 80px rgba(0,0,0,.5)}
+.filmmap__panel.open{transform:translateX(0);opacity:1;visibility:visible;pointer-events:auto;transition:transform .45s cubic-bezier(.2,.7,.1,1),opacity .32s ease}
+.filmmap__close{position:absolute;top:12px;right:12px;z-index:5;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;line-height:1}
+.filmmap__body{padding:22px 22px 30px;display:flex;flex-direction:column;gap:14px}
+.filmmap__loc{display:inline-flex;align-items:center;gap:8px;font-family:ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--yellow)}
+html[data-theme="light"] .filmmap__loc{color:var(--accent)}
+.filmmap__loc svg{width:14px;height:14px}
+.filmmap__title{font-weight:900;font-size:22px;line-height:1.12;letter-spacing:-.02em;color:var(--fg)}
+.filmmap__meta{display:flex;gap:14px;font-family:ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-mute);padding-bottom:14px;border-bottom:1px solid var(--line)}
+.filmmap__desc{font-size:14px;line-height:1.65;color:var(--fg-dim);text-wrap:pretty}
+.filmmap__tbc{display:flex;gap:9px;padding:11px 13px;border-radius:11px;background:rgba(245,240,0,.1);border:1px dashed rgba(245,240,0,.5);font-size:12px;line-height:1.5;color:var(--fg-dim)}
+.filmmap__tbc[hidden]{display:none}
+.filmmap__watch{display:inline-flex;align-items:center;justify-content:center;gap:9px;margin-top:6px;padding:14px 22px;border-radius:999px;background:var(--yellow);color:#000;font-weight:800;font-size:15px;transition:transform .25s}
+html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on-accent)}
+.filmmap__watch:hover{transform:translateY(-2px)}
+@media (max-width:640px){.filmmap{aspect-ratio:auto;height:70vh;min-height:380px}.filmmap__panel{width:100%}.filme__head{gap:14px}}
 </style>
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script>(function(){try{var m=localStorage.getItem('nk-theme');if(m==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();</script>
 </head>
 <body>
@@ -1652,6 +1713,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     <div class="nav__menu-pill" id="navPill">
       <button data-target="main" class="active" aria-current="true" data-i18n="nav.start">Start</button>
       <button data-target="filme" data-i18n="nav.filme">Filme</button>
+      <a href="Karte.html" data-i18n="nav.karte">Karte</a>
       <button data-target="info" data-i18n="nav.info">Info</button>
       <button data-target="experte" data-i18n="nav.experte">Experte</button>
       <button data-target="kontakt" data-i18n="nav.kontakt">Kontakt</button>
@@ -1669,7 +1731,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       <div class="hero__reel-frame">
         <div class="hero__reel-screen">
           <iframe
-            src="https://www.youtube.com/embed/ExM137zUBKA?autoplay=1&mute=1&controls=0&loop=1&playlist=ExM137zUBKA&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&color=white"
+            id="heroReelIframe"
+            src="https://www.youtube.com/embed/ExM137zUBKA?enablejsapi=1&autoplay=1&mute=1&controls=0&loop=1&playlist=ExM137zUBKA&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&disablekb=1&fs=0&cc_load_policy=0&start=6&color=white"
             allow="autoplay; encrypted-media"
             title="Showreel"
             tabindex="-1"></iframe>
@@ -1692,8 +1755,35 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 <!-- ============ FILMS ============ -->
 <section class="section" id="filme">
-  <h2 class="section__title" data-i18n="sec.filme">Meine Filme</h2>
+  <div class="filme__head">
+    <h2 class="section__title" data-i18n="sec.filme">Meine Filme</h2>
+    <div class="viewtoggle" id="filmViewToggle" role="tablist" aria-label="Ansicht">
+      <button class="viewtoggle__btn active" type="button" data-view="raster" role="tab" aria-selected="true" data-i18n="view.raster">Raster</button>
+      <button class="viewtoggle__btn" type="button" data-view="karte" role="tab" aria-selected="false" data-i18n="view.karte">Karte</button>
+    </div>
+  </div>
   <div class="films" id="filmsGrid"></div>
+  <div class="filmmap" id="filmMap" hidden>
+    <svg class="filmmap__svg" id="filmMapSvg" role="img" aria-label="Karte der Drehorte"></svg>
+    <div class="filmmap__hint" id="filmMapHint">Tippe auf einen Punkt</div>
+    <aside class="filmmap__panel" id="filmMapPanel" aria-hidden="true" aria-label="Filmdetails">
+      <button class="filmmap__close" id="fmClose" type="button" aria-label="Schließen">×</button>
+      <div class="filmmap__media" id="fmMedia" role="button" tabindex="0" aria-label="Video abspielen">
+        <img id="fmImg" alt="" />
+        <span class="film__broadcaster" id="fmBroadcaster"></span>
+        <span class="film__runtime" id="fmRuntime"></span>
+        <span class="filmmap__playbig"></span>
+      </div>
+      <div class="filmmap__body">
+        <span class="filmmap__loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="fmLoc"></span></span>
+        <h3 class="filmmap__title" id="fmTitle"></h3>
+        <div class="filmmap__meta"><span id="fmYear"></span><span id="fmChannel"></span></div>
+        <p class="filmmap__desc" id="fmDesc"></p>
+        <div class="filmmap__tbc" id="fmTbc" hidden><span id="fmTbcText"></span></div>
+        <button class="filmmap__watch" id="fmWatch" type="button"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="fmWatchLabel">Ansehen</span></button>
+      </div>
+    </aside>
+  </div>
 </section>
 
 <!-- ============ INFO ============ -->
@@ -1742,7 +1832,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       <div class="foot__cta">
         <button class="cta cta--primary" id="ctaCopyEmail" type="button" aria-label="E-Mail-Adresse kopieren: nikokarasek.tv@gmail.com" title="Klicken zum Kopieren">
           <span class="cta__ic" id="ctaCopyIcon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></span>
-          <span class="cta__label" id="ctaCopyLabel">nikokarasek.tv@gmail.com</span>
+          <span class="cta__label" id="ctaCopyLabel"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9bf5f2f0f4f0fae9fae8fef0b5efeddbfcf6faf2f7b5f8f4f6">[email&#160;protected]</a></span>
           <span class="cta__copyhint" id="ctaCopyHint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
         </button>
         <button class="cta cta--ghost" id="ctaCopyPhone" type="button" title="Klicken zum Kopieren">
@@ -1786,7 +1876,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ---------- LENIS SMOOTH SCROLL ---------- */
 const lenis = (function initLenis() {
   if (typeof Lenis === "undefined") return null;
@@ -2000,8 +2090,8 @@ const LOGO_FILES = [
 ];
 (function marquee() {
   const track = document.getElementById("marqueeTrack");
-  const doubled = LOGO_FILES.concat(LOGO_FILES).concat(LOGO_FILES);
-  doubled.forEach((l) => {
+  /* static press bar: render each logo exactly once */
+  LOGO_FILES.forEach((l) => {
     let cls = "logo logo--img";
     if (l.color) cls += " is-color";
     if (l.dark) cls += " is-dark";
@@ -2009,6 +2099,41 @@ const LOGO_FILES = [
     wrap.appendChild(el("img", { src: l.src, alt: l.alt }));
     track.appendChild(wrap);
   });
+})();
+
+/* ---------- HERO REEL: force clean playback, loop a short segment ---------- */
+(function heroReelLoop() {
+  const REEL_START = 6, REEL_DUR = 10; /* loop seconds 6 → 16 */
+  let player = null, guard = null;
+  function init() {
+    if (!window.YT || !window.YT.Player) return;
+    try {
+      player = new YT.Player("heroReelIframe", {
+        events: {
+          onReady: function (e) { try { e.target.mute(); e.target.seekTo(REEL_START, true); e.target.playVideo(); } catch (_) {} },
+          onStateChange: function (e) {
+            if (e.data === YT.PlayerState.ENDED) { try { e.target.seekTo(REEL_START, true); e.target.playVideo(); } catch (_) {} }
+          }
+        }
+      });
+    } catch (_) { return; }
+    clearInterval(guard);
+    guard = setInterval(function () {
+      if (!player || !player.getCurrentTime) return;
+      try {
+        const t = player.getCurrentTime();
+        if (t >= REEL_START + REEL_DUR || t < REEL_START - 1) { player.seekTo(REEL_START, true); player.playVideo(); }
+      } catch (_) {}
+    }, 400);
+  }
+  if (window.YT && window.YT.Player) { init(); }
+  else {
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () { if (typeof prev === "function") prev(); init(); };
+    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
+    }
+  }
 })();
 
 /* ---------- FOOTER LINK WAVE: split each link's text into per-character spans ---------- */
@@ -2382,7 +2507,8 @@ function buildFilmCard(item, index) {
   const DICT = {
     de: {
       "skip": "Zum Inhalt springen",
-      "nav.start": "Start", "nav.filme": "Filme", "nav.info": "Info", "nav.experte": "Experte", "nav.kontakt": "Kontakt",
+      "nav.start": "Start", "nav.filme": "Filme", "nav.karte": "Karte", "nav.info": "Info", "nav.experte": "Experte", "nav.kontakt": "Kontakt",
+      "view.raster": "Raster", "view.karte": "Karte",
       "role.reportagen": "Reportagen", "role.fernsehen": "Fernsehen",
       "sec.filme": "Meine Filme", "sec.experte": "Experte & Speaker",
       "info.title": 'Sechs Jahre <span class="infb__mute">Moskau.</span><br/> Heute Hamburg.',
@@ -2396,7 +2522,8 @@ function buildFilmCard(item, index) {
     },
     en: {
       "skip": "Skip to content",
-      "nav.start": "Start", "nav.filme": "Films", "nav.info": "About", "nav.experte": "Expert", "nav.kontakt": "Contact",
+      "nav.start": "Start", "nav.filme": "Films", "nav.karte": "Map", "nav.info": "About", "nav.experte": "Expert", "nav.kontakt": "Contact",
+      "view.raster": "Grid", "view.karte": "Map",
       "role.reportagen": "Reporting", "role.fernsehen": "Television",
       "sec.filme": "My Films", "sec.experte": "Expert & Speaker",
       "info.title": 'Six years <span class="infb__mute">Moscow.</span><br/> Now Hamburg.',
@@ -2410,7 +2537,8 @@ function buildFilmCard(item, index) {
     },
     es: {
       "skip": "Saltar al contenido",
-      "nav.start": "Inicio", "nav.filme": "Reportajes", "nav.info": "Perfil", "nav.experte": "Experto", "nav.kontakt": "Contacto",
+      "nav.start": "Inicio", "nav.filme": "Reportajes", "nav.karte": "Mapa", "nav.info": "Perfil", "nav.experte": "Experto", "nav.kontakt": "Contacto",
+      "view.raster": "Cuadrícula", "view.karte": "Mapa",
       "role.reportagen": "Reportajes", "role.fernsehen": "Televisión",
       "sec.filme": "Mis reportajes", "sec.experte": "Experto y conferenciante",
       "info.title": 'Seis años <span class="infb__mute">Moscú.</span><br/> Ahora Hamburgo.',
@@ -2424,7 +2552,8 @@ function buildFilmCard(item, index) {
     },
     fr: {
       "skip": "Aller au contenu",
-      "nav.start": "Accueil", "nav.filme": "Reportages", "nav.info": "Profil", "nav.experte": "Expert", "nav.kontakt": "Contact",
+      "nav.start": "Accueil", "nav.filme": "Reportages", "nav.karte": "Carte", "nav.info": "Profil", "nav.experte": "Expert", "nav.kontakt": "Contact",
+      "view.raster": "Grille", "view.karte": "Carte",
       "role.reportagen": "Reportages", "role.fernsehen": "Télévision",
       "sec.filme": "Mes reportages", "sec.experte": "Expert & conférencier",
       "info.title": "Six ans <span class=\"infb__mute\">Moscou.</span><br/> Aujourd’hui Hambourg.",
@@ -2504,6 +2633,154 @@ function buildFilmCard(item, index) {
   }
 
   applyLang(current);
+})();
+
+/* ---------- FILME: RASTER / KARTE TOGGLE + INLINE MAP ---------- */
+(function filmMap() {
+  const toggle = document.getElementById("filmViewToggle");
+  const grid = document.getElementById("filmsGrid");
+  const mapBox = document.getElementById("filmMap");
+  if (!toggle || !mapBox) return;
+  const svg = document.getElementById("filmMapSvg");
+  const hintEl = document.getElementById("filmMapHint");
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const REGION = { type: "MultiPoint", coordinates: [[-11, 36], [148, 36], [148, 72], [-11, 72]] };
+
+  const SPOTS = [
+    { id: "stroganina", title: "Stroganina: das sibirische Sushi", year: "2017", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "10:37", img: "assets/films/07_sibirisches_sushi.webp", yt: "QE5tX6_O7Y4", place: "Jakutsk · Sibirien", lon: 129.7331, lat: 62.0339, tbc: false, desc: "In der kältesten Großstadt der Welt wird roher, gefrorener Fisch in hauchdünne Späne gehobelt — Stroganina. Eine Reportage über sibirische Esskultur bei minus 40 Grad." },
+    { id: "troll", title: "Einblicke in Russlands Troll-Armee", year: "2020", broadcaster: "ntv", channel: "n-tv", runtime: "7:58", img: "assets/films/08_troll_armee.webp", yt: "hiGwpXndwLk", place: "St. Petersburg", lon: 30.3609, lat: 59.9311, tbc: false, desc: "Recherche in der Stadt, in der Russlands berüchtigte „Trollfabrik“ ihren Ursprung hat: Wie bezahlte Kommentatoren das Netz fluten und Stimmung machen." },
+    { id: "knast", title: "Der härteste Knast Russlands", year: "2019", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "14:12", img: "assets/films/09_haertester_knast.webp", yt: "PCqZw9QnCA8", place: "Sibirien", lon: 92.8932, lat: 56.0153, tbc: true, desc: "Eine Reportage über eines der härtesten Straflager Russlands — Alltag, Disziplin und Überleben hinter Gittern." }
+  ];
+
+  const LBL = {
+    de: { watch: "Ansehen", tbc: "Genauer Drehort wird noch bestätigt.", hint: "Tippe auf einen Punkt" },
+    en: { watch: "Watch", tbc: "Exact filming location to be confirmed.", hint: "Tap a point" },
+    es: { watch: "Ver", tbc: "El lugar exacto de rodaje está por confirmar.", hint: "Toca un punto" },
+    fr: { watch: "Regarder", tbc: "Lieu de tournage exact à confirmer.", hint: "Touchez un point" }
+  };
+  function lang() { const l = document.documentElement.lang; return LBL[l] ? l : "de"; }
+  function ftitle(s) { const tr = (typeof FILM_T !== "undefined") ? FILM_T[s.title] : null; const l = lang(); return (l === "de" || !tr || !tr[l]) ? s.title : tr[l]; }
+
+  let WORLD = null, inited = false, loading = false, current = null;
+
+  function svgEl(n, a) { const e = document.createElementNS(SVGNS, n); for (const k in a) e.setAttribute(k, a[k]); return e; }
+
+  /* ----- panel refs ----- */
+  const panel = document.getElementById("filmMapPanel");
+  const fmImg = document.getElementById("fmImg");
+  const fmBroadcaster = document.getElementById("fmBroadcaster");
+  const fmRuntime = document.getElementById("fmRuntime");
+  const fmLoc = document.getElementById("fmLoc");
+  const fmTitle = document.getElementById("fmTitle");
+  const fmYear = document.getElementById("fmYear");
+  const fmChannel = document.getElementById("fmChannel");
+  const fmDesc = document.getElementById("fmDesc");
+  const fmTbc = document.getElementById("fmTbc");
+  const fmTbcText = document.getElementById("fmTbcText");
+  const fmWatchLabel = document.getElementById("fmWatchLabel");
+
+  function fillPanel(s) {
+    fmImg.src = s.img; fmImg.alt = ftitle(s);
+    fmBroadcaster.className = "film__broadcaster " + s.broadcaster;
+    fmRuntime.textContent = s.runtime;
+    fmLoc.textContent = s.place;
+    fmTitle.textContent = ftitle(s);
+    fmYear.textContent = s.year;
+    fmChannel.textContent = s.channel;
+    fmDesc.textContent = s.desc;
+    fmWatchLabel.textContent = LBL[lang()].watch;
+    if (s.tbc) { fmTbc.hidden = false; fmTbcText.textContent = LBL[lang()].tbc; }
+    else { fmTbc.hidden = true; }
+  }
+  function openPanel(s) {
+    current = s; fillPanel(s);
+    panel.classList.add("open"); panel.setAttribute("aria-hidden", "false");
+    svg.querySelectorAll(".pin").forEach((p) => p.classList.toggle("is-active", p.dataset.id === s.id));
+  }
+  function closePanel() {
+    panel.classList.remove("open"); panel.setAttribute("aria-hidden", "true"); current = null;
+    svg.querySelectorAll(".pin").forEach((p) => p.classList.remove("is-active"));
+  }
+  document.getElementById("fmClose").addEventListener("click", closePanel);
+  document.getElementById("fmWatch").addEventListener("click", () => { if (current) openLightbox(current.yt); });
+  (function mediaPlay() {
+    const m = document.getElementById("fmMedia");
+    m.addEventListener("click", () => { if (current) openLightbox(current.yt); });
+    m.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (current) openLightbox(current.yt); } });
+  })();
+
+  function render() {
+    if (!WORLD || typeof d3 === "undefined") return;
+    const rect = svg.getBoundingClientRect();
+    const w = rect.width, h = rect.height;
+    if (!w || !h) return;
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const topPad = Math.max(20, h * 0.07), botPad = Math.max(20, h * 0.07), sidePad = 16;
+    const projection = d3.geoEquirectangular().fitExtent([[sidePad, topPad], [w - sidePad, h - botPad]], REGION);
+    const path = d3.geoPath(projection);
+
+    const grat = d3.geoGraticule().step([10, 10]);
+    const gG = svgEl("g", {});
+    gG.appendChild(svgEl("path", { d: path(grat()) || "", class: "geo-grat" }));
+    svg.appendChild(gG);
+
+    const gLand = svgEl("g", {});
+    WORLD.features.forEach((f) => { const d = path(f); if (d) gLand.appendChild(svgEl("path", { d: d, class: "geo-land" })); });
+    svg.appendChild(gLand);
+
+    const gPins = svgEl("g", {});
+    SPOTS.forEach((s) => {
+      const xy = projection([s.lon, s.lat]);
+      if (!xy) return;
+      const g = svgEl("g", { class: "pin" + (s.tbc ? " tbc" : ""), transform: "translate(" + xy[0] + "," + xy[1] + ")", tabindex: "0", role: "button" });
+      g.dataset.id = s.id;
+      g.setAttribute("aria-label", ftitle(s) + " – " + s.place);
+      g.appendChild(svgEl("circle", { class: "pin__pulse", r: "5" }));
+      g.appendChild(svgEl("circle", { class: "pin__ring", r: "12" }));
+      g.appendChild(svgEl("circle", { class: "pin__dot", r: "5" }));
+      const flip = xy[0] > w - 150;
+      const label = svgEl("text", { class: "pin__label", x: flip ? -12 : 12, y: 4, "text-anchor": flip ? "end" : "start" });
+      label.textContent = s.place;
+      g.appendChild(label);
+      g.appendChild(svgEl("circle", { class: "pin__hit", r: "20" }));
+      g.addEventListener("click", () => openPanel(s));
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPanel(s); } });
+      gPins.appendChild(g);
+    });
+    svg.appendChild(gPins);
+    if (current) svg.querySelectorAll(".pin").forEach((p) => p.classList.toggle("is-active", p.dataset.id === current.id));
+  }
+
+  function ensureMap() {
+    if (hintEl) hintEl.textContent = LBL[lang()].hint;
+    if (inited) { render(); return; }
+    if (loading) return;
+    loading = true;
+    if (typeof d3 === "undefined" || typeof topojson === "undefined") { if (hintEl) hintEl.textContent = "—"; return; }
+    fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json")
+      .then((r) => { if (!r.ok) throw new Error("http " + r.status); return r.json(); })
+      .then((topo) => { WORLD = topojson.feature(topo, topo.objects.countries); inited = true; loading = false; render(); })
+      .catch(() => { loading = false; if (hintEl) hintEl.textContent = "Karte nicht verfügbar"; });
+  }
+
+  toggle.querySelectorAll(".viewtoggle__btn").forEach((b) => {
+    b.addEventListener("click", () => {
+      const v = b.dataset.view;
+      toggle.querySelectorAll(".viewtoggle__btn").forEach((x) => { const on = x === b; x.classList.toggle("active", on); x.setAttribute("aria-selected", on ? "true" : "false"); });
+      if (v === "karte") { grid.style.display = "none"; mapBox.hidden = false; ensureMap(); }
+      else { mapBox.hidden = true; grid.style.display = ""; closePanel(); }
+    });
+  });
+
+  let rT = null;
+  window.addEventListener("resize", () => { if (mapBox.hidden) return; clearTimeout(rT); rT = setTimeout(render, 160); });
+  // refresh on language change (documentElement.lang is set by applyLang)
+  new MutationObserver(() => {
+    if (hintEl) hintEl.textContent = LBL[lang()].hint;
+    if (!mapBox.hidden && inited) render();
+    if (current) fillPanel(current);
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 })();
 </script>
 
