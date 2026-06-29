@@ -536,6 +536,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   opacity: 1;
 }
 .hero__reel-shield { position: absolute; inset: 0; z-index: 2; background: transparent; }
+/* Opaque poster over the iframe so YouTube's own controls/chrome never flash on load.
+   Fades out only once the player reports it is actually playing. */
+.hero__reel-poster {
+  position: absolute; inset: 0; z-index: 2;
+  background: #0a0a0a url("assets/films/02_im_land_des_feindes.avif") center/cover no-repeat;
+  transition: opacity 0.5s ease;
+}
+.hero__reel-poster.is-hidden { opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .hero__reel-poster { transition: none; }
+}
 .hero__reel-frame::after {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
@@ -574,13 +585,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ============ MARQUEE ============ */
-.marquee {
-  padding: 44px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+/* ============ HERO PRESS BAR (logos in hero — no dividing lines) ============ */
+.hero__press {
+  flex: 0 0 auto;
+  padding: 4px 0 0;
   position: relative;
-  overflow: hidden;
 }
 /* Static press bar — logos sit still, centered, wrapping as needed */
 .marquee__track {
@@ -1420,7 +1429,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .info-grid { gap: 36px 40px; }
   .films { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .hero { padding: 110px 24px 56px; }
-  .marquee { padding: 40px 0; }
+  .hero__press { padding: 20px 0 0; }
   .marquee__track { gap: 56px; }
   .foot__grid { grid-template-columns: minmax(auto, 440px) 1fr; gap: 40px; }
   .foot__media-frame { max-width: 340px; margin-left: auto; }
@@ -1508,7 +1517,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .section { padding: 48px 16px; }
   .section__title { font-size: clamp(26px, 7.5vw, 32px); margin-bottom: 22px; }
 
-  .marquee { padding: 20px 0 24px; }
+  .hero__press { padding: 16px 0 0; }
   .marquee__track { gap: 16px 30px; }
   .logo--img { height: 30px; padding: 0 2px; }
   .logo--img img { max-height: 30px; }
@@ -1597,7 +1606,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 @media (max-width: 640px) {
   /* keep the bar compact: hide the static role words but KEEP the animated typewriter line under the name */
-  .hero__masthead .hero__roles { display: flex; margin-top: 5px; }
+  .hero__masthead .hero__roles { display: flex; margin-top: 11px; }
   .hero__masthead .hero__roles li:not(:last-child) { display: none; }
   .nav__right { gap: 8px; }
   .lang__code, .lang__chev { display: none; }      /* flag-only language pill */
@@ -1737,6 +1746,7 @@ html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on
             title="Showreel"
             tabindex="-1"></iframe>
         </div>
+        <div class="hero__reel-poster" id="heroReelPoster" aria-hidden="true"></div>
         <div class="hero__reel-shield"></div>
         <span class="hero__reel-corner hero__reel-corner--tl"></span>
         <span class="hero__reel-corner hero__reel-corner--tr"></span>
@@ -1746,11 +1756,9 @@ html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on
       </div>
     </div>
   </div>
-</section>
-
-<!-- ============ MARQUEE ============ -->
-<section class="marquee">
-  <div class="marquee__track" id="marqueeTrack"></div>
+  <div class="hero__press">
+    <div class="marquee__track" id="marqueeTrack"></div>
+  </div>
 </section>
 
 <!-- ============ FILMS ============ -->
@@ -1830,9 +1838,9 @@ html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on
     <div class="foot__intro">
       <div class="foot__brand">NK</div>
       <div class="foot__cta">
-        <button class="cta cta--primary" id="ctaCopyEmail" type="button" aria-label="E-Mail-Adresse kopieren: nikokarasek.tv@gmail.com" title="Klicken zum Kopieren">
+        <button class="cta cta--primary" id="ctaCopyEmail" type="button" aria-label="E-Mail-Adresse kopieren" title="Klicken zum Kopieren">
           <span class="cta__ic" id="ctaCopyIcon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></span>
-          <span class="cta__label" id="ctaCopyLabel"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9bf5f2f0f4f0fae9fae8fef0b5efeddbfcf6faf2f7b5f8f4f6">[email&#160;protected]</a></span>
+          <span class="cta__label" id="ctaCopyLabel"></span>
           <span class="cta__copyhint" id="ctaCopyHint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
         </button>
         <button class="cta cta--ghost" id="ctaCopyPhone" type="button" title="Klicken zum Kopieren">
@@ -1876,7 +1884,7 @@ html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ---------- LENIS SMOOTH SCROLL ---------- */
 const lenis = (function initLenis() {
   if (typeof Lenis === "undefined") return null;
@@ -2105,6 +2113,7 @@ const LOGO_FILES = [
 (function heroReelLoop() {
   const REEL_START = 6, REEL_DUR = 10; /* loop seconds 6 → 16 */
   let player = null, guard = null;
+  function hidePoster() { const p = document.getElementById("heroReelPoster"); if (p) p.classList.add("is-hidden"); }
   function init() {
     if (!window.YT || !window.YT.Player) return;
     try {
@@ -2112,6 +2121,7 @@ const LOGO_FILES = [
         events: {
           onReady: function (e) { try { e.target.mute(); e.target.seekTo(REEL_START, true); e.target.playVideo(); } catch (_) {} },
           onStateChange: function (e) {
+            if (e.data === YT.PlayerState.PLAYING) { hidePoster(); }
             if (e.data === YT.PlayerState.ENDED) { try { e.target.seekTo(REEL_START, true); e.target.playVideo(); } catch (_) {} }
           }
         }
@@ -2122,6 +2132,7 @@ const LOGO_FILES = [
       if (!player || !player.getCurrentTime) return;
       try {
         const t = player.getCurrentTime();
+        if (t > REEL_START) hidePoster();
         if (t >= REEL_START + REEL_DUR || t < REEL_START - 1) { player.seekTo(REEL_START, true); player.playVideo(); }
       } catch (_) {}
     }, 400);
@@ -2422,9 +2433,13 @@ function buildFilmCard(item, index) {
   const label = document.getElementById("ctaCopyLabel");
   const icon = document.getElementById("ctaCopyIcon");
   if (!btn || !label) return;
-  const email = "nikokarasek.tv@gmail.com";
+  /* assembled from parts so Cloudflare/scrapers don't obfuscate it into "[email protected]" */
+  const email = "nikokarasek.tv" + "\u0040" + "gmail" + "." + "com";
+  /* inject the address as visible text + accessible label */
+  label.textContent = email;
+  btn.setAttribute("aria-label", "E-Mail-Adresse kopieren: " + email);
   const mailSvg = icon ? icon.innerHTML : "";
-  const defaultLabel = label.textContent;
+  const defaultLabel = email;
   const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
   let resetT = null;
   function copyText(t) {
