@@ -296,7 +296,7 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
 /* ---- Mobile scroll scrim: darken top ~20% of the screen once scrolled ---- */
 .scroll-scrim {
   position: fixed; top: 0; left: 0; right: 0;
-  height: 22vh;
+  height: 11vh;
   z-index: 90;
   pointer-events: none;
   opacity: 0;
@@ -2237,6 +2237,14 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
   const el = document.getElementById("roleType");
   if (!el) return;
   let words = ["Russland-Experte", "Keynote Speaker"];
+  let baseWords = words.slice();
+  function activeWords() {
+    const mobile = window.matchMedia("(max-width: 640px)").matches;
+    const extra = Array.isArray(window.__roleExtra) ? window.__roleExtra : [];
+    // On mobile the static "Reportagen · Fernsehen" line is hidden, so fold those
+    // two words into the typewriter cycle — and show them first.
+    return (mobile && extra.length) ? extra.concat(baseWords) : baseWords;
+  }
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let t = null;
   function run() {
@@ -2253,7 +2261,12 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
     }
     step();
   }
-  window.__setRoleWords = function (w) { if (Array.isArray(w) && w.length) { words = w; run(); } };
+  window.__setRoleWords = function (w) { if (Array.isArray(w) && w.length) { baseWords = w; words = activeWords(); run(); } };
+  const mqRole = window.matchMedia("(max-width: 640px)");
+  const onMqRole = function () { words = activeWords(); run(); };
+  if (mqRole.addEventListener) mqRole.addEventListener("change", onMqRole);
+  else if (mqRole.addListener) mqRole.addListener(onMqRole);
+  words = activeWords();
   run();
 })();
 
@@ -2822,7 +2835,7 @@ function buildFilmCard(item, index) {
     if (langFlag) langFlag.textContent = FLAGS[lang];
     if (langCode) langCode.textContent = CODES[lang];
     if (langMenu) langMenu.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
-    if (window.__setRoleWords) window.__setRoleWords(d.typeWords);
+    if (window.__setRoleWords) { window.__roleExtra = [d["role.reportagen"], d["role.fernsehen"]]; window.__setRoleWords(d.typeWords); }
     if (window.__footerWave) window.__footerWave();
     try { localStorage.setItem("nk-lang", lang); } catch (e) {}
   }
