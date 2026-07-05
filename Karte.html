@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Karte — Drehorte | Niko Karasek</title>
+<meta name="description" content="Interaktive Karte der Drehorte von Niko Karasek — Reportagen aus Russland, Osteuropa und dem übrigen Europa. Auf einen Punkt tippen und den Film ansehen." />
+<link rel="canonical" href="https://www.nikokarasek.com/Karte.html" />
+<meta name="robots" content="index,follow" />
+<style>
+/* ============ TOKENS (übernommen von der Startseite) ============ */
+:root {
+  --bg: #000000;
+  --bg-2: #0d0d0d;
+  --bg-3: #161616;
+  --card: #1a1a1a;
+  --fg: #ffffff;
+  --fg-dim: #b8b8b8;
+  --fg-mute: #9a9a9a;
+  --line: #262626;
+  --yellow: #f5f000;
+  --accent-pin: #f5f000;
+  --land: #161616;
+  --land-line: #2c2c2c;
+  --grat: rgba(255,255,255,0.05);
+  --panel: #121212;
+  --block-radius: 24px;
+  --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", monospace;
+}
+html[data-theme="light"] {
+  --bg: #f7f6f2;
+  --bg-2: #efeee9;
+  --bg-3: #e7e5df;
+  --card: #ecebe6;
+  --fg: #0f0f0f;
+  --fg-dim: #474745;
+  --fg-mute: #66655f;
+  --line: #dedcd5;
+  --accent-pin: #141414;
+  --land: #e4e2db;
+  --land-line: #cdcbc3;
+  --grat: rgba(0,0,0,0.06);
+  --panel: #efeee9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--fg); height: 100%; }
+body {
+  font-family: var(--sans);
+  font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+:focus-visible { outline: 2px solid var(--accent-pin); outline-offset: 3px; border-radius: 3px; }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 300; padding: 12px 18px; border-radius: 999px; background: var(--accent-pin); color: #fff; font-weight: 800; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); transition: top 0.22s cubic-bezier(.2,.7,.1,1); }
+.skip-link:focus-visible { top: 16px; outline: 2px solid var(--fg); outline-offset: 2px; }
+
+/* ============ NAV (wie Startseite) ============ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 32px;
+}
+.nav__brand { display: block; }
+.hero__logo {
+  font-family: var(--sans); font-weight: 900; font-size: clamp(22px, 2.4vw, 30px);
+  letter-spacing: -0.03em; line-height: 0.95; color: var(--fg);
+}
+.hero__logo .word { display: inline-block; white-space: nowrap; }
+.hero__logo .letter {
+  display: inline-block; opacity: 0; transform: translateY(0.5em); filter: blur(8px);
+  animation: letterIn 0.9s cubic-bezier(0.2,0.7,0.1,1) forwards; animation-delay: var(--d, 0ms);
+}
+@keyframes letterIn { 0% { opacity: 0; transform: translateY(0.5em); filter: blur(8px); } 60% { opacity: 1; filter: blur(0); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+.hero__roles {
+  list-style: none; margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center;
+}
+.hero__roles li {
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim);
+}
+.hero__roles li:not(:last-child)::after { content: "·"; margin: 0 12px; color: var(--fg-mute); font-weight: 700; }
+.hero__type::after { content: "▌"; margin-left: 2px; animation: caretBlink 1s steps(1, end) infinite; }
+@keyframes caretBlink { 50% { opacity: 0; } }
+.nav__right { display: flex; align-items: center; gap: 10px; }
+.nav__contact {
+  padding: 11px 22px; border-radius: 999px; background: var(--yellow); color: #000;
+  font-weight: 800; font-size: 13px; letter-spacing: 0.02em; transition: transform 0.2s, background 0.2s;
+}
+html[data-theme="light"] .nav__contact { background: var(--accent-pin); color: #f6f5f1; }
+.nav__contact:hover { transform: translateY(-1px); }
+.nav__menu-pill {
+  position: fixed; top: 78px; right: 16px; min-width: 220px;
+  display: flex; flex-direction: column;
+  background: rgba(18,18,18,0.94);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.12); color: #fff;
+  border-radius: 18px; padding: 10px; gap: 2px;
+  transform: translateY(-12px) scale(0.98); opacity: 0; pointer-events: none;
+  transition: opacity 0.22s, transform 0.28s cubic-bezier(.2,.7,.1,1);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5); z-index: 200;
+}
+.nav__menu-pill.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.nav__menu-pill a {
+  padding: 12px 16px; border-radius: 12px; color: rgba(255,255,255,0.82);
+  font-weight: 800; font-size: 14px; text-align: left; transition: background 0.2s, color 0.2s;
+}
+.nav__menu-pill a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.nav__menu-pill a.active { background: #fff; color: #000; }
+.nav__hamburger {
+  width: 44px; height: 44px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 5px;
+  background: rgba(0,0,0,0.28);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 50%;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+}
+.nav__hamburger:hover { transform: translateY(-1px); }
+html[data-theme="light"] .nav__hamburger { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); }
+.nav__hamburger span { display: block; width: 18px; height: 2px; background: #fff; transition: transform 0.3s, opacity 0.2s; }
+html[data-theme="light"] .nav__hamburger span { background: #0f0f0f; }
+.nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav__hamburger.open span:nth-child(2) { opacity: 0; }
+.nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* theme toggle */
+.theme-toggle {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.28);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.14); color: #fff;
+  transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
+}
+.theme-toggle:hover { transform: translateY(-1px); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle__moon { display: none; }
+html[data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: #0f0f0f; }
+html[data-theme="light"] .theme-toggle__sun { display: none; }
+html[data-theme="light"] .theme-toggle__moon { display: block; }
+
+/* language dropdown */
+.lang { position: relative; }
+.lang__btn {
+  display: flex; align-items: center; gap: 7px; height: 42px; padding: 0 14px; border-radius: 999px;
+  background: rgba(0,0,0,0.28);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.14); color: #fff;
+  font-weight: 800; font-size: 13px; letter-spacing: 0.04em; transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+html[data-theme="light"] .lang__btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: #0f0f0f; }
+.lang__flag { font-size: 15px; line-height: 1; }
+.lang__chev { width: 13px; height: 13px; opacity: 0.7; transition: transform 0.2s; }
+.lang.open .lang__chev { transform: rotate(180deg); }
+.lang__menu {
+  position: absolute; top: 52px; right: 0; min-width: 178px; list-style: none; margin: 0; padding: 8px;
+  background: rgba(18,18,18,0.94);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 14px;
+  display: flex; flex-direction: column; gap: 2px; opacity: 0; transform: translateY(-8px); pointer-events: none;
+  transition: opacity 0.2s, transform 0.22s cubic-bezier(.2,.7,.1,1); box-shadow: 0 24px 60px rgba(0,0,0,0.5); z-index: 210;
+}
+.lang.open .lang__menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.lang__menu button {
+  display: flex; align-items: center; gap: 11px; width: 100%; padding: 10px 12px; border-radius: 10px;
+  color: rgba(255,255,255,0.85); font-weight: 700; font-size: 14px; text-align: left; transition: background 0.2s, color 0.2s;
+}
+.lang__menu button span { font-size: 17px; line-height: 1; }
+.lang__menu button:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.lang__menu button.active { background: #fff; color: #000; }
+
+/* ============ MAP STAGE ============ */
+.stage { position: fixed; inset: 0; z-index: 1; }
+#map { width: 100%; height: 100%; display: block; }
+.geo-land { fill: var(--land); stroke: var(--land-line); stroke-width: 0.6px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.geo-grat { fill: none; stroke: var(--grat); stroke-width: 0.6px; vector-effect: non-scaling-stroke; }
+.geo-sphere { fill: none; stroke: var(--line); stroke-width: 0.8px; }
+
+/* pins */
+.pin { cursor: pointer; }
+.pin__hit { fill: transparent; }
+.pin__pulse { fill: var(--accent-pin); opacity: 0; transform-origin: center; animation: pinPulse 2.6s ease-out infinite; }
+.pin:nth-of-type(2) .pin__pulse { animation-delay: 0.6s; }
+.pin:nth-of-type(3) .pin__pulse { animation-delay: 1.2s; }
+@keyframes pinPulse { 0% { r: 5px; opacity: 0.55; } 100% { r: 22px; opacity: 0; } }
+.pin__dot { fill: var(--accent-pin); stroke: var(--bg); stroke-width: 1.4px; stroke-linejoin: round; transition: transform 0.2s; transform-origin: center; transform-box: fill-box; }
+.pin:hover .pin__dot, .pin.is-active .pin__dot { transform: scale(1.45); }
+.pin__ring { fill: none; stroke: var(--accent-pin); stroke-width: 1.4px; opacity: 0; transition: opacity 0.2s; }
+.pin.is-active .pin__ring { opacity: 1; }
+.pin__label {
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  fill: var(--fg); paint-order: stroke; stroke: var(--bg); stroke-width: 3.5px; stroke-linejoin: round;
+  pointer-events: none; opacity: 0.92;
+}
+.pin.tbc .pin__dot { /* Sibirien (tbc): gefüllt wie alle anderen Pins */ }
+.pin.tbc .pin__pulse { /* Sibirien (tbc) pulsiert wie alle anderen Pins */ }
+@media (prefers-reduced-motion: reduce) {
+  .pin__pulse { animation: none; opacity: 0; }
+  .hero__logo .letter { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
+  .hero__type::after { animation: none !important; }
+}
+
+/* ============ PAGE TITLE OVERLAY ============ */
+.page-head {
+  position: fixed; left: 32px; top: 104px; z-index: 40; max-width: 440px; pointer-events: none;
+}
+.page-head__kicker {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim);
+}
+.page-head__kicker i { width: 8px; height: 8px; background: var(--accent-pin); border-radius: 50%; }
+.page-head__title {
+  margin-top: 14px; font-weight: 900; font-size: clamp(28px, 3.5vw, 40px); line-height: 1.0; letter-spacing: -0.03em; color: var(--fg);
+}
+.page-head__sub { margin-top: 14px; font-size: 14px; line-height: 1.55; color: var(--fg-dim); max-width: 34ch; text-wrap: pretty; }
+.page-head__hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-mute); }
+.page-head__hint svg { width: 13px; height: 13px; flex: none; fill: var(--accent-pin); }
+
+/* ============ LEGEND (Drehorte-Liste) ============ */
+.legend {
+  position: fixed; left: 32px; bottom: 28px; z-index: 40; width: min(340px, 80vw);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.legend__head {
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-mute);
+  margin-bottom: 4px;
+}
+.legend__item {
+  display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+  padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 70%, transparent);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.legend__item:hover, .legend__item.is-active { border-color: var(--accent-pin); transform: translateX(3px); }
+.legend__num {
+  font-family: var(--mono); font-size: 12px; font-weight: 800; color: var(--accent-pin);
+  width: 18px; flex: none; font-variant-numeric: tabular-nums;
+}
+html[data-theme="light"] .legend__num { color: var(--fg); }
+.legend__txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.legend__t { font-weight: 800; font-size: 13px; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.legend__p { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-mute); }
+
+/* ============ DETAIL PANEL ============ */
+.panel {
+  position: fixed; top: 0; right: 0; z-index: 120; height: 100%;
+  width: min(400px, 92vw);
+  background: var(--panel); border-left: 1px solid var(--line);
+  transform: translateX(101%); transition: transform 0.5s cubic-bezier(.2,.7,.1,1);
+  display: flex; flex-direction: column;
+  box-shadow: -30px 0 80px rgba(0,0,0,0.5);
+}
+.panel.open { transform: translateX(0); }
+.panel__scroll { overflow-y: auto; height: 100%; }
+.panel__media {
+  position: relative; aspect-ratio: 16/9; background: var(--bg-3); overflow: hidden; cursor: pointer;
+}
+.panel__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.panel__media::after {
+  content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.45));
+}
+.panel__broadcaster {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  background: rgba(0,0,0,0.65); color: #fff; padding: 4px 9px; font-size: 10px; font-weight: 800;
+  letter-spacing: 0.04em; border-radius: 2px;
+}
+.panel__broadcaster.ntv::before { content: "n-tv"; }
+.panel__broadcaster.galileo::before { content: "Galileo"; }
+.panel__broadcaster.arte::before { content: "arte"; }
+.panel__broadcaster.zdf::before { content: "ZDF"; }
+.panel__runtime {
+  position: absolute; bottom: 12px; right: 12px; z-index: 2;
+  background: rgba(0,0,0,0.75); color: #fff; padding: 4px 9px; font-size: 11px; font-weight: 800;
+  border-radius: 2px; font-variant-numeric: tabular-nums;
+}
+.panel__playbig {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 2;
+  width: 60px; height: 60px; border-radius: 50%; background: var(--yellow);
+  display: flex; align-items: center; justify-content: center; transition: transform 0.3s;
+}
+html[data-theme="light"] .panel__playbig { background: var(--accent-pin); }
+.panel__media:hover .panel__playbig { transform: translate(-50%,-50%) scale(1.08); }
+.panel__playbig::after {
+  content: ""; border-style: solid; border-width: 9px 0 9px 14px; border-color: transparent transparent transparent #000; margin-left: 4px;
+}
+html[data-theme="light"] .panel__playbig::after { border-left-color: #f6f5f1; }
+.panel__body { padding: 26px 28px 40px; display: flex; flex-direction: column; gap: 16px; }
+.panel__loc {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-pin);
+}
+html[data-theme="light"] .panel__loc { color: var(--fg); }
+.panel__loc svg { width: 14px; height: 14px; }
+.panel__title { font-weight: 900; font-size: 26px; line-height: 1.1; letter-spacing: -0.02em; color: var(--fg); }
+.panel__meta {
+  display: flex; gap: 16px; font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-mute);
+  padding-bottom: 16px; border-bottom: 1px solid var(--line);
+}
+.panel__desc { font-size: 14px; line-height: 1.7; color: var(--fg-dim); text-wrap: pretty; }
+.panel__tbc {
+  display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 12px;
+  background: color-mix(in srgb, var(--accent-pin) 12%, transparent); border: 1px dashed color-mix(in srgb, var(--accent-pin) 50%, transparent);
+  font-size: 12px; line-height: 1.5; color: var(--fg-dim);
+}
+.panel__tbc[hidden] { display: none; }
+.panel__iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 4; background: #000; }
+.panel__media.is-playing .panel__playbig,
+.panel__media.is-playing .panel__broadcaster,
+.panel__media.is-playing .panel__runtime { display: none; }
+.panel__media.is-playing::after { display: none; }
+.panel__watch {
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+  margin-top: 6px; padding: 9px 15px; border-radius: 999px;
+  background: transparent; color: var(--fg-dim);
+  border: 1px solid var(--line);
+  font-weight: 700; font-size: 12px; letter-spacing: 0.02em;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+html[data-theme="light"] .panel__watch { background: transparent; color: var(--fg-dim); }
+.panel__watch:hover { color: var(--fg); border-color: var(--fg-mute); background: var(--bg-3); }
+.panel__watch svg { width: 14px; height: 14px; }
+html[data-theme="light"] .panel__watch:hover { background: var(--bg-3); }
+.panel__close {
+  position: absolute; top: 14px; right: 14px; z-index: 3;
+  width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.55);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; line-height: 1;
+}
+html[data-theme="light"] .panel__close { background: rgba(0,0,0,0.45); }
+.panel__close:hover { background: rgba(0,0,0,0.8); }
+
+/* loading / error states */
+.map-msg {
+  position: fixed; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-mute);
+  pointer-events: none;
+}
+
+/* ============ LIGHTBOX ============ */
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000;
+  display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.25s; padding: 24px;
+}
+.lightbox.in { opacity: 1; }
+.lightbox__inner { position: relative; width: min(1200px, 100%); aspect-ratio: 16/9; }
+.lightbox__inner iframe { width: 100%; height: 100%; border: 0; background: #000; }
+.lightbox__close {
+  position: absolute; top: -44px; right: -4px; width: 36px; height: 36px;
+  background: var(--yellow); color: #000; border-radius: 50%; font-size: 22px; font-weight: 900; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .nav { padding: 16px 18px; }
+  .hero__roles { display: none; }
+  .page-head { left: 18px; top: 88px; max-width: 70vw; }
+  .legend { left: 18px; right: 18px; width: auto; bottom: 18px; }
+  .legend__item { padding: 9px 11px; }
+  .page-head__sub, .page-head__hint { display: none; }
+}
+@media (max-width: 640px) {
+  .nav__contact { display: none; }
+  .lang__code, .lang__chev { display: none; }
+  .lang__btn { padding: 0; width: 42px; justify-content: center; gap: 0; }
+  .page-head__title { font-size: 26px; }
+  /* On phones keep only 2 legend rows visible to leave the map breathing room */
+  .legend { gap: 5px; }
+  /* Detail card becomes a full-width bottom sheet that's easy to reach with a thumb */
+  .panel { width: 100%; height: 82vh; top: auto; bottom: 0; left: 0; right: 0; transform: translateY(100%); border-left: 0; border-top: 1px solid var(--line); border-radius: 22px 22px 0 0; box-shadow: 0 -24px 60px rgba(0,0,0,0.5); }
+  .panel.open { transform: translateY(0); }
+  .panel__close { width: 44px; height: 44px; }
+  /* bigger labels so pins are easy to read + tap on a small screen */
+  .pin__label { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#map" data-i18n="skip">Zum Inhalt springen</a>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <a class="nav__brand hero__masthead" href="index.html" aria-label="Zur Startseite">
+    <div class="hero__logo" id="heroLogo">Niko Karasek</div>
+    <ul class="hero__roles">
+      <li data-i18n="role.reportagen">Reportagen</li>
+      <li data-i18n="role.fernsehen">Fernsehen</li>
+      <li><span class="hero__type" id="roleType"></span></li>
+    </ul>
+  </a>
+  <div class="nav__right">
+    <div class="lang" id="langPick">
+      <button class="lang__btn" id="langBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Sprache">
+        <span class="lang__flag" id="langFlag">🇩🇪</span><span class="lang__code" id="langCode">DE</span>
+        <svg class="lang__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <ul class="lang__menu" id="langMenu" role="listbox">
+        <li><button type="button" role="option" data-lang="de"><span>🇩🇪</span>Deutsch</button></li>
+        <li><button type="button" role="option" data-lang="en"><span>🇬🇧</span>English</button></li>
+        <li><button type="button" role="option" data-lang="es"><span>🇪🇸</span>Español</button></li>
+        <li><button type="button" role="option" data-lang="fr"><span>🇫🇷</span>Français</button></li>
+      </ul>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Helles oder dunkles Design" aria-pressed="false">
+      <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a class="nav__contact" href="index.html#kontakt" data-i18n="nav.kontakt">Kontakt</a>
+    <div class="nav__menu-pill" id="navPill">
+      <a href="index.html#main" data-i18n="nav.start">Start</a>
+      <a href="index.html#filme" data-i18n="nav.filme">Filme</a>
+      <a href="Karte.html" class="active" aria-current="page" data-i18n="nav.karte">Karte</a>
+      <a href="index.html#info" data-i18n="nav.info">Info</a>
+      <a href="index.html#experte" data-i18n="nav.experte">Experte</a>
+      <a href="index.html#kontakt" data-i18n="nav.kontakt">Kontakt</a>
+    </div>
+    <button class="nav__hamburger" id="hamburger" aria-label="Menü" aria-expanded="false" aria-controls="navPill">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ MAP ============ -->
+<div class="stage">
+  <svg id="map" role="img" aria-label="Karte der Drehorte in Europa und Russland"></svg>
+  <div class="map-msg" id="mapMsg" data-i18n="map.loading">Karte wird geladen …</div>
+</div>
+
+<!-- ============ TITLE OVERLAY ============ -->
+<header class="page-head">
+  <h1 class="page-head__title" data-i18n="map.title">Ausgewählte Filme</h1>
+  <p class="page-head__sub" data-i18n="map.sub">Reportagen aus Russland, Osteuropa und dem übrigen Europa.</p>
+  <p class="page-head__hint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-i18n="map.hint">Tippe auf ein Symbol, um den Film zu öffnen.</span></p>
+</header>
+
+<!-- ============ DETAIL PANEL ============ -->
+<aside class="panel" id="panel" aria-hidden="true" aria-label="Filmdetails">
+  <button class="panel__close" id="panelClose" type="button" aria-label="Schließen">×</button>
+  <div class="panel__scroll">
+    <div class="panel__media" id="panelMedia" role="button" tabindex="0" aria-label="Video abspielen">
+      <img id="panelImg" alt="" />
+      <span class="panel__broadcaster" id="panelBroadcaster"></span>
+      <span class="panel__runtime" id="panelRuntime"></span>
+      <span class="panel__playbig"></span>
+    </div>
+    <div class="panel__body">
+      <span class="panel__loc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="panelLoc"></span>
+      </span>
+      <h2 class="panel__title" id="panelTitle"></h2>
+      <div class="panel__meta"><span id="panelYear"></span><span id="panelChannel"></span></div>
+      <p class="panel__desc" id="panelDesc"></p>
+      <div class="panel__tbc" id="panelTbc" hidden>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span id="panelTbcText"></span>
+      </div>
+      <button class="panel__watch" id="panelWatch" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+        <span id="panelWatchLabel">Ansehen</span>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+/* boot theme before paint */
+(function(){try{var m=localStorage.getItem('nk-theme');if(m==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();
+
+/* ---------- DATA: Drehorte ---------- */
+const SPOTS = [
+  { id: "nordkorea", title: "Neujahr in Nordkorea", year: "2025", broadcaster: "galileo", channel: "Galileo · Joyn", runtime: "", img: "", ext: "https://www.joyn.de/play/clip/neujahr-in-nordkorea-russische-touristen-bei-kim-jong-un", place: "Nordkorea", lon: 125.7625, lat: 39.0392, tbc: false, desc: "Nordkorea gilt als das isolierteste Land der Welt – Ausländer:innen dürfen nur unter strengen Kontrollen einreisen. Außer, man kommt aus Russland! Was steckt hinter der Einladung von Kim Jong Un?" },
+  { id: "charkiw", title: "Die Metro-Schule von Charkiw", year: "2024", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/glxe4OqOhj0/maxresdefault.jpg", ytid: "glxe4OqOhj0", yt: "glxe4OqOhj0", place: "Charkiw", lon: 36.2304, lat: 49.9935, tbc: false, desc: "Charkiw ist vom Krieg gezeichnet und dennoch kehrt das Leben langsam zurück. Aufgrund der Nähe zur russischen Grenze gilt die Stadt jedoch als besonders gefährdet. Unterrichtet wird nur im sicheren Untergrund. „Galileo“ hat Schülerin Mascha begleitet." },
+  { id: "chisinau", title: "Die Republik Moldau und der Einfluss Russlands", year: "2025", broadcaster: "arte", channel: "arte", runtime: "", img: "assets/films/13_moldau_russland.webp", ytid: "o-XG00-xU7U", yt: "o-XG00-xU7U", place: "Chișinău", lon: 28.8638, lat: 47.0105, tbc: false, desc: "Die Republik Moldau gilt als eines der Länder, in denen russischer Einfluss und EU-Annäherung besonders direkt aufeinandertreffen. Die ARTE-Reportage blickt auf Propaganda, wirtschaftliche Abhängigkeiten und die tiefe Spaltung der Gesellschaft." },
+  { id: "berlin", title: "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?", year: "2024", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/LeUvpPtV0u0/maxresdefault.jpg", ytid: "LeUvpPtV0u0", yt: "LeUvpPtV0u0", place: "Berlin", lon: 13.4050, lat: 52.5200, tbc: false, desc: "Russland führt Krieg gegen uns: Es geht um Unterwanderung, Destabilisierung und Angst. Das Ziel: Unsere Sicherheit und unseren Staat von innen zerstören. Sogenannte Wegwerf-Agenten sind mitten in Deutschland und ihre Angriffe werden immer regelmäßiger." },
+  { id: "niederlande", title: "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!", year: "2025", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/_bSn6xn5af0/maxresdefault.jpg", ytid: "_bSn6xn5af0", yt: "_bSn6xn5af0", place: "Niederlande", lon: 4.9041, lat: 52.3676, tbc: false, labelDx: -12, labelAnchor: "end", desc: "Eine Autobahn, die einen Seeweg kreuzt? In den Niederlanden gibt es eine Straßenkreuzung, die du so noch nie gesehen hast! Entdecke dieses einzigartige Bauwerk, das Realität und keine KI-Fantasie ist. Jetzt mit uns die Niederlande erkunden!" },
+  { id: "sylt", title: "Im Reich der Superreichen", year: "2025", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "assets/films/14_reich_der_superreichen.webp", ytid: "Obj0NRFE6sI", yt: "Obj0NRFE6sI", place: "Sylt", lon: 8.3100, lat: 54.9080, tbc: false, desc: "Sylt ist die Urlaubsinsel der Superreichen. Die Immobilienpreise, die Dichte an Luxusautos und schicken Lokalen, all das ist in Deutschland einzigartig. Aber wofür steht die Insel für die echten Sylter? „Galileo“ taucht ein in den Mikrokosmos Sylt." },
+  {
+    id: "stroganina",
+    title: "Stroganina: das sibirische Sushi",
+    year: "2017", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "10:37",
+    img: "assets/films/07_sibirisches_sushi.webp", yt: "QE5tX6_O7Y4",
+    place: "Jakutsk · Sibirien", lon: 129.7331, lat: 62.0339, tbc: false,
+    desc: "In der kältesten Großstadt der Welt wird roher, gefrorener Fisch in hauchdünne Späne gehobelt — Stroganina. Eine Reportage über sibirische Esskultur bei minus 40 Grad."
+  },
+  {
+    id: "troll",
+    title: "Einblicke in Russlands Troll-Armee",
+    year: "2020", broadcaster: "ntv", channel: "n-tv", runtime: "7:58",
+    img: "assets/films/08_troll_armee.webp", yt: "hiGwpXndwLk",
+    place: "St. Petersburg", lon: 30.3609, lat: 59.9311, tbc: false, labelDx: -12, labelDy: 4, labelAnchor: "end",
+    desc: "Recherche in der Stadt, in der Russlands berüchtigte „Trollfabrik“ ihren Ursprung hat: Wie bezahlte Kommentatoren das Netz fluten und Stimmung machen."
+  },
+  {
+    id: "knast",
+    title: "Der härteste Knast Russlands",
+    year: "2018", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "14:12",
+    img: "assets/films/09_haertester_knast.webp", yt: "PCqZw9QnCA8",
+    place: "Insel Pjatak", lon: 37.8500, lat: 60.0300, tbc: false, labelDx: 12, labelDy: 4, labelAnchor: "start",
+    desc: "Auf der Insel Pjatak befindet sich der härteste Knast Russlands, auf die nur Mörder und Schwerverbrecher kommen. Wer dort einmal einsitzt, kommt nie wieder heraus."
+  }
+];
+
+/* ---------- film title translations (for legend + panel) ---------- */
+const FILM_T = {
+  "Stroganina: das sibirische Sushi": { en: "Stroganina: The Siberian Sushi", es: "Stroganina: el sushi siberiano", fr: "Stroganina : le sushi sibérien" },
+  "Einblicke in Russlands Troll-Armee": { en: "Inside Russia's Troll Army", es: "Dentro del ejército de troles de Rusia", fr: "Au cœur de l'armée de trolls russe" },
+  "Der härteste Knast Russlands": { en: "Russia's Toughest Prison", es: "La cárcel más dura de Rusia", fr: "La prison la plus dure de Russie" }
+};
+/* placeholder descriptions per language (DE is the source; EN/ES/FR optional) */
+const DESC_T = {
+  kaluga: {
+    en: "Report from Kaluga, about 180 km southwest of Moscow.",
+    es: "Reportaje desde Kaluga, a unos 180 km al suroeste de Moscú.",
+    fr: "Reportage à Kalouga, à environ 180 km au sud-ouest de Moscou."
+  },
+  nordkorea: {
+    en: "New Year in North Korea: Russian tourists travel to Kim Jong Un.",
+    es: "Año Nuevo en Corea del Norte: turistas rusos viajan a Kim Jong Un.",
+    fr: "Nouvel An en Corée du Nord : des touristes russes en voyage chez Kim Jong-un."
+  },
+  charkiw: {
+    en: "Report from Kharkiv in eastern Ukraine.",
+    es: "Reportaje desde Járkiv, en el este de Ucrania.",
+    fr: "Reportage à Kharkiv, dans l'est de l'Ukraine."
+  },
+  chisinau: {
+    en: "Report from Chișinău, the capital of Moldova.",
+    es: "Reportaje desde Chisináu, la capital de Moldavia.",
+    fr: "Reportage à Chișinău, capitale de la Moldavie."
+  },
+  berlin: { en: "Report from Berlin.", es: "Reportaje desde Berlín.", fr: "Reportage à Berlin." },
+  wien: {
+    en: "Report from Vienna, Austria.",
+    es: "Reportaje desde Viena, Austria.",
+    fr: "Reportage à Vienne, Autriche."
+  },
+  niederlande: {
+    en: "Report from the Netherlands.",
+    es: "Reportaje desde los Países Bajos.",
+    fr: "Reportage aux Pays-Bas."
+  },
+  sylt: {
+    en: "Report from the North Sea island of Sylt.",
+    es: "Reportaje desde la isla de Sylt, en el mar del Norte.",
+    fr: "Reportage depuis l'île de Sylt, en mer du Nord."
+  },
+  stroganina: {
+    en: "In the coldest big city on earth, raw frozen fish is shaved into wafer-thin slivers — stroganina. A report on Siberian food culture at minus 40 degrees.",
+    es: "En la gran ciudad más fría del mundo, el pescado crudo y congelado se corta en finísimas láminas: la stroganina. Un reportaje sobre la cultura gastronómica siberiana a 40 grados bajo cero.",
+    fr: "Dans la plus grande ville la plus froide du monde, le poisson cru et congelé est taillé en fines lamelles — la stroganina. Un reportage sur la culture culinaire sibérienne à moins 40 degrés."
+  },
+  troll: {
+    en: "Reporting from the city where Russia's notorious “troll factory” began: how paid commenters flood the web and shape opinion.",
+    es: "Investigación en la ciudad donde nació la tristemente célebre «fábrica de troles» de Rusia: cómo los comentaristas a sueldo inundan la red y manipulan la opinión.",
+    fr: "Enquête dans la ville où est née la tristement célèbre « usine à trolls » russe : comment des commentateurs rémunérés inondent le web et façonnent l'opinion."
+  },
+  knast: {
+    en: "A report on one of Russia's toughest penal colonies — daily life, discipline and survival behind bars.",
+    es: "Un reportaje sobre una de las colonias penitenciarias más duras de Rusia: la vida diaria, la disciplina y la supervivencia tras las rejas.",
+    fr: "Un reportage sur l'une des colonies pénitentiaires les plus dures de Russie — quotidien, discipline et survie derrière les barreaux."
+  }
+};
+
+/* ---------- I18N ---------- */
+const DICT = {
+  de: {
+    "role.reportagen": "Reportagen", "role.fernsehen": "Fernsehen", "skip": "Zum Inhalt springen",
+    "nav.start": "Start", "nav.filme": "Filme", "nav.karte": "Karte", "nav.info": "Info", "nav.experte": "Experte", "nav.kontakt": "Kontakt",
+    "map.kicker": "Drehorte", "map.title": "Ausgewählte Filme",
+    "map.sub": "Reportagen aus Russland, Osteuropa und dem übrigen Europa.", "map.hint": "Tippe auf ein Symbol, um den Film zu öffnen.",
+    "map.legendHead": "Filme auf der Karte", "map.watch": "Ansehen", "map.watchOn": "Auf %s ansehen", "map.source": "der Quelle", "map.loading": "Karte wird geladen …",
+    "map.error": "Karte konnte nicht geladen werden.",
+    "map.tbc": "Genauer Drehort wird noch bestätigt.",
+    typeWords: ["Russland-Experte", "Keynote Speaker"]
+  },
+  en: {
+    "role.reportagen": "Reporting", "role.fernsehen": "Television", "skip": "Skip to content",
+    "nav.start": "Start", "nav.filme": "Films", "nav.karte": "Map", "nav.info": "About", "nav.experte": "Expert", "nav.kontakt": "Contact",
+    "map.kicker": "Filming locations", "map.title": "Selected Films",
+    "map.sub": "Reports from Russia, Eastern Europe and the rest of the continent.", "map.hint": "Tap a symbol to open the film.",
+    "map.legendHead": "Films on the map", "map.watch": "Watch", "map.watchOn": "Watch on %s", "map.source": "the source", "map.loading": "Loading map …",
+    "map.error": "The map could not be loaded.",
+    "map.tbc": "Exact filming location to be confirmed.",
+    typeWords: ["Russia Expert", "Keynote Speaker"]
+  },
+  es: {
+    "role.reportagen": "Reportajes", "role.fernsehen": "Televisión", "skip": "Saltar al contenido",
+    "nav.start": "Inicio", "nav.filme": "Reportajes", "nav.karte": "Mapa", "nav.info": "Perfil", "nav.experte": "Experto", "nav.kontakt": "Contacto",
+    "map.kicker": "Lugares de rodaje", "map.title": "Reportajes seleccionados",
+    "map.sub": "Reportajes desde Rusia, Europa del Este y el resto de Europa.", "map.hint": "Toca un símbolo para abrir el reportaje.",
+    "map.legendHead": "Reportajes en el mapa", "map.watch": "Ver", "map.watchOn": "Ver en %s", "map.source": "la fuente", "map.loading": "Cargando el mapa …",
+    "map.error": "No se pudo cargar el mapa.",
+    "map.tbc": "El lugar exacto de rodaje está por confirmar.",
+    typeWords: ["Experto en Rusia", "Conferenciante"]
+  },
+  fr: {
+    "role.reportagen": "Reportages", "role.fernsehen": "Télévision", "skip": "Aller au contenu",
+    "nav.start": "Accueil", "nav.filme": "Reportages", "nav.karte": "Carte", "nav.info": "Profil", "nav.experte": "Expert", "nav.kontakt": "Contact",
+    "map.kicker": "Lieux de tournage", "map.title": "Reportages sélectionnés",
+    "map.sub": "Reportages de Russie, d'Europe de l'Est et du reste de l'Europe.", "map.hint": "Touchez un symbole pour ouvrir le film.",
+    "map.legendHead": "Films sur la carte", "map.watch": "Regarder", "map.watchOn": "Regarder sur %s", "map.source": "la source", "map.loading": "Chargement de la carte …",
+    "map.error": "La carte n'a pas pu être chargée.",
+    "map.tbc": "Lieu de tournage exact à confirmer.",
+    typeWords: ["Expert de la Russie", "Conférencier"]
+  }
+};
+const FLAGS = { de: "🇩🇪", en: "🇬🇧", es: "🇪🇸", fr: "🇫🇷" };
+const CODES = { de: "DE", en: "EN", es: "ES", fr: "FR" };
+let LANG = "de";
+try { const s = localStorage.getItem("nk-lang"); if (s && DICT[s]) LANG = s; } catch (e) {}
+
+function t(k) { return (DICT[LANG] && DICT[LANG][k] != null) ? DICT[LANG][k] : (DICT.de[k] || ""); }
+/* place-name translations for the map labels + panel */
+const PLACE_T = {
+  "Kaluga": { en: "Kaluga", es: "Kaluga", fr: "Kalouga" },
+  "Nordkorea": { en: "North Korea", es: "Corea del Norte", fr: "Corée du Nord" },
+  "Charkiw": { en: "Kharkiv", es: "Járkiv", fr: "Kharkiv" },
+  "Chișinău": { en: "Chișinău", es: "Chisináu", fr: "Chișinău" },
+  "Berlin": { en: "Berlin", es: "Berlín", fr: "Berlin" },
+  "Wien": { en: "Vienna", es: "Viena", fr: "Vienne" },
+  "Niederlande": { en: "Netherlands", es: "Países Bajos", fr: "Pays-Bas" },
+  "Sylt": { en: "Sylt", es: "Sylt", fr: "Sylt" },
+  "Insel Pjatak": { en: "Pyatak Island", es: "Isla Pyatak", fr: "Île Piatak" },
+  "Jakutsk · Sibirien": { en: "Yakutsk · Siberia", es: "Yakutsk · Siberia", fr: "Iakoutsk · Sibérie" },
+  "St. Petersburg": { en: "St. Petersburg", es: "San Petersburgo", fr: "Saint-Pétersbourg" },
+  "Sibirien": { en: "Siberia", es: "Siberia", fr: "Sibérie" }
+};
+function filmPlace(s) { const tr = PLACE_T[s.place]; return (LANG === "de" || !tr || !tr[LANG]) ? s.place : tr[LANG]; }
+function filmTitle(s) { const tr = FILM_T[s.title]; return (LANG === "de" || !tr || !tr[LANG]) ? s.title : tr[LANG]; }
+function filmDesc(s) { const tr = DESC_T[s.id]; return (LANG === "de" || !tr || !tr[LANG]) ? s.desc : tr[LANG]; }
+
+function applyLang(lang) {
+  if (!DICT[lang]) lang = "de";
+  LANG = lang;
+  document.querySelectorAll("[data-i18n]").forEach((node) => {
+    node.textContent = t(node.getAttribute("data-i18n"));
+  });
+  document.documentElement.lang = lang;
+  document.getElementById("langFlag").textContent = FLAGS[lang];
+  document.getElementById("langCode").textContent = CODES[lang];
+  document.querySelectorAll("#langMenu button").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
+  if (window.__setRoleWords) window.__setRoleWords(DICT[lang] && DICT[lang].typeWords);
+  buildLegend();
+  updatePinLabels();
+  if (currentSpot) fillPanel(currentSpot);
+  try { localStorage.setItem("nk-lang", lang); } catch (e) {}
+}
+
+/* re-translate the place labels drawn on the map (the map SVG is built once) */
+function updatePinLabels() {
+  document.querySelectorAll("#map .pin").forEach((g) => {
+    const s = SPOTS.find((x) => x.id === g.dataset.id);
+    if (!s) return;
+    const lab = g.querySelector(".pin__label");
+    if (lab) lab.textContent = filmPlace(s);
+    g.setAttribute("aria-label", filmTitle(s) + " – " + filmPlace(s));
+  });
+}
+
+/* ---------- NAV: hamburger ---------- */
+(function nav() {
+  const pill = document.getElementById("navPill");
+  const ham = document.getElementById("hamburger");
+  ham.addEventListener("click", () => {
+    const open = pill.classList.toggle("open");
+    ham.classList.toggle("open");
+    ham.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  document.addEventListener("click", (e) => {
+    if (!pill.classList.contains("open")) return;
+    if (pill.contains(e.target) || ham.contains(e.target)) return;
+    pill.classList.remove("open"); ham.classList.remove("open"); ham.setAttribute("aria-expanded", "false");
+  });
+})();
+
+/* ---------- THEME TOGGLE ---------- */
+(function theme() {
+  const tg = document.getElementById("themeToggle");
+  function isLight() { return document.documentElement.getAttribute("data-theme") === "light"; }
+  tg.setAttribute("aria-pressed", isLight() ? "true" : "false");
+  tg.addEventListener("click", () => {
+    const next = isLight() ? "dark" : "light";
+    if (next === "light") document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+    tg.setAttribute("aria-pressed", next === "light" ? "true" : "false");
+    try { localStorage.setItem("nk-theme", next); } catch (e) {}
+  });
+})();
+
+/* ---------- LANGUAGE DROPDOWN ---------- */
+(function langPick() {
+  const pick = document.getElementById("langPick");
+  const btn = document.getElementById("langBtn");
+  const menu = document.getElementById("langMenu");
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = pick.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  menu.querySelectorAll("button").forEach((b) => {
+    b.addEventListener("click", () => {
+      applyLang(b.dataset.lang);
+      pick.classList.remove("open"); btn.setAttribute("aria-expanded", "false");
+    });
+  });
+  document.addEventListener("click", (e) => {
+    if (pick.classList.contains("open") && !pick.contains(e.target)) {
+      pick.classList.remove("open"); btn.setAttribute("aria-expanded", "false");
+    }
+  });
+})();
+
+/* ---------- LIGHTBOX ---------- */
+let lbLast = null;
+function openLightbox(ytId) {
+  if (!ytId) return;
+  lbLast = document.activeElement;
+  const overlay = document.createElement("div");
+  overlay.className = "lightbox";
+  overlay.addEventListener("click", closeLightbox);
+  const inner = document.createElement("div");
+  inner.className = "lightbox__inner";
+  inner.addEventListener("click", (e) => e.stopPropagation());
+  const iframe = document.createElement("iframe");
+  iframe.src = "https://www.youtube.com/embed/" + ytId + "?autoplay=1&rel=0";
+  iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen");
+  iframe.setAttribute("allowfullscreen", "true");
+  const close = document.createElement("button");
+  close.className = "lightbox__close"; close.setAttribute("aria-label", "Close"); close.textContent = "×";
+  close.addEventListener("click", closeLightbox);
+  inner.appendChild(iframe); inner.appendChild(close); overlay.appendChild(inner);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => { overlay.classList.add("in"); close.focus(); });
+}
+function closeLightbox() {
+  const lb = document.querySelector(".lightbox");
+  if (!lb) return;
+  lb.classList.remove("in");
+  setTimeout(() => lb.remove(), 250);
+  if (lbLast && lbLast.focus) { lbLast.focus(); lbLast = null; }
+}
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeLightbox(); closePanel(); } });
+
+/* ---------- DETAIL PANEL ---------- */
+let currentSpot = null;
+const panel = document.getElementById("panel");
+function fillPanel(s) {
+  const im = document.getElementById("panelImg");
+  if (s.img) {
+    im.style.display = ""; im.dataset.fb = ""; im.alt = filmTitle(s);
+    im.onload = function () { if (s.ytid && this.naturalWidth <= 121 && !this.dataset.fb) { this.dataset.fb = "1"; this.src = "https://i.ytimg.com/vi/" + s.ytid + "/hqdefault.jpg"; } };
+    im.onerror = function () { if (s.ytid && !this.dataset.fb) { this.dataset.fb = "1"; this.src = "https://i.ytimg.com/vi/" + s.ytid + "/hqdefault.jpg"; } else { this.style.display = "none"; } };
+    im.src = s.img;
+  } else { im.onload = null; im.onerror = null; im.removeAttribute("src"); im.style.display = "none"; }
+  const bc = document.getElementById("panelBroadcaster");
+  bc.className = "panel__broadcaster " + (s.broadcaster || "");
+  bc.style.display = s.broadcaster ? "" : "none";
+  const rt = document.getElementById("panelRuntime");
+  rt.textContent = s.runtime || ""; rt.style.display = s.runtime ? "" : "none";
+  document.getElementById("panelLoc").textContent = filmPlace(s);
+  document.getElementById("panelTitle").textContent = filmTitle(s);
+  document.getElementById("panelYear").textContent = s.year;
+  document.getElementById("panelChannel").textContent = s.channel;
+  document.getElementById("panelDesc").textContent = filmDesc(s);
+  const tbc = document.getElementById("panelTbc");
+  if (s.tbc) { tbc.hidden = false; document.getElementById("panelTbcText").textContent = t("map.tbc"); }
+  else { tbc.hidden = true; }
+  // small "watch at source" button (YouTube / Joyn / …)
+  const w = document.getElementById("panelWatch");
+  const src = sourceName(s);
+  const url = watchUrl(s);
+  if (url) {
+    w.style.display = "";
+    document.getElementById("panelWatchLabel").textContent = t("map.watchOn").replace("%s", src);
+  } else {
+    w.style.display = "none";
+  }
+}
+/* source name + external URL for the small button */
+function sourceName(s) {
+  if (s.ext) {
+    try {
+      const h = new URL(s.ext).hostname.replace(/^www\./, "");
+      if (/joyn/.test(h)) return "Joyn";
+      if (/youtube|youtu\.be/.test(h)) return "YouTube";
+      if (/arte/.test(h)) return "ARTE";
+      if (/zdf/.test(h)) return "ZDF";
+      return h;
+    } catch (e) { return t("map.source"); }
+  }
+  if (s.yt) return "YouTube";
+  return "";
+}
+function watchUrl(s) {
+  if (s.yt) return "https://www.youtube.com/watch?v=" + s.yt;
+  if (s.ext) return s.ext;
+  return "";
+}
+/* inline player inside the panel media (on-site); external clip opens its source */
+function stopInline() {
+  const m = document.getElementById("panelMedia");
+  const f = m.querySelector(".panel__iframe");
+  if (f) f.remove();
+  m.classList.remove("is-playing");
+}
+function playInline(s) {
+  if (!s) return;
+  if (s.yt) {
+    const m = document.getElementById("panelMedia");
+    stopInline();
+    const f = document.createElement("iframe");
+    f.className = "panel__iframe";
+    f.src = "https://www.youtube.com/embed/" + s.yt + "?autoplay=1&rel=0&playsinline=1";
+    f.setAttribute("allow", "autoplay; encrypted-media; fullscreen");
+    f.setAttribute("allowfullscreen", "true");
+    m.appendChild(f);
+    m.classList.add("is-playing");
+  } else if (s.ext) {
+    window.open(s.ext, "_blank", "noopener");
+  }
+}
+function openPanel(s) {
+  currentSpot = s;
+  stopInline();
+  fillPanel(s);
+  panel.classList.add("open");
+  panel.setAttribute("aria-hidden", "false");
+  document.querySelectorAll(".pin").forEach((p) => p.classList.toggle("is-active", p.dataset.id === s.id));
+  document.querySelectorAll(".legend__item").forEach((l) => l.classList.toggle("is-active", l.dataset.id === s.id));
+}
+function closePanel() {
+  stopInline();
+  panel.classList.remove("open");
+  panel.setAttribute("aria-hidden", "true");
+  currentSpot = null;
+  document.querySelectorAll(".pin").forEach((p) => p.classList.remove("is-active"));
+  document.querySelectorAll(".legend__item").forEach((l) => l.classList.remove("is-active"));
+}
+document.getElementById("panelClose").addEventListener("click", closePanel);
+document.getElementById("panelWatch").addEventListener("click", function () { if (currentSpot) window.open(watchUrl(currentSpot), "_blank", "noopener"); });
+(function panelMediaPlay() {
+  const m = document.getElementById("panelMedia");
+  m.addEventListener("click", function () { playInline(currentSpot); });
+  m.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playInline(currentSpot); } });
+})();
+
+/* ---------- LEGEND ---------- */
+function buildLegend() {
+  const host = document.getElementById("legend");
+  if (!host) return;
+  host.querySelectorAll(".legend__item").forEach((n) => n.remove());
+  SPOTS.forEach((s, i) => {
+    const item = document.createElement("button");
+    item.className = "legend__item";
+    item.type = "button";
+    item.dataset.id = s.id;
+    if (currentSpot && currentSpot.id === s.id) item.classList.add("is-active");
+    const num = document.createElement("span");
+    num.className = "legend__num";
+    num.textContent = String(i + 1).padStart(2, "0");
+    const txt = document.createElement("span");
+    txt.className = "legend__txt";
+    const tt = document.createElement("span");
+    tt.className = "legend__t"; tt.textContent = filmTitle(s);
+    const pp = document.createElement("span");
+    pp.className = "legend__p"; pp.textContent = filmPlace(s);
+    txt.appendChild(tt); txt.appendChild(pp);
+    item.appendChild(num); item.appendChild(txt);
+    item.addEventListener("click", () => openPanel(s));
+    host.appendChild(item);
+  });
+}
+
+/* ---------- MAP RENDER (d3-geo + topojson) ---------- */
+const svg = document.getElementById("map");
+const SVGNS = "http://www.w3.org/2000/svg";
+let WORLD = null;
+
+const REGION = { type: "MultiPoint", coordinates: [[-12, 35], [150, 35], [150, 73], [-12, 73]] };
+
+function el(name, attrs) {
+  const e = document.createElementNS(SVGNS, name);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+function render() {
+  if (!WORLD || typeof d3 === "undefined") return;
+  const rect = svg.getBoundingClientRect();
+  const w = rect.width, h = rect.height;
+  if (!w || !h) return;
+  svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  // vertical breathing room for the title/legend overlays
+  const topPad = Math.min(150, h * 0.16);
+  const botPad = Math.min(150, h * 0.16);
+  const sidePad = 20;
+
+  const projection = d3.geoEquirectangular().fitExtent(
+    [[sidePad, topPad], [w - sidePad, h - botPad]], REGION
+  );
+  const path = d3.geoPath(projection);
+
+  // graticule
+  const grat = d3.geoGraticule().step([10, 10]);
+  const gG = el("g", {});
+  const gp = el("path", { d: path(grat()) || "", class: "geo-grat" });
+  gG.appendChild(gp);
+  svg.appendChild(gG);
+
+  // land
+  const gLand = el("g", {});
+  WORLD.features.forEach((f) => {
+    const d = path(f);
+    if (!d) return;
+    gLand.appendChild(el("path", { d: d, class: "geo-land" }));
+  });
+  svg.appendChild(gLand);
+
+  // pins
+  const gPins = el("g", {});
+  SPOTS.forEach((s) => {
+    const xy = projection([s.lon, s.lat]);
+    if (!xy) return;
+    const g = el("g", { class: "pin" + (s.tbc ? " tbc" : ""), transform: "translate(" + xy[0] + "," + xy[1] + ")", tabindex: "0", role: "button" });
+    g.dataset.id = s.id;
+    g.setAttribute("aria-label", filmTitle(s) + " – " + filmPlace(s));
+    g.appendChild(el("circle", { class: "pin__pulse", r: "5" }));
+    g.appendChild(el("circle", { class: "pin__ring", r: "12" }));
+    g.appendChild(el("path", { class: "pin__dot", d: "M-3.4,-4.8 L5,0 L-3.4,4.8 Z" }));
+    // label: place to the right unless near the right edge, then to the left.
+    // Per-spot overrides (labelDx/labelDy/labelAnchor) resolve collisions between close pins.
+    const flip = xy[0] > w - 160;
+    const lx = s.labelDx != null ? s.labelDx : (flip ? -12 : 12);
+    const ly = s.labelDy != null ? s.labelDy : 4;
+    const lanchor = s.labelAnchor || (flip ? "end" : "start");
+    const label = el("text", { class: "pin__label", x: lx, y: ly, "text-anchor": lanchor });
+    label.textContent = filmPlace(s);
+    g.appendChild(label);
+    g.appendChild(el("circle", { class: "pin__hit", r: "20" }));
+    g.addEventListener("click", () => openPanel(s));
+    g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPanel(s); } });
+    gPins.appendChild(g);
+  });
+  svg.appendChild(gPins);
+
+  // make the whole pin (icon + label) clickable, not just the small icon
+  gPins.querySelectorAll(".pin").forEach((g) => {
+    try {
+      const b = g.getBBox();
+      const hit = el("rect", { class: "pin__hit", x: b.x - 6, y: b.y - 6, width: b.width + 12, height: b.height + 12 });
+      g.insertBefore(hit, g.firstChild);
+    } catch (e) {}
+  });
+
+  if (currentSpot) {
+    const active = currentSpot.id;
+    svg.querySelectorAll(".pin").forEach((p) => p.classList.toggle("is-active", p.dataset.id === active));
+  }
+}
+
+function loadMap() {
+  const msg = document.getElementById("mapMsg");
+  if (typeof d3 === "undefined" || typeof topojson === "undefined") {
+    msg.textContent = t("map.error"); return;
+  }
+  fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json")
+    .then((r) => { if (!r.ok) throw new Error("http " + r.status); return r.json(); })
+    .then((topo) => {
+      WORLD = topojson.feature(topo, topo.objects.countries);
+      msg.style.display = "none";
+      render();
+    })
+    .catch(() => { msg.textContent = t("map.error"); });
+}
+
+/* resize (debounced) */
+let rT = null;
+window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(render, 160); });
+
+/* ---------- HEADER: animierter Name + Typewriter-Rolle (wie Startseite) ---------- */
+(function heroLogo() {
+  const host = document.getElementById("heroLogo");
+  if (!host) return;
+  const text = host.textContent.trim();
+  host.textContent = "";
+  const tokens = text.split(/(\s+)/); let ci = 0;
+  tokens.forEach((tok) => {
+    if (tok === "") return;
+    if (/^\s+$/.test(tok)) { host.appendChild(document.createTextNode(" ")); return; }
+    const word = document.createElement("span"); word.className = "word";
+    [...tok].forEach((ch) => {
+      const s = document.createElement("span"); s.className = "letter";
+      s.style.setProperty("--d", (200 + ci * 60) + "ms"); s.textContent = ch;
+      word.appendChild(s); ci++;
+    });
+    host.appendChild(word);
+  });
+})();
+(function roleTyper() {
+  const elT = document.getElementById("roleType");
+  if (!elT) return;
+  let words = ["Russland-Experte", "Keynote Speaker"];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let tm = null;
+  function run() {
+    clearTimeout(tm);
+    if (reduce) { elT.textContent = words[0]; return; }
+    let wi = 0, ci = 0, deleting = false;
+    function step() {
+      const w = words[wi]; ci += deleting ? -1 : 1; elT.textContent = w.slice(0, ci);
+      if (!deleting && ci === w.length) { deleting = true; tm = setTimeout(step, 1700); return; }
+      if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; tm = setTimeout(step, 350); return; }
+      tm = setTimeout(step, deleting ? 45 : 95);
+    }
+    step();
+  }
+  window.__setRoleWords = function (w) { if (Array.isArray(w) && w.length) { words = w; run(); } };
+  run();
+})();
+
+/* ---------- INIT ---------- */
+applyLang(LANG);
+buildLegend();
+loadMap();
+
+/* Klick auf die Karte / leere Fläche schließt die Detailkarte rechts */
+svg.addEventListener("click", (e) => { if (!e.target.closest(".pin")) closePanel(); });
+</script>
+</body>
+</html>

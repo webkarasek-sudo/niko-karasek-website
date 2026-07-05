@@ -56,7 +56,7 @@
         "Dokumentarfilm",
         "Fernsehjournalismus"
       ],
-      "knowsLanguage": ["de", "ru", "en"],
+      "knowsLanguage": ["de", "en", "ru", "es", "fr", "pt"],
       "sameAs": [
         "https://www.facebook.com/niko.karasek",
         "https://www.instagram.com/nikokarasek"
@@ -111,8 +111,8 @@ html[data-theme="light"][data-accent="terracotta"] { --accent: #D9533B; }
 html, body { transition: background-color 0.35s ease, color 0.35s ease; }
 /* nav contact button + hamburger pick up accent in light theme */
 html[data-theme="light"] .nav__contact { background: var(--accent); color: var(--on-accent); }
-html[data-theme="light"] .nav__hamburger { background: var(--accent); }
-html[data-theme="light"] .nav__hamburger span { background: var(--on-accent); }
+html[data-theme="light"] .nav__hamburger { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); }
+html[data-theme="light"] .nav__hamburger span { background: #0f0f0f; }
 /* film placeholder stripes */
 html[data-theme="light"] .film__placeholder { background: repeating-linear-gradient(45deg, #e7e5df 0 14px, #efeee9 14px 28px); }
 /* hero video corner brackets invert for the light theme */
@@ -148,6 +148,9 @@ html[data-theme="light"] .infb__text,
 html[data-theme="light"] .infb__yr-plus,
 html[data-theme="light"] .infb__yr-v { color: var(--on-accent-dim); }
 html[data-theme="light"] .infb__years { border-top-color: var(--on-accent-line); }
+html[data-theme="light"] .infb__langs { border-top-color: var(--on-accent-line); }
+html[data-theme="light"] .infb__langs-k { color: var(--on-accent-dim); }
+html[data-theme="light"] .infb__langs-v { color: var(--on-accent); }
 html[data-theme="light"] .infb__yr { border-bottom-color: var(--on-accent-line); }
 html[data-theme="light"] .infb__yr.on { background: linear-gradient(90deg, rgba(255,255,255,.08), transparent 55%); }
 html[data-theme="light"] .infb__yr.on .infb__yr-plus,
@@ -232,6 +235,45 @@ a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 
+/* ============ PRELOADER (loading counter) ============ */
+.preloader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex;
+  align-items: center; justify-content: center;
+  padding: clamp(26px, 6vw, 76px);
+  transition: opacity 0.6s cubic-bezier(.5,0,.1,1);
+}
+.preloader.is-done { opacity: 0; pointer-events: none; }
+.pl__count {
+  font-family: var(--sans);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  color: var(--fg);
+  font-size: clamp(28px, 3.4vw, 46px);
+  font-variant-numeric: tabular-nums;
+  display: flex; align-items: flex-start;
+  user-select: none;
+}
+.pl__pct {
+  font-size: 0.32em; font-weight: 800;
+  margin-left: 0.1em; margin-top: 0.12em;
+  color: var(--yellow);
+}
+html[data-theme="light"] .pl__pct { color: var(--accent); }
+.pl__bar {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 3px;
+  background: rgba(255,255,255,0.08);
+}
+html[data-theme="light"] .pl__bar { background: rgba(0,0,0,0.08); }
+.pl__bar-fill {
+  display: block; height: 100%; width: 0%;
+  background: var(--yellow);
+}
+html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
+
+
 /* ============ NAV ============ */
 /* ---- Accessibility: visible keyboard focus + skip link ---- */
 :focus-visible {
@@ -308,16 +350,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav__menu-pill button.active,
 .nav__menu-pill a.active { background: #fff; color: #000; }
 .nav__hamburger {
-  /* filled circle reads visually larger than the outlined flag/theme buttons,
-     so keep it a touch smaller (40 vs 44) to balance them optically */
-  width: 40px; height: 40px;
+  width: 44px; height: 44px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 5px;
-  background: var(--yellow);
+  background: rgba(0,0,0,0.28);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: 50%;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
 }
+.nav__hamburger:hover { transform: translateY(-1px); }
 .nav__hamburger span {
-  display: block; width: 18px; height: 2px; background: #000;
+  display: block; width: 18px; height: 2px; background: #fff;
   transition: transform 0.3s, opacity 0.2s;
 }
 .nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -528,12 +572,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__reel-frame { position: relative; aspect-ratio: 16 / 9; background: #0a0a0a; }
 .hero__reel-screen {
   position: absolute; inset: 0; overflow: hidden;
-  background: #0a0a0a url("assets/films/02_im_land_des_feindes.avif") center/cover no-repeat;
+  background: #0a0a0a url("assets/hero-poster.jpg") center/cover no-repeat;
 }
+/* IMPORTANT — hiding YouTube chrome on the hero showreel:
+   YouTube ALWAYS paints its own chrome (video title top-left, share/watch-later
+   buttons top-right) over an embed for the first few seconds and on hover.
+   controls=0 + modestbranding removes the bottom bar, but NOT the title row.
+   The only reliable way to kill it is to over-scale the iframe so that row is
+   physically cropped outside the visible frame. scale(1.45) pushes the top ~16%
+   (the title row) and the right-edge buttons out of view. DO NOT lower this below
+   ~1.4 or the YouTube title/buttons reappear. */
 .hero__reel-screen iframe {
   position: absolute; top: 50%; left: 50%;
   width: 100%; height: 100%;
-  transform: translate(-50%, -50%) scale(1.32);
+  transform: translate(-50%, -50%) scale(1.45);
   border: 0; pointer-events: none;
   opacity: 1;
 }
@@ -542,7 +594,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    Fades out only once the player reports it is actually playing. */
 .hero__reel-poster {
   position: absolute; inset: 0; z-index: 2;
-  background: #0a0a0a url("assets/films/02_im_land_des_feindes.avif") center/cover no-repeat;
+  background: #0a0a0a url("assets/hero-poster.jpg") center/cover no-repeat;
   transition: opacity 0.5s ease;
 }
 .hero__reel-poster.is-hidden { opacity: 0; pointer-events: none; }
@@ -807,6 +859,21 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   margin-bottom: 4px;
 }
 .film__year { font-size: 11px; color: var(--fg-mute); font-weight: 600; }
+
+/* films: archive button + grouped rows + category chip */
+.films-all { display: inline-flex; align-items: center; gap: 9px; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--line); font-weight: 800; font-size: 13px; letter-spacing: 0.02em; color: var(--fg); background: var(--bg-2); transition: background .2s, color .2s, border-color .2s, transform .2s; }
+.films-all svg { width: 15px; height: 15px; transition: transform .25s; }
+.films-all:hover { transform: translateY(-1px); border-color: var(--fg-mute); background: var(--bg-3); }
+.films-all:hover svg { transform: translateX(3px); }
+.films-group + .films-group { margin-top: 48px; }
+.films-group__title { font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace); font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-dim); padding-bottom: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; }
+.films-group__title::before { content: ""; width: 0; height: 0; border-radius: 0; background: none; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent var(--yellow); flex: none; }
+html[data-theme="light"] .films-group__title::before { background: none; border-left-color: var(--accent); }
+.film__caption { display: flex; flex-direction: column; align-items: flex-start; }
+.film__meta { position: absolute; top: 10px; left: 10px; z-index: 3; display: flex; flex-wrap: wrap; gap: 6px; }
+.film__cat, .film__chan { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 4px; font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border: 0; }
+.film__cat { color: #fff; }
+.film__chan { color: #fff; }
 
 /* ============ INFO ============ */
 .info-section { padding: 100px var(--block-inset) 80px; }
@@ -1104,6 +1171,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .infb__cta-main svg { width: 19px; height: 19px; flex: none; transition: transform 0.3s; }
 .infb__cta:hover .infb__cta-main svg { transform: translate(2px, -2px); }
+.infb__langs { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.2); }
+.infb__langs-k { font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(0,0,0,.5); }
+.infb__langs-v { font-size: 14px; font-weight: 600; line-height: 1.5; color: rgba(0,0,0,.8); }
 .infb__years {
   display: flex; flex-direction: column;
   border-top: 1px solid rgba(0,0,0,.2);
@@ -1497,16 +1567,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     font-size: 15px;
   }
   .nav__hamburger {
-    width: 40px; height: 40px;
+    width: 44px; height: 44px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 5px;
-    background: var(--yellow);
+    background: rgba(0,0,0,0.28);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.14);
     border-radius: 50%;
   }
   .nav__hamburger span {
     display: block;
     width: 18px; height: 2px;
-    background: #000;
+    background: #fff;
     transition: transform 0.3s, opacity 0.2s;
   }
   .nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -1517,7 +1589,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hero__reel { width: 92vw; gap: 14px; }
   .hero__reel-play { width: 60px; height: 60px; }
   .hero__reel-play::after { border-width: 7px 0 7px 12px; }
-  .hero__reel-corner { width: 20px; height: 20px; }
+  .hero__reel-corner { width: 11px; height: 11px; border-width: 1px; border-color: rgba(255,255,255,0.4); }
+  .hero__reel-corner--tl { top: -6px; left: -6px; }
+  .hero__reel-corner--tr { top: -6px; right: -6px; }
+  .hero__reel-corner--bl { bottom: -6px; left: -6px; }
+  .hero__reel-corner--br { bottom: -6px; right: -6px; }
+  html[data-theme="light"] .hero__reel-corner { border-color: rgba(15,15,15,0.4); }
 
   .section { padding: 48px 16px; }
   .section__title { font-size: clamp(26px, 7.5vw, 32px); margin-bottom: 22px; }
@@ -1694,6 +1771,12 @@ html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on
 </head>
 <body>
 
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pl__count"><span id="plNum">0</span><span class="pl__pct">%</span></div>
+  <div class="pl__bar"><span class="pl__bar-fill" id="plBar"></span></div>
+</div>
+
 <a class="skip-link" href="#main" data-i18n="skip">Zum Inhalt springen</a>
 
 <!-- ============ NAV ============ -->
@@ -1770,32 +1853,18 @@ html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on
 <section class="section" id="filme">
   <div class="filme__head">
     <h2 class="section__title" data-i18n="sec.filme">Meine Filme</h2>
-    <div class="viewtoggle" id="filmViewToggle" role="tablist" aria-label="Ansicht">
-      <button class="viewtoggle__btn active" type="button" data-view="raster" role="tab" aria-selected="true" data-i18n="view.raster">Raster</button>
-      <button class="viewtoggle__btn" type="button" data-view="karte" role="tab" aria-selected="false" data-i18n="view.karte">Karte</button>
-    </div>
+    <a class="films-all" href="Filme.html" data-i18n="films.all">Alle Filme
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
-  <div class="films" id="filmsGrid"></div>
-  <div class="filmmap" id="filmMap" hidden>
-    <svg class="filmmap__svg" id="filmMapSvg" role="img" aria-label="Karte der Drehorte"></svg>
-    <div class="filmmap__hint" id="filmMapHint">Tippe auf einen Punkt</div>
-    <aside class="filmmap__panel" id="filmMapPanel" aria-hidden="true" aria-label="Filmdetails">
-      <button class="filmmap__close" id="fmClose" type="button" aria-label="Schließen">×</button>
-      <div class="filmmap__media" id="fmMedia" role="button" tabindex="0" aria-label="Video abspielen">
-        <img id="fmImg" alt="" />
-        <span class="film__broadcaster" id="fmBroadcaster"></span>
-        <span class="film__runtime" id="fmRuntime"></span>
-        <span class="filmmap__playbig"></span>
-      </div>
-      <div class="filmmap__body">
-        <span class="filmmap__loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="fmLoc"></span></span>
-        <h3 class="filmmap__title" id="fmTitle"></h3>
-        <div class="filmmap__meta"><span id="fmYear"></span><span id="fmChannel"></span></div>
-        <p class="filmmap__desc" id="fmDesc"></p>
-        <div class="filmmap__tbc" id="fmTbc" hidden><span id="fmTbcText"></span></div>
-        <button class="filmmap__watch" id="fmWatch" type="button"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span id="fmWatchLabel">Ansehen</span></button>
-      </div>
-    </aside>
+
+  <div class="films-group">
+    <h3 class="films-group__title" data-i18n="group.politik">Politik &amp; Konflikt</h3>
+    <div class="films" id="filmsPolitik"></div>
+  </div>
+  <div class="films-group">
+    <h3 class="films-group__title" data-i18n="group.gesellschaft">Gesellschaft &amp; Alltag</h3>
+    <div class="films" id="filmsGesellschaft"></div>
   </div>
 </section>
 
@@ -1826,6 +1895,10 @@ html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on
           Dezember 2022 lebe ich in Hamburg und drehe Reportagen und
           Dokumentationen aus aller Welt — der Fokus bleibt Osteuropa.
         </p>
+        <div class="infb__langs">
+          <span class="infb__langs-k" data-i18n="info.langsK">Sprachen</span>
+          <span class="infb__langs-v" data-i18n="info.langsV">Deutsch · Englisch · Russisch · Spanisch · Französisch · Portugiesisch</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1909,6 +1982,35 @@ const lenis = (function initLenis() {
   return l;
 })();
 
+/* ---------- PRELOADER (loading counter) ---------- */
+(function preloader() {
+  const pl = document.getElementById("preloader");
+  if (!pl) return;
+  const num = document.getElementById("plNum");
+  const bar = document.getElementById("plBar");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.body.style.overflow = "hidden";
+  if (lenis) lenis.stop();
+  function finish() {
+    pl.classList.add("is-done");
+    document.body.style.overflow = "";
+    if (lenis) lenis.start();
+    setTimeout(() => pl.remove(), 650);
+  }
+  if (reduce) { if (num) num.textContent = "100"; if (bar) bar.style.width = "100%"; finish(); return; }
+  const DURATION = 1600;
+  const t0 = performance.now();
+  (function tick(now) {
+    const t = Math.min(1, (now - t0) / DURATION);
+    const eased = 1 - Math.pow(1 - t, 2);
+    const v = Math.round(eased * 100);
+    if (num) num.textContent = v;
+    if (bar) bar.style.width = v + "%";
+    if (t < 1) requestAnimationFrame(tick);
+    else setTimeout(finish, 240);
+  })(t0);
+})();
+
 /* ---------- DATA ---------- */
 const ROTATING_WORDS = ["Reportagen", "Fernsehen", "Russland Experte", "Keynote Speaker"];
 
@@ -1928,6 +2030,12 @@ const LOGOS = [
 ];
 
 const FILMS = [
+  { title: "Neujahr in Nordkorea", year: "2025", broadcaster: "galileo", runtime: "", img: "assets/films/11_neujahr_nordkorea.webp", ext: "https://www.joyn.de/play/clip/neujahr-in-nordkorea-russische-touristen-bei-kim-jong-un" },
+  { title: "Die Metro-Schule von Charkiw", year: "2024", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/glxe4OqOhj0/maxresdefault.jpg", ytid: "glxe4OqOhj0", yt: "glxe4OqOhj0" },
+  { title: "Reportage aus Chișinău", year: "2024", broadcaster: "", runtime: "", img: "https://i.ytimg.com/vi/o-XG00-xU7U/maxresdefault.jpg", ytid: "o-XG00-xU7U", yt: "o-XG00-xU7U" },
+  { title: "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?", year: "2024", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/LeUvpPtV0u0/maxresdefault.jpg", ytid: "LeUvpPtV0u0", yt: "LeUvpPtV0u0" },
+  { title: "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!", year: "2025", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/_bSn6xn5af0/maxresdefault.jpg", ytid: "_bSn6xn5af0", yt: "_bSn6xn5af0" },
+  { title: "Im Reich der Superreichen", year: "2025", broadcaster: "galileo", runtime: "", img: "assets/films/14_reich_der_superreichen.webp", yt: "Obj0NRFE6sI" },
   { title: "Putins Helfer", year: "2023", broadcaster: "zdf", runtime: "44:49", img: "assets/films/01_putins_helfer.avif", yt: "dGIUKCFdQJ0" },
   { title: "Im Land des Feindes", year: "2022", broadcaster: "arte", runtime: "32:01", img: "assets/films/02_im_land_des_feindes.avif", yt: "" },
   { title: "10 Fragen an eine politische Gefangene", year: "2024", broadcaster: "galileo", runtime: "11:32", img: "assets/films/03_politische_gefangene.webp", yt: "EtEYaXDx0IY" },
@@ -1936,8 +2044,35 @@ const FILMS = [
   { title: "Russland: Putins leise Gegnerin", year: "2024", broadcaster: "arte", runtime: "12:33", img: "assets/films/06_putins_gegnerin.webp", yt: "f0agKxLEgWI" },
   { title: "Stroganina: das sibirische Sushi", year: "2017", broadcaster: "galileo", runtime: "10:37", img: "assets/films/07_sibirisches_sushi.webp", yt: "QE5tX6_O7Y4" },
   { title: "Einblicke in Russlands Troll-Armee", year: "2020", broadcaster: "ntv", runtime: "7:58", img: "assets/films/08_troll_armee.webp", yt: "hiGwpXndwLk" },
-  { title: "Der härteste Knast Russlands", year: "2019", broadcaster: "galileo", runtime: "14:12", img: "assets/films/09_haertester_knast.webp", yt: "PCqZw9QnCA8" },
+  { title: "Der härteste Knast Russlands", year: "2018", broadcaster: "galileo", runtime: "14:12", img: "assets/films/09_haertester_knast.webp", yt: "PCqZw9QnCA8" },
+  { title: "Russland: Putin will Kinder", year: "2026", broadcaster: "arte", runtime: "", img: "assets/films/10_putin_will_kinder.webp", yt: "" },
+  { title: "Wem gehört der Döner?", year: "2025", broadcaster: "arte", runtime: "", img: "assets/films/12_wem_gehoert_der_doener.webp", yt: "n4fKc5pDYY8" },
+  { title: "Die Republik Moldau und der Einfluss Russlands", year: "2025", broadcaster: "arte", runtime: "", img: "assets/films/13_moldau_russland.webp", yt: "o-XG00-xU7U" },
 ];
+
+/* Kategorie + Featured-Zuordnung (cat: politik | gesellschaft). featured = wird auf der Startseite gezeigt. */
+const FILM_CAT = {
+  "Putins Helfer": "politik",
+  "Im Land des Feindes": "politik",
+  "10 Fragen an eine politische Gefangene": "politik",
+  "Russland: Denunzieren um jeden Preis": "politik",
+  "Teilmobilmachung in Russland": "politik",
+  "Russland: Putins leise Gegnerin": "politik",
+  "Einblicke in Russlands Troll-Armee": "politik",
+  "Der härteste Knast Russlands": "politik",
+  "Die Metro-Schule von Charkiw": "politik",
+  "Reportage aus Chișinău": "politik",
+  "Die Republik Moldau und der Einfluss Russlands": "politik",
+  "Russland: Putin will Kinder": "politik",
+  "Stroganina: das sibirische Sushi": "gesellschaft",
+  "Neujahr in Nordkorea": "gesellschaft",
+  "Wem gehört der Döner?": "gesellschaft",
+  "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?": "politik",
+  "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!": "gesellschaft",
+  "Im Reich der Superreichen": "gesellschaft"
+};
+const FILM_FEATURED = ["Putins Helfer", "Die Republik Moldau und der Einfluss Russlands", "Russland: Putin will Kinder", "Neujahr in Nordkorea", "Wem gehört der Döner?", "Im Reich der Superreichen"];
+FILMS.forEach((f) => { f.cat = FILM_CAT[f.title] || "politik"; f.featured = FILM_FEATURED.indexOf(f.title) !== -1; });
 
 const EXPERTS = [
   { title: "Russland-Experte bei ntv", outlet: "NTV", runtime: "4:44", broadcaster: "ntv", img: "assets/experts/01_russland_experte_ntv.webp", yt: "fR6aUz2VrTo" },
@@ -1956,12 +2091,17 @@ const FILM_T = {
   "Stroganina: das sibirische Sushi": { en: "Stroganina: The Siberian Sushi", es: "Stroganina: el sushi siberiano", fr: "Stroganina : le sushi sibérien" },
   "Einblicke in Russlands Troll-Armee": { en: "Inside Russia's Troll Army", es: "Dentro del ejército de troles de Rusia", fr: "Au cœur de l'armée de trolls russe" },
   "Der härteste Knast Russlands": { en: "Russia's Toughest Prison", es: "La cárcel más dura de Rusia", fr: "La prison la plus dure de Russie" },
+  "Russland: Putin will Kinder": { en: "Russia: Putin Wants Children", es: "Rusia: Putin quiere niños", fr: "Russie : Poutine veut des enfants" },
+  "Wem gehört der Döner?": { en: "Who Owns the Doner?", es: "¿De quién es el döner?", fr: "À qui appartient le kebab ?" },
+  "Die Republik Moldau und der Einfluss Russlands": { en: "Moldova and the Influence of Russia", es: "La República de Moldavia y la influencia de Rusia", fr: "La République de Moldavie et l'influence de la Russie" },
+  "Im Reich der Superreichen": { en: "In the Realm of the Super-Rich", es: "En el reino de los superricos", fr: "Au royaume des super-riches" },
   "Russland-Experte bei ntv": { en: "Russia Expert on ntv", es: "Experto en Rusia en ntv", fr: "Expert de la Russie sur ntv" },
   "Die Zukunft des Journalismus": { en: "The Future of Journalism", es: "El futuro del periodismo", fr: "L'avenir du journalisme" },
   "Bei Stern TV mit Marina Owsjannikowa": { en: "On Stern TV with Marina Ovsyannikova", es: "En Stern TV con Marina Ovsiánnikova", fr: "Sur Stern TV avec Marina Ovsiannikova" }
 };
 
 const SHOWREEL_YT = "ExM137zUBKA";
+const BROADCASTER_NAME = { arte: "arte", ntv: "n-tv", ard: "ARD", zdf: "ZDF", galileo: "Galileo", sterntv: "Stern TV" };
 
 /* ---------- HELPERS ---------- */
 function el(tag, attrs = {}, children = []) {
@@ -2117,7 +2257,6 @@ const LOGO_FILES = [
 /* ---------- HERO REEL: force clean playback, loop a short segment ---------- */
 (function heroReelLoop() {
   const REEL_START = 6, REEL_DUR = 10; /* loop seconds 6 → 16 */
-  const REEL_REVEAL = REEL_START + 2.5; /* keep the poster up until YT's title/play-button chrome has faded */
   let player = null, guard = null, posterHidden = false;
   function hidePoster() { if (posterHidden) return; posterHidden = true; const p = document.getElementById("heroReelPoster"); if (p) p.classList.add("is-hidden"); }
   function init() {
@@ -2127,9 +2266,11 @@ const LOGO_FILES = [
         events: {
           onReady: function (e) { try { e.target.mute(); e.target.seekTo(REEL_START, true); e.target.playVideo(); } catch (_) {} },
           onStateChange: function (e) {
-            /* do NOT reveal on PLAYING — YouTube still overlays its title and big
-               play/replay button for the first ~3s. The guard reveals once we're
-               safely into the clip. */
+            /* IMPORTANT — reveal the moment real video frames are on screen, so the
+               showreel starts IMMEDIATELY (no 2-3s poster hold). YouTube's title
+               chrome is already cropped off by the iframe over-scale (see CSS),
+               so there is nothing to wait out. */
+            if (e.data === YT.PlayerState.PLAYING) { hidePoster(); }
             if (e.data === YT.PlayerState.ENDED) { try { e.target.seekTo(REEL_START, true); e.target.playVideo(); } catch (_) {} }
           }
         }
@@ -2140,10 +2281,10 @@ const LOGO_FILES = [
       if (!player || !player.getCurrentTime) return;
       try {
         const t = player.getCurrentTime();
-        if (t >= REEL_REVEAL) hidePoster();
+        if (t > REEL_START) hidePoster(); /* safety reveal as soon as we're into the clip */
         if (t >= REEL_START + REEL_DUR || t < REEL_START - 1) { player.seekTo(REEL_START, true); player.playVideo(); }
       } catch (_) {}
-    }, 400);
+    }, 250);
   }
   if (window.YT && window.YT.Player) { init(); }
   else {
@@ -2232,15 +2373,29 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLight
 /* ---------- FILM/EXPERT CARDS ---------- */
 function buildFilmCard(item, index) {
   const media = el("div", { class: "film__media" }, [
-    el("div", { class: "film__broadcaster " + item.broadcaster }),
     el("div", { class: "film__placeholder" }, [el("span", {}, "still 16:9")]),
   ]);
+  /* Sender/Kanal wird jetzt als Chip in der Caption gezeigt (nicht mehr als Badge auf dem Bild) */
   if (item.img) {
-    const img = el("img", { class: "film__img", src: item.img, alt: item.title, loading: "lazy" });
+    const img = el("img", {
+      class: "film__img", src: item.img, alt: item.title, loading: "lazy",
+      onload: function () {
+        /* YouTube serves a 120x90 grey placeholder (HTTP 200) when maxresdefault is missing → swap to hqdefault */
+        if (item.ytid && this.naturalWidth <= 121 && !this.dataset.fb) { this.dataset.fb = "1"; this.src = "https://i.ytimg.com/vi/" + item.ytid + "/hqdefault.jpg"; }
+      },
+      onerror: function () {
+        if (item.ytid && !this.dataset.fb) { this.dataset.fb = "1"; this.src = "https://i.ytimg.com/vi/" + item.ytid + "/hqdefault.jpg"; }
+        else { this.remove(); }
+      }
+    });
     media.appendChild(img);
   }
-  media.appendChild(el("div", { class: "film__runtime" }, item.runtime));
+  if (item.runtime) media.appendChild(el("div", { class: "film__runtime" }, item.runtime));
   media.appendChild(el("div", { class: "film__play" }));
+  media.appendChild(el("div", { class: "film__meta" }, [
+    item.cat ? el("div", { class: "film__cat", "data-i18n": "cat." + item.cat }, item.cat === "politik" ? "Politik" : "Gesellschaft") : null,
+    item.broadcaster ? el("div", { class: "film__chan" }, BROADCASTER_NAME[item.broadcaster] || item.broadcaster) : null,
+  ]));
   const card = el("article", { class: "film" }, [
     media,
     el("div", { class: "film__caption" }, [
@@ -2248,12 +2403,13 @@ function buildFilmCard(item, index) {
       el("div", { class: "film__year" }, item.year || item.outlet || ""),
     ]),
   ]);
-  if (item.yt) {
+  const open = item.yt ? (() => openLightbox(item.yt))
+    : (item.ext ? (() => window.open(item.ext, "_blank", "noopener")) : null);
+  if (open) {
     card.style.cursor = "pointer";
     card.setAttribute("role", "button");
     card.setAttribute("tabindex", "0");
     card.setAttribute("aria-label", item.title + " – Video abspielen");
-    const open = () => openLightbox(item.yt);
     card.addEventListener("click", open);
     card.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
@@ -2263,8 +2419,12 @@ function buildFilmCard(item, index) {
 }
 
 (function films() {
-  const grid = document.getElementById("filmsGrid");
-  FILMS.forEach((f, i) => grid.appendChild(buildFilmCard(f, i)));
+  const gp = document.getElementById("filmsPolitik");
+  const gg = document.getElementById("filmsGesellschaft");
+  if (!gp || !gg) return;
+  const byYear = (a, b) => (parseInt(b.year, 10) || 0) - (parseInt(a.year, 10) || 0);
+  FILMS.filter((f) => f.featured && f.cat === "politik").sort(byYear).forEach((f, i) => gp.appendChild(buildFilmCard(f, i)));
+  FILMS.filter((f) => f.featured && f.cat === "gesellschaft").sort(byYear).forEach((f, i) => gg.appendChild(buildFilmCard(f, i)));
 })();
 
 (function experts() {
@@ -2534,9 +2694,11 @@ function buildFilmCard(item, index) {
       "view.raster": "Raster", "view.karte": "Karte",
       "role.reportagen": "Reportagen", "role.fernsehen": "Fernsehen",
       "sec.filme": "Meine Filme", "sec.experte": "Experte & Speaker",
+      "films.all": "Alle Filme", "group.politik": "Politik & Konflikt", "group.gesellschaft": "Gesellschaft & Alltag", "cat.politik": "Politik", "cat.gesellschaft": "Gesellschaft",
       "info.title": 'Sechs Jahre <span class="infb__mute">Moskau.</span><br/> Heute Hamburg.',
       "info.corner1": "Info", "info.corner2": "Reporter · Dok · TV",
       "info.yr1": "Moskau · Russland", "info.yr2": "Kyjiw · Ukraine", "info.yr3k": "Heute", "info.yr3v": "Hamburg · Welt",
+      "info.langsK": "Sprachen", "info.langsV": "Deutsch · Englisch · Russisch · Spanisch · Französisch · Portugiesisch",
       "info.text": "Bis Ende 2022 habe ich für sechs Jahre in Russland gelebt und von dort als freier Journalist für alle deutschen Fernsehsender berichtet. Seit Dezember 2022 lebe ich in Hamburg und drehe Reportagen und Dokumentationen aus aller Welt — der Fokus bleibt Osteuropa.",
       "foot.sitemap": "Sitemap", "foot.social": "Social Media", "foot.experteLink": "Experte / Speaker", "foot.save": "Kontakt speichern",
       "legal.impressum": "Impressum", "legal.datenschutz": "Datenschutzerklärung",
@@ -2549,9 +2711,11 @@ function buildFilmCard(item, index) {
       "view.raster": "Grid", "view.karte": "Map",
       "role.reportagen": "Reporting", "role.fernsehen": "Television",
       "sec.filme": "My Films", "sec.experte": "Expert & Speaker",
+      "films.all": "All Films", "group.politik": "Politics & Conflict", "group.gesellschaft": "Society & Everyday", "cat.politik": "Politics", "cat.gesellschaft": "Society",
       "info.title": 'Six years <span class="infb__mute">Moscow.</span><br/> Now Hamburg.',
       "info.corner1": "About", "info.corner2": "Reporter · Doc · TV",
       "info.yr1": "Moscow · Russia", "info.yr2": "Kyiv · Ukraine", "info.yr3k": "Now", "info.yr3v": "Hamburg · World",
+      "info.langsK": "Languages", "info.langsV": "German · English · Russian · Spanish · French · Portuguese",
       "info.text": "Until the end of 2022 I lived in Russia for six years, reporting from there as a freelance journalist for all German TV networks. Since December 2022 I have been based in Hamburg, filming reports and documentaries from all over the world — with a continued focus on Eastern Europe.",
       "foot.sitemap": "Sitemap", "foot.social": "Social Media", "foot.experteLink": "Expert / Speaker", "foot.save": "Save contact",
       "legal.impressum": "Imprint", "legal.datenschutz": "Privacy Policy",
@@ -2564,9 +2728,11 @@ function buildFilmCard(item, index) {
       "view.raster": "Cuadrícula", "view.karte": "Mapa",
       "role.reportagen": "Reportajes", "role.fernsehen": "Televisión",
       "sec.filme": "Mis reportajes", "sec.experte": "Experto y conferenciante",
+      "films.all": "Todos los reportajes", "group.politik": "Política y conflicto", "group.gesellschaft": "Sociedad y vida cotidiana", "cat.politik": "Política", "cat.gesellschaft": "Sociedad",
       "info.title": 'Seis años <span class="infb__mute">Moscú.</span><br/> Ahora Hamburgo.',
       "info.corner1": "Perfil", "info.corner2": "Reportero · Doc · TV",
       "info.yr1": "Moscú · Rusia", "info.yr2": "Kyiv · Ucrania", "info.yr3k": "Ahora", "info.yr3v": "Hamburgo · Mundo",
+      "info.langsK": "Idiomas", "info.langsV": "Alemán · Inglés · Ruso · Español · Francés · Portugués",
       "info.text": "Hasta finales de 2022 viví seis años en Rusia, desde donde informé como periodista independiente para todas las cadenas de televisión alemanas. Desde diciembre de 2022 vivo en Hamburgo y realizo reportajes y documentales de todo el mundo, manteniendo el foco en Europa del Este.",
       "foot.sitemap": "Mapa del sitio", "foot.social": "Redes sociales", "foot.experteLink": "Experto / Conferenciante", "foot.save": "Guardar contacto",
       "legal.impressum": "Aviso legal", "legal.datenschutz": "Política de privacidad",
@@ -2579,9 +2745,11 @@ function buildFilmCard(item, index) {
       "view.raster": "Grille", "view.karte": "Carte",
       "role.reportagen": "Reportages", "role.fernsehen": "Télévision",
       "sec.filme": "Mes reportages", "sec.experte": "Expert & conférencier",
+      "films.all": "Tous les reportages", "group.politik": "Politique & conflit", "group.gesellschaft": "Société & quotidien", "cat.politik": "Politique", "cat.gesellschaft": "Société",
       "info.title": "Six ans <span class=\"infb__mute\">Moscou.</span><br/> Aujourd’hui Hambourg.",
       "info.corner1": "Profil", "info.corner2": "Reporter · Doc · TV",
       "info.yr1": "Moscou · Russie", "info.yr2": "Kyiv · Ukraine", "info.yr3k": "Aujourd’hui", "info.yr3v": "Hambourg · Monde",
+      "info.langsK": "Langues", "info.langsV": "Allemand · Anglais · Russe · Espagnol · Français · Portugais",
       "info.text": "Jusqu’à fin 2022, j’ai vécu six ans en Russie, d’où j’ai travaillé comme journaliste indépendant pour toutes les chaînes de télévision allemandes. Depuis décembre 2022, je vis à Hambourg et je réalise des reportages et des documentaires du monde entier — avec un intérêt constant pour l’Europe de l’Est.",
       "foot.sitemap": "Plan du site", "foot.social": "Réseaux sociaux", "foot.experteLink": "Expert / Conférencier", "foot.save": "Enregistrer le contact",
       "legal.impressum": "Mentions légales", "legal.datenschutz": "Politique de confidentialité",
@@ -2670,9 +2838,15 @@ function buildFilmCard(item, index) {
   const REGION = { type: "MultiPoint", coordinates: [[-11, 36], [148, 36], [148, 72], [-11, 72]] };
 
   const SPOTS = [
+    { id: "nordkorea", title: "Neujahr in Nordkorea", year: "2025", broadcaster: "galileo", channel: "Galileo · Joyn", runtime: "", img: "", ext: "https://www.joyn.de/play/clip/neujahr-in-nordkorea-russische-touristen-bei-kim-jong-un", place: "Nordkorea", lon: 125.7625, lat: 39.0392, tbc: false, desc: "Nordkorea gilt als das isolierteste Land der Welt – Ausländer:innen dürfen nur unter strengen Kontrollen einreisen. Außer, man kommt aus Russland! Was steckt hinter der Einladung von Kim Jong Un?" },
+    { id: "charkiw", title: "Die Metro-Schule von Charkiw", year: "2024", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/glxe4OqOhj0/maxresdefault.jpg", ytid: "glxe4OqOhj0", yt: "glxe4OqOhj0", place: "Charkiw", lon: 36.2304, lat: 49.9935, tbc: false, desc: "Charkiw ist vom Krieg gezeichnet und dennoch kehrt das Leben langsam zurück. Aufgrund der Nähe zur russischen Grenze gilt die Stadt jedoch als besonders gefährdet. Unterrichtet wird nur im sicheren Untergrund. „Galileo“ hat Schülerin Mascha begleitet." },
+    { id: "chisinau", title: "Die Republik Moldau und der Einfluss Russlands", year: "2025", broadcaster: "arte", channel: "arte", runtime: "", img: "assets/films/13_moldau_russland.webp", ytid: "o-XG00-xU7U", yt: "o-XG00-xU7U", place: "Chișinău", lon: 28.8638, lat: 47.0105, tbc: false, desc: "Die Republik Moldau gilt als eines der Länder, in denen russischer Einfluss und EU-Annäherung besonders direkt aufeinandertreffen. Die ARTE-Reportage blickt auf Propaganda, wirtschaftliche Abhängigkeiten und die tiefe Spaltung der Gesellschaft." },
+    { id: "berlin", title: "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?", year: "2024", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/LeUvpPtV0u0/maxresdefault.jpg", ytid: "LeUvpPtV0u0", yt: "LeUvpPtV0u0", place: "Berlin", lon: 13.4050, lat: 52.5200, tbc: false, desc: "Russland führt Krieg gegen uns: Es geht um Unterwanderung, Destabilisierung und Angst. Das Ziel: Unsere Sicherheit und unseren Staat von innen zerstören. Sogenannte Wegwerf-Agenten sind mitten in Deutschland und ihre Angriffe werden immer regelmäßiger." },
+    { id: "niederlande", title: "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!", year: "2025", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/_bSn6xn5af0/maxresdefault.jpg", ytid: "_bSn6xn5af0", yt: "_bSn6xn5af0", place: "Niederlande", lon: 4.9041, lat: 52.3676, tbc: false, labelDx: -12, labelAnchor: "end", desc: "Eine Autobahn, die einen Seeweg kreuzt? In den Niederlanden gibt es eine Straßenkreuzung, die du so noch nie gesehen hast! Entdecke dieses einzigartige Bauwerk, das Realität und keine KI-Fantasie ist. Jetzt mit uns die Niederlande erkunden!" },
+    { id: "sylt", title: "Im Reich der Superreichen", year: "2025", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "assets/films/14_reich_der_superreichen.webp", ytid: "Obj0NRFE6sI", yt: "Obj0NRFE6sI", place: "Sylt", lon: 8.3100, lat: 54.9080, tbc: false, desc: "Sylt ist die Urlaubsinsel der Superreichen. Die Immobilienpreise, die Dichte an Luxusautos und schicken Lokalen, all das ist in Deutschland einzigartig. Aber wofür steht die Insel für die echten Sylter? „Galileo“ taucht ein in den Mikrokosmos Sylt." },
     { id: "stroganina", title: "Stroganina: das sibirische Sushi", year: "2017", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "10:37", img: "assets/films/07_sibirisches_sushi.webp", yt: "QE5tX6_O7Y4", place: "Jakutsk · Sibirien", lon: 129.7331, lat: 62.0339, tbc: false, desc: "In der kältesten Großstadt der Welt wird roher, gefrorener Fisch in hauchdünne Späne gehobelt — Stroganina. Eine Reportage über sibirische Esskultur bei minus 40 Grad." },
     { id: "troll", title: "Einblicke in Russlands Troll-Armee", year: "2020", broadcaster: "ntv", channel: "n-tv", runtime: "7:58", img: "assets/films/08_troll_armee.webp", yt: "hiGwpXndwLk", place: "St. Petersburg", lon: 30.3609, lat: 59.9311, tbc: false, desc: "Recherche in der Stadt, in der Russlands berüchtigte „Trollfabrik“ ihren Ursprung hat: Wie bezahlte Kommentatoren das Netz fluten und Stimmung machen." },
-    { id: "knast", title: "Der härteste Knast Russlands", year: "2019", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "14:12", img: "assets/films/09_haertester_knast.webp", yt: "PCqZw9QnCA8", place: "Sibirien", lon: 92.8932, lat: 56.0153, tbc: true, desc: "Eine Reportage über eines der härtesten Straflager Russlands — Alltag, Disziplin und Überleben hinter Gittern." }
+    { id: "knast", title: "Der härteste Knast Russlands", year: "2018", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "14:12", img: "assets/films/09_haertester_knast.webp", yt: "PCqZw9QnCA8", place: "Insel Pjatak", lon: 37.8500, lat: 60.0300, tbc: false, desc: "Auf der Insel Pjatak befindet sich der härteste Knast Russlands, auf die nur Mörder und Schwerverbrecher kommen. Wer dort einmal einsitzt, kommt nie wieder heraus." }
   ];
 
   const LBL = {
@@ -2703,9 +2877,23 @@ function buildFilmCard(item, index) {
   const fmWatchLabel = document.getElementById("fmWatchLabel");
 
   function fillPanel(s) {
-    fmImg.src = s.img; fmImg.alt = ftitle(s);
-    fmBroadcaster.className = "film__broadcaster " + s.broadcaster;
-    fmRuntime.textContent = s.runtime;
+    if (s.img) {
+      fmImg.style.display = ""; fmImg.dataset.fb = ""; fmImg.alt = ftitle(s);
+      fmImg.onload = function () {
+        if (s.ytid && this.naturalWidth <= 121 && !this.dataset.fb) { this.dataset.fb = "1"; this.src = "https://i.ytimg.com/vi/" + s.ytid + "/hqdefault.jpg"; }
+      };
+      fmImg.onerror = function () {
+        if (s.ytid && !this.dataset.fb) { this.dataset.fb = "1"; this.src = "https://i.ytimg.com/vi/" + s.ytid + "/hqdefault.jpg"; }
+        else { this.style.display = "none"; }
+      };
+      fmImg.src = s.img;
+    } else {
+      fmImg.onerror = null; fmImg.removeAttribute("src"); fmImg.style.display = "none";
+    }
+    fmBroadcaster.className = "film__broadcaster " + (s.broadcaster || "");
+    fmBroadcaster.style.display = s.broadcaster ? "" : "none";
+    fmRuntime.textContent = s.runtime || "";
+    fmRuntime.style.display = s.runtime ? "" : "none";
     fmLoc.textContent = s.place;
     fmTitle.textContent = ftitle(s);
     fmYear.textContent = s.year;
@@ -2725,11 +2913,16 @@ function buildFilmCard(item, index) {
     svg.querySelectorAll(".pin").forEach((p) => p.classList.remove("is-active"));
   }
   document.getElementById("fmClose").addEventListener("click", closePanel);
-  document.getElementById("fmWatch").addEventListener("click", () => { if (current) openLightbox(current.yt); });
+  function playCurrent() {
+    if (!current) return;
+    if (current.yt) openLightbox(current.yt);
+    else if (current.ext) window.open(current.ext, "_blank", "noopener");
+  }
+  document.getElementById("fmWatch").addEventListener("click", playCurrent);
   (function mediaPlay() {
     const m = document.getElementById("fmMedia");
-    m.addEventListener("click", () => { if (current) openLightbox(current.yt); });
-    m.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (current) openLightbox(current.yt); } });
+    m.addEventListener("click", playCurrent);
+    m.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playCurrent(); } });
   })();
 
   function render() {

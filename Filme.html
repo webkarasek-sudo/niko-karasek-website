@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alle Filme — Reportagen & Dokumentationen | Niko Karasek</title>
+<meta name="description" content="Alle Reportagen und Dokumentationen von Niko Karasek — von politischen Reportagen aus Russland und der Ukraine bis zu Gesellschafts- und Alltagsgeschichten. Nach Themen filterbar." />
+<link rel="canonical" href="https://www.nikokarasek.com/Filme.html" />
+<meta name="robots" content="index,follow" />
+<style>
+/* ============ TOKENS (von der Startseite) ============ */
+:root {
+  --bg: #000000;
+  --bg-2: #0d0d0d;
+  --bg-3: #161616;
+  --card: #1a1a1a;
+  --fg: #ffffff;
+  --fg-dim: #b8b8b8;
+  --fg-mute: #9a9a9a;
+  --line: #262626;
+  --yellow: #f5f000;
+  --accent: #f5f000;
+  --on-accent: #000;
+  --block-radius: 24px;
+  --block-inset: 32px;
+  --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", monospace;
+}
+html[data-theme="light"] {
+  --bg: #f7f6f2;
+  --bg-2: #efeee9;
+  --bg-3: #e7e5df;
+  --card: #ecebe6;
+  --fg: #0f0f0f;
+  --fg-dim: #474745;
+  --fg-mute: #66655f;
+  --line: #dedcd5;
+  --accent: #141414;
+  --on-accent: #f6f5f1;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--fg); }
+body {
+  font-family: var(--sans);
+  font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 300; padding: 12px 18px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-weight: 800; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); transition: top 0.22s cubic-bezier(.2,.7,.1,1); }
+.skip-link:focus-visible { top: 16px; outline: 2px solid var(--fg); outline-offset: 2px; }
+
+/* ============ NAV (wie Startseite) ============ */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 22px 32px; }
+.nav__brand { display: block; }
+.nav__logo { font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.03em; line-height: 0.95; color: var(--fg); }
+.nav__roles { list-style: none; margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; }
+.nav__roles li { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim); }
+.nav__roles li:not(:last-child)::after { content: "·"; margin: 0 12px; color: var(--fg-mute); font-weight: 700; }
+.nav__right { display: flex; align-items: center; gap: 10px; }
+.nav__contact { padding: 11px 22px; border-radius: 999px; background: var(--yellow); color: #000; font-weight: 800; font-size: 13px; letter-spacing: 0.02em; transition: transform 0.2s, background 0.2s; }
+html[data-theme="light"] .nav__contact { background: var(--accent); color: var(--on-accent); }
+.nav__contact:hover { transform: translateY(-1px); }
+.nav__menu-pill { position: fixed; top: 78px; right: 16px; min-width: 220px; display: flex; flex-direction: column; background: rgba(18,18,18,0.94); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12); color: #fff; border-radius: 18px; padding: 10px; gap: 2px; transform: translateY(-12px) scale(0.98); opacity: 0; pointer-events: none; transition: opacity 0.22s, transform 0.28s cubic-bezier(.2,.7,.1,1); box-shadow: 0 24px 60px rgba(0,0,0,0.5); z-index: 200; }
+.nav__menu-pill.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.nav__menu-pill a { padding: 12px 16px; border-radius: 12px; color: rgba(255,255,255,0.82); font-weight: 800; font-size: 14px; text-align: left; transition: background 0.2s, color 0.2s; }
+.nav__menu-pill a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.nav__menu-pill a.active { background: #fff; color: #000; }
+.nav__hamburger { width: 44px; height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: rgba(0,0,0,0.28); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.14); border-radius: 50%; transition: background 0.25s, border-color 0.25s, transform 0.25s; }
+.nav__hamburger:hover { transform: translateY(-1px); }
+html[data-theme="light"] .nav__hamburger { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); }
+.nav__hamburger span { display: block; width: 18px; height: 2px; background: #fff; transition: transform 0.3s, opacity 0.2s; }
+html[data-theme="light"] .nav__hamburger span { background: #0f0f0f; }
+.nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav__hamburger.open span:nth-child(2) { opacity: 0; }
+.nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.theme-toggle { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.28); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.14); color: #fff; transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.25s; }
+.theme-toggle:hover { transform: translateY(-1px); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle__moon { display: none; }
+html[data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: #0f0f0f; }
+html[data-theme="light"] .theme-toggle__sun { display: none; }
+html[data-theme="light"] .theme-toggle__moon { display: block; }
+
+.lang { position: relative; }
+.lang__btn { display: flex; align-items: center; gap: 7px; height: 42px; padding: 0 14px; border-radius: 999px; background: rgba(0,0,0,0.28); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.14); color: #fff; font-weight: 800; font-size: 13px; letter-spacing: 0.04em; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+html[data-theme="light"] .lang__btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: #0f0f0f; }
+.lang__flag { font-size: 15px; line-height: 1; }
+.lang__chev { width: 13px; height: 13px; opacity: 0.7; transition: transform 0.2s; }
+.lang.open .lang__chev { transform: rotate(180deg); }
+.lang__menu { position: absolute; top: 52px; right: 0; min-width: 178px; list-style: none; margin: 0; padding: 8px; background: rgba(18,18,18,0.94); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; display: flex; flex-direction: column; gap: 2px; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity 0.2s, transform 0.22s cubic-bezier(.2,.7,.1,1); box-shadow: 0 24px 60px rgba(0,0,0,0.5); z-index: 210; }
+.lang.open .lang__menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.lang__menu button { display: flex; align-items: center; gap: 11px; width: 100%; padding: 10px 12px; border-radius: 10px; color: rgba(255,255,255,0.85); font-weight: 700; font-size: 14px; text-align: left; transition: background 0.2s, color 0.2s; }
+.lang__menu button span { font-size: 17px; line-height: 1; }
+.lang__menu button:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.lang__menu button.active { background: #fff; color: #000; }
+
+/* ============ PAGE HEADER ============ */
+.page { max-width: 1320px; margin: 0 auto; padding: 130px 32px 80px; }
+.page-head__kicker { display: inline-flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); }
+.page-head__kicker i { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+.page-head__kicker svg { width: 11px; height: 11px; fill: var(--accent); flex: none; }
+.page-head__title { margin-top: 16px; font-weight: 900; font-size: clamp(28px, 3.5vw, 40px); line-height: 1.0; letter-spacing: -0.03em; color: var(--fg); }
+.page-head__sub { margin-top: 16px; font-size: 16px; line-height: 1.55; color: var(--fg-dim); max-width: 56ch; text-wrap: pretty; }
+
+/* ============ TABS ============ */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 36px 0 8px; padding: 5px; border: 1px solid var(--line); border-radius: 999px; width: fit-content; max-width: 100%; }
+.tab { padding: 11px 22px; border-radius: 999px; font-weight: 800; font-size: 14px; letter-spacing: 0.01em; color: var(--fg-dim); white-space: nowrap; transition: background 0.2s, color 0.2s; }
+.tab:hover { color: var(--fg); }
+.tab.active { background: var(--accent); color: var(--on-accent); }
+.channels { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 8px; padding: 5px; border: 1px solid var(--line); border-radius: 999px; width: fit-content; max-width: 100%; }
+.chtab { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 999px; font-weight: 800; font-size: 13px; color: var(--fg-dim); white-space: nowrap; transition: background 0.2s, color 0.2s; }
+.chtab:hover { color: var(--fg); }
+.chtab.active { background: var(--accent); color: var(--on-accent); }
+.chtab__n { font-family: var(--mono); font-size: 10px; font-weight: 700; opacity: 0.55; font-variant-numeric: tabular-nums; }
+.chtab.active .chtab__n { opacity: 0.7; }
+.films-empty { grid-column: 1 / -1; padding: 44px 4px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-mute); }
+/* ============ FILTER DROPDOWNS ============ */
+.filters { display: flex; flex-wrap: wrap; gap: 12px; margin: 36px 0 8px; }
+.filterdd { position: relative; }
+.filterdd__btn { display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg-2); color: var(--fg); font-weight: 800; font-size: 14px; transition: border-color .2s, background .2s; }
+.filterdd__btn:hover { border-color: var(--fg-mute); }
+.filterdd.open .filterdd__btn { border-color: var(--accent); }
+.filterdd__lbl { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--fg-mute); }
+.filterdd__val { font-weight: 800; }
+.filterdd__chev { width: 14px; height: 14px; opacity: .65; transition: transform .25s; }
+.filterdd.open .filterdd__chev { transform: rotate(180deg); }
+.filterdd__menu { position: absolute; top: 56px; left: 0; min-width: 100%; width: max-content; max-width: 340px; list-style: none; margin: 0; padding: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 2px; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: transform .22s cubic-bezier(.2,.7,.1,1); box-shadow: 0 24px 60px rgba(0,0,0,0.5); z-index: 60; }
+.filterdd.open .filterdd__menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.filterdd__opt { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; padding: 12px 14px; border-radius: 11px; color: var(--fg-dim); font-weight: 800; font-size: 14px; text-align: left; white-space: nowrap; transition: background .2s, color .2s; }
+.filterdd__opt:hover { background: var(--bg-3); color: var(--fg); }
+.filterdd__opt.active { background: var(--accent); color: var(--on-accent); }
+.filterdd__optn { font-family: var(--mono); font-size: 11px; font-weight: 700; opacity: .55; font-variant-numeric: tabular-nums; }
+.filterdd__opt.active .filterdd__optn { opacity: .8; }
+.tabs__count { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-mute); margin: 18px 2px 28px; }
+
+/* ============ FILMS GRID (von der Startseite) ============ */
+.films { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 16px; }
+.film { position: relative; cursor: default; opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(.2,.7,.1,1), transform 0.7s cubic-bezier(.2,.7,.1,1); }
+.film.in { opacity: 1; transform: none; }
+.film__media { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--card); transition: transform 0.5s cubic-bezier(.2,.7,.1,1); }
+.film:hover .film__media { transform: scale(1.03); }
+.film__placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(45deg, #1a1a1a 0 14px, #222 14px 28px); }
+html[data-theme="light"] .film__placeholder { background: repeating-linear-gradient(45deg, #e7e5df 0 14px, #efeee9 14px 28px); }
+.film__placeholder span { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-mute); font-weight: 600; }
+.film__broadcaster { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.65); color: #fff; padding: 4px 8px; font-size: 10px; font-weight: 800; letter-spacing: 0.04em; text-transform: lowercase; border-radius: 2px; z-index: 2; }
+.film__broadcaster.arte::before { content: "arte"; }
+.film__broadcaster.ntv::before { content: "n-tv"; }
+.film__broadcaster.ard::before { content: "ARD"; letter-spacing: 0.08em; }
+.film__broadcaster.zdf::before { content: "ZDF"; letter-spacing: 0.06em; }
+.film__broadcaster.galileo::before { content: "Galileo"; text-transform: none; }
+.film__broadcaster.sterntv::before { content: "Stern TV"; text-transform: none; }
+.film__media img.film__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: brightness(0.86) saturate(0.95); transition: filter 0.4s cubic-bezier(.2,.7,.1,1); }
+.film:hover .film__media img.film__img { filter: brightness(1) saturate(1); }
+.film__media::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.02) 42%, rgba(0,0,0,0.20) 100%); opacity: 1; transition: opacity 0.4s cubic-bezier(.2,.7,.1,1); }
+.film:hover .film__media::after { opacity: 0.35; }
+.film__runtime { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.75); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: #fff; padding: 4px 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; border-radius: 2px; z-index: 2; font-variant-numeric: tabular-nums; }
+.film__play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.85); background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 3; opacity: 0.85; transition: opacity 0.3s, background 0.3s; }
+.film:hover .film__play { opacity: 1; background: rgba(0,0,0,0.7); }
+.film__play::after { content: ""; border-style: solid; border-width: 6px 0 6px 9px; border-color: transparent transparent transparent #fff; margin-left: 2px; }
+.film__caption { display: flex; flex-direction: column; align-items: flex-start; padding: 12px 4px 0; }
+.film__meta { position: absolute; top: 10px; left: 10px; z-index: 3; display: flex; flex-wrap: wrap; gap: 6px; }
+.film__cat, .film__chan { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 4px; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border: 0; }
+.film__cat { color: #fff; }
+.film__chan { color: #fff; }
+.film__title { font-weight: 800; font-size: 14px; line-height: 1.3; color: var(--fg); letter-spacing: -0.005em; margin-bottom: 4px; }
+.film__year { font-size: 11px; color: var(--fg-mute); font-weight: 600; }
+
+/* ============ FOOTER LINK ============ */
+.page-foot { border-top: 1px solid var(--line); margin-top: 64px; padding-top: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-mute); }
+.page-foot a { display: inline-flex; align-items: center; gap: 8px; color: var(--fg-dim); }
+.page-foot a:hover { color: var(--fg); }
+.page-foot a svg { width: 15px; height: 15px; }
+
+/* ============ LIGHTBOX ============ */
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.25s; padding: 24px; }
+.lightbox.in { opacity: 1; }
+.lightbox__inner { position: relative; width: min(1200px, 100%); aspect-ratio: 16/9; }
+.lightbox__inner iframe { width: 100%; height: 100%; border: 0; background: #000; }
+.lightbox__close { position: absolute; top: -44px; right: -4px; width: 36px; height: 36px; background: var(--yellow); color: #000; border-radius: 50%; font-size: 22px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center; }
+
+@media (max-width: 1024px) {
+  .nav { padding: 18px 24px; }
+  .page { padding: 120px 24px 64px; }
+  .films { grid-template-columns: repeat(2, 1fr); gap: 18px 14px; }
+}
+@media (max-width: 900px) { .nav__roles { display: none; } }
+@media (max-width: 640px) {
+  .nav { padding: 14px 16px; }
+  .nav__contact { display: none; }
+  .lang__code, .lang__chev { display: none; }
+  .lang__btn { padding: 0; width: 42px; justify-content: center; gap: 0; }
+  .page { padding: 100px 16px 56px; }
+  .films { grid-template-columns: 1fr; gap: 22px; }
+  .tab { padding: 10px 16px; font-size: 13px; }
+  .chtab { padding: 8px 14px; font-size: 12px; }
+  .filters { gap: 10px; }
+  .filterdd, .filterdd__btn { width: 100%; }
+  .filterdd__btn { justify-content: space-between; }
+  .filterdd__menu { width: 100%; max-width: none; }
+  .film__title { font-size: 15px; }
+}
+
+/* ===== Masthead: animierter Name + Rollen (wie Startseite) ===== */
+.hero__logo { font-family: var(--sans); font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); line-height: 0.95; letter-spacing: -0.03em; color: var(--fg); }
+.hero__logo .word { display: inline-block; white-space: nowrap; }
+.hero__logo .letter { display: inline-block; opacity: 0; transform: translateY(0.5em); filter: blur(8px); animation: letterIn 0.9s cubic-bezier(0.2,0.7,0.1,1) forwards; animation-delay: var(--d, 0ms); will-change: transform, filter, opacity; }
+@keyframes letterIn { 0% { opacity: 0; transform: translateY(0.5em); filter: blur(8px); } 60% { opacity: 1; filter: blur(0); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+.hero__roles { list-style: none; margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; }
+.hero__roles li { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim); }
+.hero__roles li:not(:last-child)::after { content: "·"; margin: 0 12px; color: var(--fg-mute); font-weight: 700; }
+.hero__type::after { content: "▌"; margin-left: 2px; animation: caretBlink 1s steps(1, end) infinite; }
+@keyframes caretBlink { 50% { opacity: 0; } }
+@media (max-width: 640px) {
+  .hero__masthead .hero__roles { display: flex; margin-top: 9px; }
+  .hero__masthead .hero__roles li:not(:last-child) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__logo .letter { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
+  .hero__type::after { animation: none !important; }
+  .film { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .film:hover .film__media { transform: none; }
+}
+
+/* ===== Footer (gelber CTA-Block, wie Startseite) ===== */
+.foot__intro { display: flex; flex-direction: column; gap: 26px; align-items: flex-start; }
+.foot__social { display: flex; flex-direction: row; gap: 6px; justify-self: center; }
+.foot__social a { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; opacity: 0.55; transition: transform 0.2s, opacity 0.2s; }
+.foot__social a:hover { transform: translateY(-2px); opacity: 1; }
+.foot__social svg { width: 19px; height: 19px; }
+.foot__cta { display: flex; flex-direction: column; align-items: stretch; gap: 14px; width: 100%; max-width: 500px; }
+.cta { display: inline-flex; align-items: center; gap: 12px; padding: 22px 32px; border-radius: 999px; font-family: var(--sans); font-weight: 800; font-size: 19px; letter-spacing: -0.01em; text-decoration: none; border: none; cursor: pointer; white-space: nowrap; transition: transform 0.25s cubic-bezier(.2,.7,.1,1), background 0.25s, color 0.25s, border-color 0.25s; }
+.cta--primary.copied { background: #16a34a; color: #fff; }
+.cta__ic { display: inline-flex; }
+.cta__ic svg { width: 21px; height: 21px; }
+.cta__copyhint { display: inline-flex; margin-left: auto; padding-left: 14px; opacity: 0.5; transition: opacity 0.2s; }
+.cta__copyhint svg { width: 17px; height: 17px; }
+.cta--primary:hover .cta__copyhint { opacity: 0.9; }
+.cta--primary.copied .cta__copyhint { display: none; }
+.cta--ghost.copied { border-color: #16a34a; color: #16a34a; }
+.cta svg { width: 21px; height: 21px; flex: none; }
+.cta--primary { background: #000; color: var(--yellow); }
+.cta--primary:hover { transform: translateY(-3px); background: #141414; }
+.cta--ghost { background: transparent; color: #000; border: 1.5px solid rgba(0,0,0,0.35); }
+.cta--ghost:hover { transform: translateY(-3px); border-color: #000; background: rgba(0,0,0,0.06); }
+.cta:focus-visible { outline: 2px solid #000; box-shadow: 0 0 0 4px rgba(0,0,0,0.25); }
+.foot { background: var(--yellow); color: #000; padding: 56px 48px 28px; margin: 64px var(--block-inset) var(--block-inset); border-radius: var(--block-radius); position: relative; overflow: hidden; }
+.foot__grid { display: grid; grid-template-columns: minmax(auto, 520px) 1fr; gap: 48px; align-items: start; position: relative; z-index: 1; }
+.foot__brand { font-weight: 900; font-size: 40px; letter-spacing: -0.04em; color: #000; line-height: 1; }
+.foot__media { align-self: end; max-width: 340px; width: 100%; margin-left: auto; }
+.foot__media-frame { aspect-ratio: 16/9; background: #000; position: relative; overflow: hidden; }
+.foot__media-placeholder { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, #1a1a1a 0 14px, #222 14px 28px); display: flex; align-items: center; justify-content: center; }
+.foot__media-placeholder span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #6e6e6e; font-weight: 600; }
+.foot__media-gif { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: transform 0.6s cubic-bezier(.2,.7,.1,1); }
+.foot__media-frame:hover .foot__media-gif { transform: scale(1.04); }
+.foot__bottom { margin-top: 40px; padding-top: 22px; border-top: 1.5px solid rgba(0,0,0,0.08); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; position: relative; z-index: 1; color: rgba(0,0,0,0.42); }
+.foot__legal { display: flex; gap: 18px; justify-content: flex-end; }
+.foot__bottom > .foot__legal { text-align: right; }
+.foot__legal a { color: rgba(0,0,0,0.42); position: relative; }
+.foot__legal a:hover { text-decoration: underline; }
+html[data-theme="light"] .foot { background: var(--accent); color: var(--on-accent); }
+html[data-theme="light"] .foot__brand { color: var(--on-accent); }
+html[data-theme="light"] .foot__bottom { border-top-color: rgba(255,255,255,0.16); color: rgba(255,255,255,0.66); }
+html[data-theme="light"] .foot__legal a { color: rgba(255,255,255,0.66); }
+html[data-theme="light"] .foot__social a { color: var(--on-accent); opacity: 0.6; }
+html[data-theme="light"] .foot__social a:hover { opacity: 1; }
+html[data-theme="light"] .cta--primary { background: var(--on-accent); color: #141414; }
+html[data-theme="light"] .cta--primary:hover { background: #fff; }
+html[data-theme="light"] .cta--ghost { color: var(--on-accent); border-color: rgba(255,255,255,0.16); }
+html[data-theme="light"] .cta--ghost:hover { color: var(--on-accent); border-color: var(--on-accent); background: rgba(255,255,255,0.06); }
+@media (max-width: 860px) {
+  .foot__grid { grid-template-columns: 1fr; gap: 30px 28px; }
+  .foot__media { max-width: 420px; margin-left: 0; }
+}
+@media (max-width: 640px) {
+  .foot { padding: 40px 16px 20px; margin: 48px 16px 16px; }
+  .foot__brand { font-size: 32px; }
+  .foot__media-frame { max-width: none; margin-left: 0; }
+  .foot__bottom { grid-template-columns: 1fr; gap: 12px; text-align: left; }
+  .foot__bottom > .foot__legal { text-align: left; }
+  .foot__legal { justify-content: flex-start; flex-wrap: wrap; }
+  .foot__social { justify-self: start; }
+  .cta { font-size: 15px; padding: 16px 22px; }
+  .foot__cta { max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main" data-i18n="skip">Zum Inhalt springen</a>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <a class="nav__brand hero__masthead" href="index.html" aria-label="Zur Startseite">
+    <div class="hero__logo" id="heroLogo">Niko Karasek</div>
+    <ul class="hero__roles">
+      <li data-i18n="role.reportagen">Reportagen</li>
+      <li data-i18n="role.fernsehen">Fernsehen</li>
+      <li><span class="hero__type" id="roleType"></span></li>
+    </ul>
+  </a>
+  <div class="nav__right">
+    <div class="lang" id="langPick">
+      <button class="lang__btn" id="langBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Sprache">
+        <span class="lang__flag" id="langFlag">🇩🇪</span><span class="lang__code" id="langCode">DE</span>
+        <svg class="lang__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <ul class="lang__menu" id="langMenu" role="listbox">
+        <li><button type="button" role="option" data-lang="de"><span>🇩🇪</span>Deutsch</button></li>
+        <li><button type="button" role="option" data-lang="en"><span>🇬🇧</span>English</button></li>
+        <li><button type="button" role="option" data-lang="es"><span>🇪🇸</span>Español</button></li>
+        <li><button type="button" role="option" data-lang="fr"><span>🇫🇷</span>Français</button></li>
+      </ul>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Helles oder dunkles Design" aria-pressed="false">
+      <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a class="nav__contact" href="index.html#kontakt" data-i18n="nav.kontakt">Kontakt</a>
+    <div class="nav__menu-pill" id="navPill">
+      <a href="index.html#main" data-i18n="nav.start">Start</a>
+      <a href="Filme.html" class="active" aria-current="page" data-i18n="nav.filme">Filme</a>
+      <a href="Karte.html" data-i18n="nav.karte">Karte</a>
+      <a href="index.html#info" data-i18n="nav.info">Info</a>
+      <a href="index.html#experte" data-i18n="nav.experte">Experte</a>
+      <a href="index.html#kontakt" data-i18n="nav.kontakt">Kontakt</a>
+    </div>
+    <button class="nav__hamburger" id="hamburger" aria-label="Menü" aria-expanded="false" aria-controls="navPill">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ PAGE ============ -->
+<main class="page" id="main" tabindex="-1">
+  <header>
+    <span class="page-head__kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-i18n="all.kicker">Archiv</span></span>
+    <h1 class="page-head__title" data-i18n="all.title">Alle Filme</h1>
+    <p class="page-head__sub" data-i18n="all.sub">Von politischen Reportagen aus Russland und der Ukraine bis zu Gesellschafts- und Alltagsgeschichten aus aller Welt.</p>
+  </header>
+
+  <div class="filters">
+    <div class="filterdd" id="ddTopic">
+      <button class="filterdd__btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <span class="filterdd__lbl" data-i18n="filter.topic">Thema</span>
+        <span class="filterdd__val" id="ddTopicVal"></span>
+        <svg class="filterdd__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <ul class="filterdd__menu" id="ddTopicMenu" role="listbox"></ul>
+    </div>
+    <div class="filterdd" id="ddChannel">
+      <button class="filterdd__btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <span class="filterdd__lbl" data-i18n="filter.sender">Sender</span>
+        <span class="filterdd__val" id="ddChannelVal"></span>
+        <svg class="filterdd__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <ul class="filterdd__menu" id="ddChannelMenu" role="listbox"></ul>
+    </div>
+  </div>
+  <div class="tabs__count" id="tabsCount"></div>
+
+  <div class="films" id="filmsGrid"></div>
+
+</main>
+
+<!-- ============ FOOTER (wie Startseite) ============ -->
+<footer class="foot" id="kontakt">
+  <div class="foot__grid">
+    <div class="foot__intro">
+      <div class="foot__brand">NK</div>
+      <div class="foot__cta">
+        <button class="cta cta--primary" id="ctaCopyEmail" type="button" aria-label="E-Mail-Adresse kopieren" title="Klicken zum Kopieren">
+          <span class="cta__ic" id="ctaCopyIcon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg></span>
+          <span class="cta__label" id="ctaCopyLabel"></span>
+          <span class="cta__copyhint" id="ctaCopyHint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+        </button>
+        <button class="cta cta--ghost" id="ctaCopyPhone" type="button" title="Klicken zum Kopieren">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span id="ctaCopyPhoneLabel">+49 174 637 9751</span>
+        </button>
+        <button class="cta cta--ghost" id="ctaVcard" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></svg>
+          <span data-i18n="foot.save">Kontakt speichern</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="foot__media">
+      <div class="foot__media-frame">
+        <div class="foot__media-placeholder">
+          <span>still 16:9 — feldarbeit</span>
+        </div>
+        <img class="foot__media-gif" src="assets/footer.gif" alt="Behind the scenes" />
+      </div>
+    </div>
+  </div>
+
+  <div class="foot__bottom">
+    <span>© 2026 Niko Karasek · Hamburg</span>
+    <div class="foot__social" aria-label="Social Media">
+      <a href="https://www.facebook.com/niko.karasek" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/nikokarasek" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/niko-karasek" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.3 8.65 21 11 21 14.1V21h-4v-6.1c0-1.45-.03-3.3-2-3.3s-2.3 1.57-2.3 3.2V21H9z"/></svg>
+      </a>
+    </div>
+    <span class="foot__legal">
+      <a href="Impressum.html" data-i18n="legal.impressum">Impressum</a>
+      <a href="Datenschutz.html" data-i18n="legal.datenschutz">Datenschutzerklärung</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function(){try{var m=localStorage.getItem('nk-theme');if(m==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();
+
+/* ---------- DATA: alle Filme (cat: politik | gesellschaft) ---------- */
+const FILMS = [
+  { title: "Neujahr in Nordkorea", year: "2025", cat: "gesellschaft", broadcaster: "galileo", runtime: "", img: "assets/films/11_neujahr_nordkorea.webp", ext: "https://www.joyn.de/play/clip/neujahr-in-nordkorea-russische-touristen-bei-kim-jong-un" },
+  { title: "Russland: Putin will Kinder", year: "2026", cat: "politik", broadcaster: "arte", runtime: "", img: "assets/films/10_putin_will_kinder.webp", yt: "" },
+  { title: "Wem gehört der Döner?", year: "2025", cat: "gesellschaft", broadcaster: "arte", runtime: "", img: "assets/films/12_wem_gehoert_der_doener.webp", yt: "n4fKc5pDYY8" },
+  { title: "Die Metro-Schule von Charkiw", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/glxe4OqOhj0/maxresdefault.jpg", ytid: "glxe4OqOhj0", yt: "glxe4OqOhj0" },
+  { title: "Die Republik Moldau und der Einfluss Russlands", year: "2025", cat: "politik", broadcaster: "arte", runtime: "", img: "assets/films/13_moldau_russland.webp", yt: "o-XG00-xU7U" },
+  { title: "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/LeUvpPtV0u0/maxresdefault.jpg", ytid: "LeUvpPtV0u0", yt: "LeUvpPtV0u0" },
+  { title: "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!", year: "2025", cat: "gesellschaft", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/_bSn6xn5af0/maxresdefault.jpg", ytid: "_bSn6xn5af0", yt: "_bSn6xn5af0" },
+  { title: "Im Reich der Superreichen", year: "2025", cat: "gesellschaft", broadcaster: "galileo", runtime: "", img: "assets/films/14_reich_der_superreichen.webp", yt: "Obj0NRFE6sI" },
+  { title: "Putins Helfer", year: "2023", cat: "politik", broadcaster: "zdf", runtime: "44:49", img: "assets/films/01_putins_helfer.avif", yt: "dGIUKCFdQJ0" },
+  { title: "Im Land des Feindes", year: "2022", cat: "politik", broadcaster: "arte", runtime: "32:01", img: "assets/films/02_im_land_des_feindes.avif", yt: "" },
+  { title: "10 Fragen an eine politische Gefangene", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "11:32", img: "assets/films/03_politische_gefangene.webp", yt: "EtEYaXDx0IY" },
+  { title: "Russland: Denunzieren um jeden Preis", year: "2022", cat: "politik", broadcaster: "arte", runtime: "12:33", img: "assets/films/04_denunzieren.webp", yt: "Kxf7oJbs4FQ" },
+  { title: "Teilmobilmachung in Russland", year: "2022", cat: "politik", broadcaster: "galileo", runtime: "9:13", img: "assets/films/05_teilmobilmachung.webp", yt: "C7kgXe8R0vM" },
+  { title: "Russland: Putins leise Gegnerin", year: "2024", cat: "politik", broadcaster: "arte", runtime: "12:33", img: "assets/films/06_putins_gegnerin.webp", yt: "f0agKxLEgWI" },
+  { title: "Stroganina: das sibirische Sushi", year: "2017", cat: "gesellschaft", broadcaster: "galileo", runtime: "10:37", img: "assets/films/07_sibirisches_sushi.webp", yt: "QE5tX6_O7Y4" },
+  { title: "Einblicke in Russlands Troll-Armee", year: "2020", cat: "politik", broadcaster: "ntv", runtime: "7:58", img: "assets/films/08_troll_armee.webp", yt: "hiGwpXndwLk" },
+  { title: "Der härteste Knast Russlands", year: "2018", cat: "politik", broadcaster: "galileo", runtime: "14:12", img: "assets/films/09_haertester_knast.webp", yt: "PCqZw9QnCA8" },
+  { title: "Russland-Experte bei ntv", year: "2024", cat: "experte", broadcaster: "ntv", runtime: "4:44", img: "assets/experts/01_russland_experte_ntv.webp", yt: "fR6aUz2VrTo" },
+  { title: "Die Zukunft des Journalismus", year: "2023", cat: "experte", broadcaster: "arte", runtime: "9:54", img: "assets/experts/02_zukunft_journalismus.webp", yt: "CfZGnVX3dSk" },
+  { title: "Bei Stern TV mit Marina Owsjannikowa", year: "2022", cat: "experte", broadcaster: "sterntv", runtime: "9:17", img: "assets/experts/03_stern_tv.webp", yt: "mzv5JJlje5I" }
+];
+
+const FILM_T = {
+  "Russland: Putin will Kinder": { en: "Russia: Putin Wants Children", es: "Rusia: Putin quiere niños", fr: "Russie : Poutine veut des enfants" },
+  "Wem gehört der Döner?": { en: "Who Owns the Doner?", es: "¿De quién es el döner?", fr: "À qui appartient le kebab ?" },
+  "Die Republik Moldau und der Einfluss Russlands": { en: "Moldova and the Influence of Russia", es: "La República de Moldavia y la influencia de Rusia", fr: "La République de Moldavie et l'influence de la Russie" },
+  "Im Reich der Superreichen": { en: "In the Realm of the Super-Rich", es: "En el reino de los superricos", fr: "Au royaume des super-riches" },
+  "Putins Helfer": { en: "Putin's Helpers", es: "Los ayudantes de Putin", fr: "Les complices de Poutine" },
+  "Im Land des Feindes": { en: "In the Land of the Enemy", es: "En el país del enemigo", fr: "Au pays de l'ennemi" },
+  "10 Fragen an eine politische Gefangene": { en: "10 Questions for a Political Prisoner", es: "10 preguntas a una presa política", fr: "10 questions à une prisonnière politique" },
+  "Russland: Denunzieren um jeden Preis": { en: "Russia: Denouncing at Any Cost", es: "Rusia: denunciar a cualquier precio", fr: "Russie : dénoncer à tout prix" },
+  "Teilmobilmachung in Russland": { en: "Partial Mobilisation in Russia", es: "Movilización parcial en Rusia", fr: "Mobilisation partielle en Russie" },
+  "Russland: Putins leise Gegnerin": { en: "Russia: Putin's Quiet Opponent", es: "Rusia: la silenciosa opositora de Putin", fr: "Russie : l'opposante discrète de Poutine" },
+  "Stroganina: das sibirische Sushi": { en: "Stroganina: The Siberian Sushi", es: "Stroganina: el sushi siberiano", fr: "Stroganina : le sushi sibérien" },
+  "Einblicke in Russlands Troll-Armee": { en: "Inside Russia's Troll Army", es: "Dentro del ejército de troles de Rusia", fr: "Au cœur de l'armée de trolls russe" },
+  "Der härteste Knast Russlands": { en: "Russia's Toughest Prison", es: "La cárcel más dura de Rusia", fr: "La prison la plus dure de Russie" },
+  "Russland-Experte bei ntv": { en: "Russia Expert on ntv", es: "Experto en Rusia en ntv", fr: "Expert de la Russie sur ntv" },
+  "Die Zukunft des Journalismus": { en: "The Future of Journalism", es: "El futuro del periodismo", fr: "L'avenir du journalisme" },
+  "Bei Stern TV mit Marina Owsjannikowa": { en: "On Stern TV with Marina Ovsyannikova", es: "En Stern TV con Marina Ovsiánnikova", fr: "Sur Stern TV avec Marina Ovsiannikova" }
+};
+
+const BROADCASTER_NAME = { arte: "arte", ntv: "n-tv", ard: "ARD", zdf: "ZDF", galileo: "Galileo", sterntv: "Stern TV" };
+
+/* ---------- I18N ---------- */
+const DICT = {
+  de: { "role.reportagen":"Reportagen","role.fernsehen":"Fernsehen","skip":"Zum Inhalt springen","nav.start":"Start","nav.filme":"Filme","nav.karte":"Karte","nav.info":"Info","nav.experte":"Experte","nav.kontakt":"Kontakt",
+    "all.kicker":"Archiv","all.title":"Alle Filme","all.sub":"Von politischen Reportagen aus Russland und der Ukraine bis zu Gesellschafts- und Alltagsgeschichten aus aller Welt.",
+    "all.tab.alle":"Alle","group.politik":"Politik & Konflikt","group.gesellschaft":"Gesellschaft & Alltag",
+    "cat.politik":"Politik","cat.gesellschaft":"Gesellschaft","cat.experte":"Experte","group.experte":"Experte & Speaker","all.back":"Zur Startseite","all.count":"Filme","all.sender":"Alle Sender","all.empty":"Keine Filme in dieser Kombination.","filter.topic":"Thema","filter.sender":"Sender",
+    "foot.save":"Kontakt speichern","legal.impressum":"Impressum","legal.datenschutz":"Datenschutzerklärung","copied":"Kopiert!", typeWords:["Russland-Experte","Keynote Speaker"] },
+  en: { "role.reportagen":"Reporting","role.fernsehen":"Television","skip":"Skip to content","nav.start":"Start","nav.filme":"Films","nav.karte":"Map","nav.info":"About","nav.experte":"Expert","nav.kontakt":"Contact",
+    "all.kicker":"Archive","all.title":"All Films","all.sub":"From political reports out of Russia and Ukraine to society and everyday stories from around the world.",
+    "all.tab.alle":"All","group.politik":"Politics & Conflict","group.gesellschaft":"Society & Everyday",
+    "cat.politik":"Politics","cat.gesellschaft":"Society","cat.experte":"Expert","group.experte":"Expert & Speaker","all.back":"Back to start","all.count":"films","all.sender":"All channels","all.empty":"No films for this combination.","filter.topic":"Topic","filter.sender":"Channel",
+    "foot.save":"Save contact","legal.impressum":"Imprint","legal.datenschutz":"Privacy Policy","copied":"Copied!", typeWords:["Russia Expert","Keynote Speaker"] },
+  es: { "role.reportagen":"Reportajes","role.fernsehen":"Televisión","skip":"Saltar al contenido","nav.start":"Inicio","nav.filme":"Reportajes","nav.karte":"Mapa","nav.info":"Perfil","nav.experte":"Experto","nav.kontakt":"Contacto",
+    "all.kicker":"Archivo","all.title":"Todos los reportajes","all.sub":"Desde reportajes políticos de Rusia y Ucrania hasta historias de sociedad y vida cotidiana de todo el mundo.",
+    "all.tab.alle":"Todos","group.politik":"Política y conflicto","group.gesellschaft":"Sociedad y vida cotidiana",
+    "cat.politik":"Política","cat.gesellschaft":"Sociedad","cat.experte":"Experto","group.experte":"Experto y conferenciante","all.back":"Volver al inicio","all.count":"reportajes","all.sender":"Todos los canales","all.empty":"No hay reportajes para esta combinación.","filter.topic":"Tema","filter.sender":"Canal",
+    "foot.save":"Guardar contacto","legal.impressum":"Aviso legal","legal.datenschutz":"Política de privacidad","copied":"¡Copiado!", typeWords:["Experto en Rusia","Conferenciante"] },
+  fr: { "role.reportagen":"Reportages","role.fernsehen":"Télévision","skip":"Aller au contenu","nav.start":"Accueil","nav.filme":"Reportages","nav.karte":"Carte","nav.info":"Profil","nav.experte":"Expert","nav.kontakt":"Contact",
+    "all.kicker":"Archives","all.title":"Tous les reportages","all.sub":"Des reportages politiques de Russie et d'Ukraine aux histoires de société et du quotidien du monde entier.",
+    "all.tab.alle":"Tous","group.politik":"Politique & conflit","group.gesellschaft":"Société & quotidien",
+    "cat.politik":"Politique","cat.gesellschaft":"Société","cat.experte":"Expert","group.experte":"Expert & conférencier","all.back":"Retour à l'accueil","all.count":"reportages","all.sender":"Toutes les chaînes","all.empty":"Aucun film pour cette combinaison.","filter.topic":"Thème","filter.sender":"Chaîne",
+    "foot.save":"Enregistrer le contact","legal.impressum":"Mentions légales","legal.datenschutz":"Politique de confidentialité","copied":"Copié !", typeWords:["Expert de la Russie","Conférencier"] }
+};
+const FLAGS = { de:"🇩🇪", en:"🇬🇧", es:"🇪🇸", fr:"🇫🇷" };
+const CODES = { de:"DE", en:"EN", es:"ES", fr:"FR" };
+let LANG = "de";
+try { const s = localStorage.getItem("nk-lang"); if (s && DICT[s]) LANG = s; } catch (e) {}
+function t(k){ return (DICT[LANG] && DICT[LANG][k] != null) ? DICT[LANG][k] : (DICT.de[k] || ""); }
+function filmTitle(f){ const tr = FILM_T[f.title]; return (LANG === "de" || !tr || !tr[LANG]) ? f.title : tr[LANG]; }
+
+/* ---------- helpers ---------- */
+function el(tag, attrs, children) {
+  const e = document.createElement(tag);
+  attrs = attrs || {};
+  for (const k in attrs) {
+    if (k === "class") e.className = attrs[k];
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2).toLowerCase(), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  (Array.isArray(children) ? children : (children == null ? [] : [children])).forEach((c) => {
+    if (c == null) return;
+    e.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+  });
+  return e;
+}
+
+/* ---------- LIGHTBOX ---------- */
+let lbLast = null;
+function openLightbox(ytId) {
+  if (!ytId) return;
+  lbLast = document.activeElement;
+  const overlay = el("div", { class: "lightbox", onclick: closeLightbox });
+  const inner = el("div", { class: "lightbox__inner", onclick: (e) => e.stopPropagation() });
+  const iframe = el("iframe", { src: "https://www.youtube.com/embed/" + ytId + "?autoplay=1&rel=0", allow: "autoplay; encrypted-media; fullscreen", allowfullscreen: "true" });
+  const close = el("button", { class: "lightbox__close", "aria-label": "Close", onclick: closeLightbox }, "×");
+  inner.appendChild(iframe); inner.appendChild(close); overlay.appendChild(inner);
+  document.body.appendChild(overlay);
+  document.body.style.overflow = "hidden";
+  requestAnimationFrame(() => { overlay.classList.add("in"); close.focus(); });
+}
+function closeLightbox() {
+  const lb = document.querySelector(".lightbox");
+  if (!lb) return;
+  lb.classList.remove("in");
+  document.body.style.overflow = "";
+  setTimeout(() => lb.remove(), 250);
+  if (lbLast && lbLast.focus) { lbLast.focus(); lbLast = null; }
+}
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
+
+/* ---------- CARD ---------- */
+function buildFilmCard(item) {
+  const media = el("div", { class: "film__media" }, [
+    el("div", { class: "film__placeholder" }, [el("span", {}, "still 16:9")]),
+  ]);
+  /* Sender/Kanal wird jetzt als Chip in der Caption gezeigt (nicht mehr als Badge auf dem Bild) */
+  if (item.img) {
+    media.appendChild(el("img", {
+      class: "film__img", src: item.img, alt: filmTitle(item), loading: "lazy",
+      onload: function () { if (item.ytid && this.naturalWidth <= 121 && !this.dataset.fb) { this.dataset.fb = "1"; this.src = "https://i.ytimg.com/vi/" + item.ytid + "/hqdefault.jpg"; } },
+      onerror: function () { if (item.ytid && !this.dataset.fb) { this.dataset.fb = "1"; this.src = "https://i.ytimg.com/vi/" + item.ytid + "/hqdefault.jpg"; } else { this.remove(); } }
+    }));
+  }
+  if (item.runtime) media.appendChild(el("div", { class: "film__runtime" }, item.runtime));
+  media.appendChild(el("div", { class: "film__play" }));
+  media.appendChild(el("div", { class: "film__meta" }, [
+    el("div", { class: "film__cat" }, t("cat." + item.cat)),
+    item.broadcaster ? el("div", { class: "film__chan" }, BROADCASTER_NAME[item.broadcaster] || item.broadcaster) : null,
+  ]));
+  const card = el("article", { class: "film" }, [
+    media,
+    el("div", { class: "film__caption" }, [
+      el("div", { class: "film__title" }, filmTitle(item)),
+      el("div", { class: "film__year" }, item.year || ""),
+    ]),
+  ]);
+  const open = item.yt ? (() => openLightbox(item.yt)) : (item.ext ? (() => window.open(item.ext, "_blank", "noopener")) : null);
+  if (open) {
+    card.style.cursor = "pointer";
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", filmTitle(item) + " – Video abspielen");
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+  }
+  return card;
+}
+
+/* ---------- GRID + TABS ---------- */
+let activeCat = "alle";
+let activeChannel = "alle";
+const CHANNEL_ORDER = ["zdf", "arte", "galileo", "ntv", "sterntv"];
+const grid = document.getElementById("filmsGrid");
+const countEl = document.getElementById("tabsCount");
+function renderGrid() {
+  grid.innerHTML = "";
+  const list = FILMS.filter((f) =>
+    (activeCat === "alle" || f.cat === activeCat) &&
+    (activeChannel === "alle" || f.broadcaster === activeChannel)
+  );
+  list.sort((a, b) => (parseInt(b.year, 10) || 0) - (parseInt(a.year, 10) || 0));
+  if (!list.length) grid.appendChild(el("p", { class: "films-empty" }, t("all.empty")));
+  else list.forEach((f) => grid.appendChild(buildFilmCard(f)));
+  countEl.textContent = list.length + " " + t("all.count");
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+  grid.querySelectorAll(".film").forEach((n, i) => { n.style.transitionDelay = (Math.min(i, 5) * 50) + "ms"; io.observe(n); });
+}
+
+(function filterDropdowns() {
+  const TOPICS = [
+    { key: "alle", i18n: "all.tab.alle" },
+    { key: "politik", i18n: "group.politik" },
+    { key: "gesellschaft", i18n: "group.gesellschaft" },
+    { key: "experte", i18n: "group.experte" },
+  ];
+  function closeAll() {
+    document.querySelectorAll(".filterdd.open").forEach((d) => { d.classList.remove("open"); const b = d.querySelector(".filterdd__btn"); if (b) b.setAttribute("aria-expanded", "false"); });
+  }
+  window.__buildFilters = function buildFilters() {
+    const topicMenu = document.getElementById("ddTopicMenu");
+    const chMenu = document.getElementById("ddChannelMenu");
+    const topicVal = document.getElementById("ddTopicVal");
+    const chVal = document.getElementById("ddChannelVal");
+    if (!topicMenu || !chMenu) return;
+    topicMenu.innerHTML = "";
+    TOPICS.forEach((tp) => {
+      const opt = el("button", { class: "filterdd__opt" + (activeCat === tp.key ? " active" : ""), type: "button", role: "option" }, [el("span", {}, t(tp.i18n))]);
+      opt.addEventListener("click", () => { activeCat = tp.key; closeAll(); window.__buildFilters(); renderGrid(); });
+      topicMenu.appendChild(opt);
+      if (activeCat === tp.key) topicVal.textContent = t(tp.i18n);
+    });
+    chMenu.innerHTML = "";
+    const present = CHANNEL_ORDER.filter((c) => FILMS.some((f) => f.broadcaster === c));
+    function chOpt(key, labelText, count) {
+      const opt = el("button", { class: "filterdd__opt" + (activeChannel === key ? " active" : ""), type: "button", role: "option" }, [el("span", {}, labelText)]);
+      if (count != null) opt.appendChild(el("span", { class: "filterdd__optn" }, String(count)));
+      opt.addEventListener("click", () => { activeChannel = key; closeAll(); window.__buildFilters(); renderGrid(); });
+      chMenu.appendChild(opt);
+      if (activeChannel === key) chVal.textContent = labelText;
+    }
+    chOpt("alle", t("all.sender"), null);
+    present.forEach((c) => chOpt(c, BROADCASTER_NAME[c] || c, FILMS.filter((f) => f.broadcaster === c).length));
+  };
+  document.querySelectorAll(".filterdd").forEach((dd) => {
+    const btn = dd.querySelector(".filterdd__btn");
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const willOpen = !dd.classList.contains("open");
+      closeAll();
+      dd.classList.toggle("open", willOpen);
+      btn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+    });
+  });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".filterdd")) closeAll(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(); });
+})();
+
+/* ---------- NAV / THEME / LANG ---------- */
+(function nav() {
+  const pill = document.getElementById("navPill");
+  const ham = document.getElementById("hamburger");
+  ham.addEventListener("click", () => {
+    const open = pill.classList.toggle("open");
+    ham.classList.toggle("open");
+    ham.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  document.addEventListener("click", (e) => {
+    if (!pill.classList.contains("open")) return;
+    if (pill.contains(e.target) || ham.contains(e.target)) return;
+    pill.classList.remove("open"); ham.classList.remove("open"); ham.setAttribute("aria-expanded", "false");
+  });
+})();
+(function theme() {
+  const tg = document.getElementById("themeToggle");
+  function isLight() { return document.documentElement.getAttribute("data-theme") === "light"; }
+  tg.setAttribute("aria-pressed", isLight() ? "true" : "false");
+  tg.addEventListener("click", () => {
+    const next = isLight() ? "dark" : "light";
+    if (next === "light") document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+    tg.setAttribute("aria-pressed", next === "light" ? "true" : "false");
+    try { localStorage.setItem("nk-theme", next); } catch (e) {}
+  });
+})();
+(function langPick() {
+  const pick = document.getElementById("langPick");
+  const btn = document.getElementById("langBtn");
+  const menu = document.getElementById("langMenu");
+  btn.addEventListener("click", (e) => { e.stopPropagation(); const open = pick.classList.toggle("open"); btn.setAttribute("aria-expanded", open ? "true" : "false"); });
+  menu.querySelectorAll("button").forEach((b) => { b.addEventListener("click", () => { applyLang(b.dataset.lang); pick.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); }); });
+  document.addEventListener("click", (e) => { if (pick.classList.contains("open") && !pick.contains(e.target)) { pick.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); } });
+})();
+
+function applyLang(lang) {
+  if (!DICT[lang]) lang = "de";
+  LANG = lang;
+  document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = t(node.getAttribute("data-i18n")); });
+  document.documentElement.lang = lang;
+  document.getElementById("langFlag").textContent = FLAGS[lang];
+  document.getElementById("langCode").textContent = CODES[lang];
+  document.querySelectorAll("#langMenu button").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
+  if (window.__setRoleWords) window.__setRoleWords(DICT[lang] && DICT[lang].typeWords);
+  try { localStorage.setItem("nk-lang", lang); } catch (e) {}
+  if (window.__buildFilters) window.__buildFilters();
+  renderGrid();
+}
+
+/* ---------- HEADER: animierter Name + Typewriter-Rolle ---------- */
+(function heroLogo() {
+  const host = document.getElementById("heroLogo");
+  if (!host) return;
+  const text = host.textContent.trim();
+  host.textContent = "";
+  const tokens = text.split(/(\s+)/); let ci = 0;
+  tokens.forEach((tok) => {
+    if (tok === "") return;
+    if (/^\s+$/.test(tok)) { host.appendChild(document.createTextNode(" ")); return; }
+    const word = document.createElement("span"); word.className = "word";
+    [...tok].forEach((ch) => {
+      const s = document.createElement("span"); s.className = "letter";
+      s.style.setProperty("--d", (200 + ci * 60) + "ms"); s.textContent = ch;
+      word.appendChild(s); ci++;
+    });
+    host.appendChild(word);
+  });
+})();
+(function roleTyper() {
+  const elT = document.getElementById("roleType");
+  if (!elT) return;
+  let words = ["Russland-Experte", "Keynote Speaker"];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let tm = null;
+  function run() {
+    clearTimeout(tm);
+    if (reduce) { elT.textContent = words[0]; return; }
+    let wi = 0, ci = 0, deleting = false;
+    function step() {
+      const w = words[wi]; ci += deleting ? -1 : 1; elT.textContent = w.slice(0, ci);
+      if (!deleting && ci === w.length) { deleting = true; tm = setTimeout(step, 1700); return; }
+      if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; tm = setTimeout(step, 350); return; }
+      tm = setTimeout(step, deleting ? 45 : 95);
+    }
+    step();
+  }
+  window.__setRoleWords = function (w) { if (Array.isArray(w) && w.length) { words = w; run(); } };
+  run();
+})();
+
+/* ---------- FOOTER: Kontakt kopieren + vCard ---------- */
+function nkCopyText(tx) {
+  function fb() {
+    return new Promise((res, rej) => {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = tx; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        const ok = document.execCommand("copy"); document.body.removeChild(ta);
+        ok ? res() : rej();
+      } catch (e) { rej(e); }
+    });
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(tx).catch(fb);
+  return fb();
+}
+(function ctaCopyEmail() {
+  const btn = document.getElementById("ctaCopyEmail");
+  const label = document.getElementById("ctaCopyLabel");
+  const icon = document.getElementById("ctaCopyIcon");
+  if (!btn || !label) return;
+  const email = "nikokarasek.tv" + "\u0040" + "gmail" + "." + "com";
+  label.textContent = email;
+  btn.setAttribute("aria-label", "E-Mail-Adresse kopieren: " + email);
+  const mailSvg = icon ? icon.innerHTML : "";
+  const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  let resetT = null;
+  btn.addEventListener("click", () => {
+    nkCopyText(email).then(() => {
+      btn.classList.add("copied");
+      if (icon) icon.innerHTML = checkSvg;
+      label.textContent = t("copied");
+      clearTimeout(resetT);
+      resetT = setTimeout(() => { btn.classList.remove("copied"); if (icon) icon.innerHTML = mailSvg; label.textContent = email; }, 2200);
+    }).catch(() => { label.textContent = email; });
+  });
+})();
+(function ctaCopyPhone() {
+  const btn = document.getElementById("ctaCopyPhone");
+  const label = document.getElementById("ctaCopyPhoneLabel");
+  if (!btn || !label) return;
+  const phone = "+49 174 637 9751";
+  const defaultLabel = label.textContent;
+  let resetT = null;
+  btn.addEventListener("click", () => {
+    nkCopyText(phone).then(() => {
+      btn.classList.add("copied");
+      label.textContent = t("copied");
+      clearTimeout(resetT);
+      resetT = setTimeout(() => { btn.classList.remove("copied"); label.textContent = defaultLabel; }, 2000);
+    });
+  });
+})();
+(function vcard() {
+  const btn = document.getElementById("ctaVcard");
+  if (!btn) return;
+  const vcf = [
+    "BEGIN:VCARD", "VERSION:3.0", "N:Karasek;Niko;;;", "FN:Niko Karasek",
+    "ORG:Niko Karasek \u2014 Journalist & Reporter",
+    "TITLE:Freier Journalist, Fernsehreporter, Russland-Experte",
+    "TEL;TYPE=CELL,VOICE:+491746379751",
+    "EMAIL;TYPE=INTERNET:nikokarasek.tv@gmail.com",
+    "URL:https://www.nikokarasek.com",
+    "ADR;TYPE=WORK:;;;Hamburg;;;Deutschland", "END:VCARD"
+  ].join("\r\n");
+  btn.addEventListener("click", () => {
+    const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "Niko-Karasek.vcf";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+})();
+
+applyLang(LANG);
+</script>
+</body>
+</html>
