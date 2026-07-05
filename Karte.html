@@ -356,6 +356,21 @@ html[data-theme="light"] .panel__close { background: rgba(0,0,0,0.45); }
   display: flex; align-items: center; justify-content: center;
 }
 
+/* ============ MOBILE SWIPE HINT ============ */
+.map-swipe-hint {
+  position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+  z-index: 45; display: none; align-items: center; gap: 9px;
+  padding: 9px 15px; border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 84%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-dim);
+  pointer-events: none; transition: opacity 0.35s ease;
+}
+.map-swipe-hint svg { width: 15px; height: 15px; flex: none; stroke: var(--accent-pin); }
+.map-swipe-hint.gone { opacity: 0; }
+
 /* ============ RESPONSIVE ============ */
 @media (max-width: 900px) {
   .nav { padding: 16px 18px; }
@@ -378,6 +393,9 @@ html[data-theme="light"] .panel__close { background: rgba(0,0,0,0.45); }
   .panel__close { width: 44px; height: 44px; }
   /* bigger labels so pins are easy to read + tap on a small screen */
   .pin__label { font-size: 12px; }
+  /* the map becomes a finger-pannable canvas on phones */
+  .stage { touch-action: none; }
+  .map-swipe-hint { display: inline-flex; }
 }
 </style>
 </head>
@@ -439,6 +457,12 @@ html[data-theme="light"] .panel__close { background: rgba(0,0,0,0.45); }
   <p class="page-head__sub" data-i18n="map.sub">Reportagen aus Russland, Osteuropa und dem übrigen Europa.</p>
   <p class="page-head__hint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-i18n="map.hint">Tippe auf ein Symbol, um den Film zu öffnen.</span></p>
 </header>
+
+<!-- ============ MOBILE SWIPE HINT ============ -->
+<div class="map-swipe-hint" id="swipeHint" aria-hidden="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m9 8-4 4 4 4"/><path d="m15 8 4 4-4 4"/></svg>
+  <span data-i18n="map.swipe">Wischen · Symbol tippen</span>
+</div>
 
 <!-- ============ DETAIL PANEL ============ -->
 <aside class="panel" id="panel" aria-hidden="true" aria-label="Filmdetails">
@@ -577,7 +601,7 @@ const DICT = {
     "role.reportagen": "Reportagen", "role.fernsehen": "Fernsehen", "skip": "Zum Inhalt springen",
     "nav.start": "Start", "nav.filme": "Filme", "nav.karte": "Karte", "nav.info": "Info", "nav.experte": "Experte", "nav.kontakt": "Kontakt",
     "map.kicker": "Drehorte", "map.title": "Ausgewählte Filme",
-    "map.sub": "Reportagen aus Russland, Osteuropa und dem übrigen Europa.", "map.hint": "Tippe auf ein Symbol, um den Film zu öffnen.",
+    "map.sub": "Reportagen aus Russland, Osteuropa und dem übrigen Europa.", "map.hint": "Tippe auf ein Symbol, um den Film zu öffnen.", "map.swipe": "Wischen · Symbol tippen",
     "map.legendHead": "Filme auf der Karte", "map.watch": "Ansehen", "map.watchOn": "Auf %s ansehen", "map.source": "der Quelle", "map.loading": "Karte wird geladen …",
     "map.error": "Karte konnte nicht geladen werden.",
     "map.tbc": "Genauer Drehort wird noch bestätigt.",
@@ -587,7 +611,7 @@ const DICT = {
     "role.reportagen": "Reporting", "role.fernsehen": "Television", "skip": "Skip to content",
     "nav.start": "Start", "nav.filme": "Films", "nav.karte": "Map", "nav.info": "About", "nav.experte": "Expert", "nav.kontakt": "Contact",
     "map.kicker": "Filming locations", "map.title": "Selected Films",
-    "map.sub": "Reports from Russia, Eastern Europe and the rest of the continent.", "map.hint": "Tap a symbol to open the film.",
+    "map.sub": "Reports from Russia, Eastern Europe and the rest of the continent.", "map.hint": "Tap a symbol to open the film.", "map.swipe": "Swipe · tap a pin",
     "map.legendHead": "Films on the map", "map.watch": "Watch", "map.watchOn": "Watch on %s", "map.source": "the source", "map.loading": "Loading map …",
     "map.error": "The map could not be loaded.",
     "map.tbc": "Exact filming location to be confirmed.",
@@ -597,7 +621,7 @@ const DICT = {
     "role.reportagen": "Reportajes", "role.fernsehen": "Televisión", "skip": "Saltar al contenido",
     "nav.start": "Inicio", "nav.filme": "Reportajes", "nav.karte": "Mapa", "nav.info": "Perfil", "nav.experte": "Experto", "nav.kontakt": "Contacto",
     "map.kicker": "Lugares de rodaje", "map.title": "Reportajes seleccionados",
-    "map.sub": "Reportajes desde Rusia, Europa del Este y el resto de Europa.", "map.hint": "Toca un símbolo para abrir el reportaje.",
+    "map.sub": "Reportajes desde Rusia, Europa del Este y el resto de Europa.", "map.hint": "Toca un símbolo para abrir el reportaje.", "map.swipe": "Desliza · toca un punto",
     "map.legendHead": "Reportajes en el mapa", "map.watch": "Ver", "map.watchOn": "Ver en %s", "map.source": "la fuente", "map.loading": "Cargando el mapa …",
     "map.error": "No se pudo cargar el mapa.",
     "map.tbc": "El lugar exacto de rodaje está por confirmar.",
@@ -607,7 +631,7 @@ const DICT = {
     "role.reportagen": "Reportages", "role.fernsehen": "Télévision", "skip": "Aller au contenu",
     "nav.start": "Accueil", "nav.filme": "Reportages", "nav.karte": "Carte", "nav.info": "Profil", "nav.experte": "Expert", "nav.kontakt": "Contact",
     "map.kicker": "Lieux de tournage", "map.title": "Reportages sélectionnés",
-    "map.sub": "Reportages de Russie, d'Europe de l'Est et du reste de l'Europe.", "map.hint": "Touchez un symbole pour ouvrir le film.",
+    "map.sub": "Reportages de Russie, d'Europe de l'Est et du reste de l'Europe.", "map.hint": "Touchez un symbole pour ouvrir le film.", "map.swipe": "Glisser · toucher un point",
     "map.legendHead": "Films sur la carte", "map.watch": "Regarder", "map.watchOn": "Regarder sur %s", "map.source": "la source", "map.loading": "Chargement de la carte …",
     "map.error": "La carte n'a pas pu être chargée.",
     "map.tbc": "Lieu de tournage exact à confirmer.",
@@ -885,6 +909,13 @@ function buildLegend() {
 const svg = document.getElementById("map");
 const SVGNS = "http://www.w3.org/2000/svg";
 let WORLD = null;
+let panX = 0, panY = 0, gPan = null;
+const panRange = { x: [0, 0], y: [0, 0] };
+function clampPan() {
+  panX = Math.min(panRange.x[1], Math.max(panRange.x[0], panX));
+  panY = Math.min(panRange.y[1], Math.max(panRange.y[0], panY));
+}
+function applyPan() { if (gPan) gPan.setAttribute("transform", "translate(" + panX + "," + panY + ")"); }
 
 const REGION = { type: "MultiPoint", coordinates: [[-12, 35], [150, 35], [150, 73], [-12, 73]] };
 
@@ -902,31 +933,46 @@ function render() {
   svg.setAttribute("viewBox", "0 0 " + w + " " + h);
   while (svg.firstChild) svg.removeChild(svg.firstChild);
 
-  // vertical breathing room for the title/legend overlays
-  const topPad = Math.min(150, h * 0.16);
-  const botPad = Math.min(150, h * 0.16);
-  const sidePad = 20;
+  const isMobile = w <= 640;
+  // vertical breathing room for the title / bottom overlays
+  const topPad = isMobile ? 128 : Math.min(150, h * 0.16);
+  const botPad = isMobile ? 74 : Math.min(150, h * 0.16);
+  const sidePad = isMobile ? 8 : 20;
 
   const projection = d3.geoEquirectangular().fitExtent(
     [[sidePad, topPad], [w - sidePad, h - botPad]], REGION
   );
+
+  // On phones the Europe→Siberia strip is far wider than tall, so a width-fitted
+  // map is a thin band with big black margins and the European pins collide.
+  // Enlarge it to fill the vertical space and let the extra east–west width
+  // become a horizontal finger-pan.
+  if (isMobile) {
+    const b0 = d3.geoPath(projection).bounds(REGION);
+    const curH = b0[1][1] - b0[0][1];
+    const targetH = h - topPad - botPad;
+    const k = curH > 0 ? Math.max(1, targetH / curH) : 1;
+    projection.scale(projection.scale() * k);
+    const cs = REGION.coordinates;
+    const c = [cs.reduce((a, p) => a + p[0], 0) / cs.length,
+               cs.reduce((a, p) => a + p[1], 0) / cs.length];
+    const cp = projection(c), tr = projection.translate();
+    projection.translate([tr[0] + w / 2 - cp[0], tr[1] + h / 2 - cp[1]]);
+  }
+
   const path = d3.geoPath(projection);
 
+  // everything sits in one pan group we can translate with a finger drag
+  gPan = el("g", { id: "mapPan" });
+
   // graticule
-  const grat = d3.geoGraticule().step([10, 10]);
-  const gG = el("g", {});
-  const gp = el("path", { d: path(grat()) || "", class: "geo-grat" });
-  gG.appendChild(gp);
-  svg.appendChild(gG);
+  gPan.appendChild(el("path", { d: path(d3.geoGraticule().step([10, 10])()) || "", class: "geo-grat" }));
 
   // land
-  const gLand = el("g", {});
   WORLD.features.forEach((f) => {
     const d = path(f);
-    if (!d) return;
-    gLand.appendChild(el("path", { d: d, class: "geo-land" }));
+    if (d) gPan.appendChild(el("path", { d: d, class: "geo-land" }));
   });
-  svg.appendChild(gLand);
 
   // pins
   const gPins = el("g", {});
@@ -953,7 +999,8 @@ function render() {
     g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPanel(s); } });
     gPins.appendChild(g);
   });
-  svg.appendChild(gPins);
+  gPan.appendChild(gPins);
+  svg.appendChild(gPan);
 
   // make the whole pin (icon + label) clickable, not just the small icon
   gPins.querySelectorAll(".pin").forEach((g) => {
@@ -963,6 +1010,17 @@ function render() {
       g.insertBefore(hit, g.firstChild);
     } catch (e) {}
   });
+
+  // pan limits — cover-clamp so the map never leaves a gap; a little slack (bx/by)
+  // so edge pins aren't glued to the screen edge.
+  const bb = path.bounds(REGION);
+  const bx = isMobile ? 46 : 0, by = isMobile ? 34 : 0;
+  const x0 = bb[0][0] - bx, x1 = bb[1][0] + bx, y0 = bb[0][1] - by, y1 = bb[1][1] + by;
+  panRange.x = (x1 - x0) > w ? [w - x1, -x0] : [0, 0];
+  panRange.y = (y1 - y0) > h ? [h - y1, -y0] : [0, 0];
+  if (!isMobile) { panX = 0; panY = 0; }
+  clampPan();
+  applyPan();
 
   if (currentSpot) {
     const active = currentSpot.id;
@@ -1034,6 +1092,41 @@ window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(rend
 applyLang(LANG);
 buildLegend();
 loadMap();
+
+/* ---------- MOBILE PAN (finger-drag the map) ---------- */
+(function panDrag() {
+  const stage = document.querySelector(".stage");
+  const hint = document.getElementById("swipeHint");
+  let active = false, moved = false, sx = 0, sy = 0, ox = 0, oy = 0, pid = null;
+  function mobile() { return svg.getBoundingClientRect().width <= 640; }
+  function swallow(ev) { ev.stopPropagation(); ev.preventDefault(); }
+  function pannable() { return panRange.x[0] !== panRange.x[1] || panRange.y[0] !== panRange.y[1]; }
+  stage.addEventListener("pointerdown", (e) => {
+    if (!mobile() || !pannable()) return;
+    if (e.target.closest(".panel")) return;
+    active = true; moved = false; sx = e.clientX; sy = e.clientY; ox = panX; oy = panY; pid = e.pointerId;
+  });
+  stage.addEventListener("pointermove", (e) => {
+    if (!active) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (!moved && Math.hypot(dx, dy) > 6) {
+      moved = true;
+      try { stage.setPointerCapture(pid); } catch (_) {}
+      if (hint) { hint.classList.add("gone"); setTimeout(() => { hint.style.display = "none"; }, 350); }
+    }
+    if (moved) { panX = ox + dx; panY = oy + dy; clampPan(); applyPan(); e.preventDefault(); }
+  }, { passive: false });
+  function end() {
+    if (!active) return;
+    active = false;
+    if (moved) { // swallow the click that a drag would otherwise fire
+      svg.addEventListener("click", swallow, true);
+      setTimeout(() => svg.removeEventListener("click", swallow, true), 0);
+    }
+  }
+  stage.addEventListener("pointerup", end);
+  stage.addEventListener("pointercancel", end);
+})();
 
 /* Klick auf die Karte / leere Fläche schließt die Detailkarte rechts */
 svg.addEventListener("click", (e) => { if (!e.target.closest(".pin")) closePanel(); });
