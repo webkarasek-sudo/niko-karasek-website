@@ -256,7 +256,19 @@ html[data-theme="light"] .legend__num { color: var(--fg); }
   box-shadow: -30px 0 80px rgba(0,0,0,0.5);
 }
 .panel.open { transform: translateX(0); }
-.panel__scroll { overflow-y: auto; height: 100%; }
+.panel__topbar {
+  position: relative; flex: none;
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 10px; padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+.panel__grip {
+  position: absolute; left: 50%; top: 9px; transform: translateX(-50%);
+  width: 40px; height: 4px; border-radius: 999px; background: var(--line);
+  display: none;
+}
+.panel__scroll { overflow-y: auto; flex: 1; min-height: 0; }
 .panel__media {
   position: relative; aspect-ratio: 16/9; background: var(--bg-3); overflow: hidden; cursor: pointer;
 }
@@ -327,13 +339,12 @@ html[data-theme="light"] .panel__watch { background: transparent; color: var(--f
 .panel__watch svg { width: 14px; height: 14px; }
 html[data-theme="light"] .panel__watch:hover { background: var(--bg-3); }
 .panel__close {
-  position: absolute; top: 14px; right: 14px; z-index: 3;
-  width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.55);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; line-height: 1;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--bg-3); color: var(--fg);
+  display: flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1;
+  transition: background 0.2s;
 }
-html[data-theme="light"] .panel__close { background: rgba(0,0,0,0.45); }
-.panel__close:hover { background: rgba(0,0,0,0.8); }
+.panel__close:hover { background: var(--line); }
 
 /* loading / error states */
 .map-msg {
@@ -391,6 +402,8 @@ html[data-theme="light"] .panel__close { background: rgba(0,0,0,0.45); }
   .panel { width: 100%; height: 82vh; top: auto; bottom: 0; left: 0; right: 0; transform: translateY(100%); border-left: 0; border-top: 1px solid var(--line); border-radius: 22px 22px 0 0; box-shadow: 0 -24px 60px rgba(0,0,0,0.5); }
   .panel.open { transform: translateY(0); }
   .panel__close { width: 44px; height: 44px; }
+  .panel__grip { display: block; }
+  .panel__topbar { border-radius: 22px 22px 0 0; }
   /* bigger labels so pins are easy to read + tap on a small screen */
   .pin__label { font-size: 12px; }
   /* the map becomes a finger-pannable canvas on phones */
@@ -466,7 +479,10 @@ html[data-theme="light"] .panel__close { background: rgba(0,0,0,0.45); }
 
 <!-- ============ DETAIL PANEL ============ -->
 <aside class="panel" id="panel" aria-hidden="true" aria-label="Filmdetails">
-  <button class="panel__close" id="panelClose" type="button" aria-label="Schließen">×</button>
+  <div class="panel__topbar">
+    <span class="panel__grip" aria-hidden="true"></span>
+    <button class="panel__close" id="panelClose" type="button" aria-label="Schließen">×</button>
+  </div>
   <div class="panel__scroll">
     <div class="panel__media" id="panelMedia" role="button" tabindex="0" aria-label="Video abspielen">
       <img id="panelImg" alt="" />
@@ -909,7 +925,7 @@ function buildLegend() {
 const svg = document.getElementById("map");
 const SVGNS = "http://www.w3.org/2000/svg";
 let WORLD = null;
-let panX = 0, panY = 0, gPan = null;
+let panX = 0, panY = 0, gPan = null, panReady = false;
 const panRange = { x: [0, 0], y: [0, 0] };
 function clampPan() {
   panX = Math.min(panRange.x[1], Math.max(panRange.x[0], panX));
@@ -1019,6 +1035,12 @@ function render() {
   panRange.x = (x1 - x0) > w ? [w - x1, -x0] : [0, 0];
   panRange.y = (y1 - y0) > h ? [h - y1, -y0] : [0, 0];
   if (!isMobile) { panX = 0; panY = 0; }
+  else if (!panReady) {
+    // open focused on the film-dense western cluster (Europe) instead of empty Russia
+    const focus = projection([22.8, 53.8]);
+    if (focus) { panX = w / 2 - focus[0]; panY = 0; }
+    panReady = true;
+  }
   clampPan();
   applyPan();
 
