@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Seite nicht gefunden — Niko Karasek</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+<meta name="theme-color" content="#000000" />
+<style>
+  :root {
+    --bg: #0a0a0a; --fg: #ededea; --fg-dim: #b0b0ad; --fg-mute: #8f8f8c;
+    --line: #2a2a2a; --yellow: #f5f000; --panel: #121212;
+    --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "JetBrains Mono", monospace;
+  }
+  html[data-theme="light"] {
+    --bg: #f7f6f2; --fg: #0f0f0f; --fg-dim: #474745; --fg-mute: #66655f;
+    --line: #dedcd5; --panel: #efeee9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column; min-height: 100svh;
+  }
+  .top { padding: 26px clamp(20px, 5vw, 56px); }
+  .brand { font-weight: 900; font-size: 20px; letter-spacing: -0.03em; display: inline-flex; align-items: center; text-decoration: none; color: var(--fg); }
+  .brand .sq { width: 12px; height: 12px; background: var(--yellow); margin-right: 9px; }
+
+  main {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 40px clamp(20px, 5vw, 56px) 60px; max-width: 900px;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-mute);
+    display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px;
+  }
+  .eyebrow i { width: 0; height: 0; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent var(--yellow); }
+  .code {
+    font-weight: 900; letter-spacing: -0.05em; line-height: 0.86;
+    font-size: clamp(90px, 20vw, 220px);
+  }
+  .code b { color: var(--yellow); }
+  h1 { font-weight: 800; font-size: clamp(22px, 3.4vw, 34px); letter-spacing: -0.02em; margin: 26px 0 14px; }
+  p { color: var(--fg-dim); font-size: 16px; line-height: 1.6; max-width: 48ch; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 24px; border-radius: 999px; font-weight: 800; font-size: 14px;
+    text-decoration: none; transition: transform 0.25s cubic-bezier(.2,.7,.1,1), background 0.25s;
+  }
+  .btn svg { width: 16px; height: 16px; }
+  .btn--primary { background: var(--yellow); color: #000; }
+  .btn--primary:hover { transform: translateY(-2px); }
+  .btn--ghost { border: 1px solid var(--line); color: var(--fg); }
+  .btn--ghost:hover { border-color: var(--fg-mute); }
+
+  .links { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  .links a {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--fg-mute); text-decoration: none; transition: color 0.2s;
+  }
+  .links a:hover { color: var(--fg); }
+
+  footer { padding: 22px clamp(20px, 5vw, 56px); border-top: 1px solid var(--line); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-mute); }
+</style>
+<script>(function(){try{var m=localStorage.getItem('nk-theme');if(m==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();</script>
+</head>
+<body>
+  <div class="top">
+    <a class="brand" href="/index.html"><span class="sq"></span>NIKO KARASEK</a>
+  </div>
+
+  <main>
+    <span class="eyebrow"><i></i>Fehler 404</span>
+    <div class="code">4<b>0</b>4</div>
+    <h1>Diese Seite gibt es nicht.</h1>
+    <p>Der Link ist vielleicht veraltet oder es hat sich ein Tippfehler eingeschlichen. Zurück zur Startseite oder direkt zu den Reportagen.</p>
+
+    <div class="actions">
+      <a class="btn btn--primary" href="/index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Zur Startseite
+      </a>
+      <a class="btn btn--ghost" href="/Filme.html">
+        Alle Filme
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <nav class="links" aria-label="Weitere Seiten">
+      <a href="/Karte.html">Karte</a>
+      <a href="/Filme.html">Filme</a>
+      <a href="/Impressum.html">Impressum</a>
+      <a href="/Datenschutz.html">Datenschutz</a>
+    </nav>
+  </main>
+
+  <footer>Niko Karasek — Reportagen · Fernsehen · Russland-Experte</footer>
+</body>
+</html>

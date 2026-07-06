@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#000000" />
 <title>Karte — Drehorte | Niko Karasek</title>
 <meta name="description" content="Interaktive Karte der Drehorte von Niko Karasek — Reportagen aus Russland, Osteuropa und dem übrigen Europa. Auf einen Punkt tippen und den Film ansehen." />
 <link rel="canonical" href="https://www.nikokarasek.com/Karte.html" />
@@ -10,14 +15,14 @@
 <style>
 /* ============ TOKENS (übernommen von der Startseite) ============ */
 :root {
-  --bg: #000000;
-  --bg-2: #0d0d0d;
-  --bg-3: #161616;
-  --card: #1a1a1a;
-  --fg: #ffffff;
-  --fg-dim: #b8b8b8;
-  --fg-mute: #9a9a9a;
-  --line: #262626;
+  --bg: #0a0a0a;
+  --bg-2: #121212;
+  --bg-3: #1a1a1a;
+  --card: #1c1c1c;
+  --fg: #ededea;
+  --fg-dim: #b0b0ad;
+  --fg-mute: #8f8f8c;
+  --line: #2a2a2a;
   --yellow: #f5f000;
   --accent-pin: #f5f000;
   --land: #161616;
@@ -519,11 +524,11 @@ html[data-theme="light"] .panel__watch:hover { background: var(--bg-3); }
 /* ---------- DATA: Drehorte ---------- */
 const SPOTS = [
   { id: "nordkorea", title: "Neujahr in Nordkorea", year: "2025", broadcaster: "galileo", channel: "Galileo · Joyn", runtime: "", img: "", ext: "https://www.joyn.de/play/clip/neujahr-in-nordkorea-russische-touristen-bei-kim-jong-un", place: "Nordkorea", lon: 125.7625, lat: 39.0392, tbc: false, desc: "Nordkorea gilt als das isolierteste Land der Welt – Ausländer:innen dürfen nur unter strengen Kontrollen einreisen. Außer, man kommt aus Russland! Was steckt hinter der Einladung von Kim Jong Un?" },
-  { id: "charkiw", title: "Die Metro-Schule von Charkiw", year: "2024", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/glxe4OqOhj0/maxresdefault.jpg", ytid: "glxe4OqOhj0", yt: "glxe4OqOhj0", place: "Charkiw", lon: 36.2304, lat: 49.9935, tbc: false, desc: "Charkiw ist vom Krieg gezeichnet und dennoch kehrt das Leben langsam zurück. Aufgrund der Nähe zur russischen Grenze gilt die Stadt jedoch als besonders gefährdet. Unterrichtet wird nur im sicheren Untergrund. „Galileo“ hat Schülerin Mascha begleitet." },
+  { id: "charkiw", title: "Die Metro-Schule von Charkiw", year: "2024", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/glxe4OqOhj0/maxresdefault.jpg", ytid: "glxe4OqOhj0", yt: "glxe4OqOhj0", noembed: true, place: "Charkiw", lon: 36.2304, lat: 49.9935, tbc: false, desc: "Charkiw ist vom Krieg gezeichnet und dennoch kehrt das Leben langsam zurück. Aufgrund der Nähe zur russischen Grenze gilt die Stadt jedoch als besonders gefährdet. Unterrichtet wird nur im sicheren Untergrund. „Galileo“ hat Schülerin Mascha begleitet." },
   { id: "chisinau", title: "Die Republik Moldau und der Einfluss Russlands", year: "2025", broadcaster: "arte", channel: "arte", runtime: "", img: "assets/films/13_moldau_russland.webp", ytid: "o-XG00-xU7U", yt: "o-XG00-xU7U", place: "Chișinău", lon: 28.8638, lat: 47.0105, tbc: false, desc: "Die Republik Moldau gilt als eines der Länder, in denen russischer Einfluss und EU-Annäherung besonders direkt aufeinandertreffen. Die ARTE-Reportage blickt auf Propaganda, wirtschaftliche Abhängigkeiten und die tiefe Spaltung der Gesellschaft." },
-  { id: "berlin", title: "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?", year: "2024", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/LeUvpPtV0u0/maxresdefault.jpg", ytid: "LeUvpPtV0u0", yt: "LeUvpPtV0u0", place: "Berlin", lon: 13.4050, lat: 52.5200, tbc: false, desc: "Russland führt Krieg gegen uns: Es geht um Unterwanderung, Destabilisierung und Angst. Das Ziel: Unsere Sicherheit und unseren Staat von innen zerstören. Sogenannte Wegwerf-Agenten sind mitten in Deutschland und ihre Angriffe werden immer regelmäßiger." },
-  { id: "niederlande", title: "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!", year: "2025", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/_bSn6xn5af0/maxresdefault.jpg", ytid: "_bSn6xn5af0", yt: "_bSn6xn5af0", place: "Niederlande", lon: 4.9041, lat: 52.3676, tbc: false, labelDx: -12, labelAnchor: "end", desc: "Eine Autobahn, die einen Seeweg kreuzt? In den Niederlanden gibt es eine Straßenkreuzung, die du so noch nie gesehen hast! Entdecke dieses einzigartige Bauwerk, das Realität und keine KI-Fantasie ist. Jetzt mit uns die Niederlande erkunden!" },
-  { id: "sylt", title: "Im Reich der Superreichen", year: "2025", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "assets/films/14_reich_der_superreichen.webp", ytid: "Obj0NRFE6sI", yt: "Obj0NRFE6sI", place: "Sylt", lon: 8.3100, lat: 54.9080, tbc: false, desc: "Sylt ist die Urlaubsinsel der Superreichen. Die Immobilienpreise, die Dichte an Luxusautos und schicken Lokalen, all das ist in Deutschland einzigartig. Aber wofür steht die Insel für die echten Sylter? „Galileo“ taucht ein in den Mikrokosmos Sylt." },
+  { id: "berlin", title: "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?", year: "2024", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/LeUvpPtV0u0/maxresdefault.jpg", ytid: "LeUvpPtV0u0", yt: "LeUvpPtV0u0", noembed: true, place: "Berlin", lon: 13.4050, lat: 52.5200, tbc: false, desc: "Russland führt Krieg gegen uns: Es geht um Unterwanderung, Destabilisierung und Angst. Das Ziel: Unsere Sicherheit und unseren Staat von innen zerstören. Sogenannte Wegwerf-Agenten sind mitten in Deutschland und ihre Angriffe werden immer regelmäßiger." },
+  { id: "niederlande", title: "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!", year: "2025", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "https://i.ytimg.com/vi/_bSn6xn5af0/maxresdefault.jpg", ytid: "_bSn6xn5af0", yt: "_bSn6xn5af0", noembed: true, place: "Niederlande", lon: 4.9041, lat: 52.3676, tbc: false, labelDx: -12, labelAnchor: "end", desc: "Eine Autobahn, die einen Seeweg kreuzt? In den Niederlanden gibt es eine Straßenkreuzung, die du so noch nie gesehen hast! Entdecke dieses einzigartige Bauwerk, das Realität und keine KI-Fantasie ist. Jetzt mit uns die Niederlande erkunden!" },
+  { id: "sylt", title: "Im Reich der Superreichen", year: "2025", broadcaster: "galileo", channel: "Galileo · ProSieben", runtime: "", img: "assets/films/14_reich_der_superreichen.webp", ytid: "Obj0NRFE6sI", yt: "Obj0NRFE6sI", noembed: true, place: "Sylt", lon: 8.3100, lat: 54.9080, tbc: false, desc: "Sylt ist die Urlaubsinsel der Superreichen. Die Immobilienpreise, die Dichte an Luxusautos und schicken Lokalen, all das ist in Deutschland einzigartig. Aber wofür steht die Insel für die echten Sylter? „Galileo“ taucht ein in den Mikrokosmos Sylt." },
   {
     id: "stroganina",
     title: "Stroganina: das sibirische Sushi",
@@ -855,6 +860,12 @@ function stopInline() {
 }
 function playInline(s) {
   if (!s) return;
+  // Some broadcasters (Galileo/ARTE) disable embedding → the inline player would be
+  // a dead black box. For those, open the clip on YouTube in a new tab instead.
+  if (s.noembed && s.yt) {
+    window.open("https://www.youtube.com/watch?v=" + s.yt, "_blank", "noopener");
+    return;
+  }
   if (s.yt) {
     const m = document.getElementById("panelMedia");
     stopInline();
