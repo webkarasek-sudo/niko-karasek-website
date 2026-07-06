@@ -1,4 +1,6 @@
-# Canonicalize to https + www (matches <link rel="canonical"> and og:url).
-# Netlify already forces HTTPS when the domain has TLS; this pins the apex→www host.
-https://nikokarasek.com/*   https://www.nikokarasek.com/:splat   301!
-http://nikokarasek.com/*    https://www.nikokarasek.com/:splat    301!
+# Хост-редиректы (apex ↔ www) НЕ прописываем вручную —
+# Netlify сам перенаправляет на основной домен (Domain management → Primary domain).
+# Ручные правила здесь конфликтуют с этим и вызывают петлю редиректов.
+#
+# Пример SPA-фолбэка (не нужен для многостраничного сайта):
+# /*   /index.html   200
