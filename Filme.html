@@ -7,17 +7,22 @@
 <meta name="description" content="Alle Reportagen und Dokumentationen von Niko Karasek — von politischen Reportagen aus Russland und der Ukraine bis zu Gesellschafts- und Alltagsgeschichten. Nach Themen filterbar." />
 <link rel="canonical" href="https://www.nikokarasek.com/Filme.html" />
 <meta name="robots" content="index,follow" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#000000" />
 <style>
 /* ============ TOKENS (von der Startseite) ============ */
 :root {
-  --bg: #000000;
-  --bg-2: #0d0d0d;
-  --bg-3: #161616;
-  --card: #1a1a1a;
-  --fg: #ffffff;
-  --fg-dim: #b8b8b8;
-  --fg-mute: #9a9a9a;
-  --line: #262626;
+  --bg: #0a0a0a;
+  --bg-2: #121212;
+  --bg-3: #1a1a1a;
+  --card: #1c1c1c;
+  --fg: #ededea;
+  --fg-dim: #b0b0ad;
+  --fg-mute: #8f8f8c;
+  --line: #2a2a2a;
   --yellow: #f5f000;
   --accent: #f5f000;
   --on-accent: #000;
@@ -126,7 +131,7 @@ html[data-theme="light"] .lang__btn { background: rgba(0,0,0,0.05); border-color
 .filterdd { position: relative; }
 .filterdd__btn { display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg-2); color: var(--fg); font-weight: 800; font-size: 14px; transition: border-color .2s, background .2s; }
 .filterdd__btn:hover { border-color: var(--fg-mute); }
-.filterdd.open .filterdd__btn { border-color: var(--accent); }
+.filterdd.open .filterdd__btn { border-color: var(--fg); }
 .filterdd__lbl { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--fg-mute); }
 .filterdd__val { font-weight: 800; }
 .filterdd__chev { width: 14px; height: 14px; opacity: .65; transition: transform .25s; }
@@ -134,8 +139,8 @@ html[data-theme="light"] .lang__btn { background: rgba(0,0,0,0.05); border-color
 .filterdd__menu { position: absolute; top: 56px; left: 0; min-width: 100%; width: max-content; max-width: 340px; list-style: none; margin: 0; padding: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 2px; opacity: 0; transform: translateY(-8px); pointer-events: none; transition: transform .22s cubic-bezier(.2,.7,.1,1); box-shadow: 0 24px 60px rgba(0,0,0,0.5); z-index: 60; }
 .filterdd.open .filterdd__menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .filterdd__opt { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; padding: 12px 14px; border-radius: 11px; color: var(--fg-dim); font-weight: 800; font-size: 14px; text-align: left; white-space: nowrap; transition: background .2s, color .2s; }
-.filterdd__opt:hover { background: var(--bg-3); color: var(--fg); }
-.filterdd__opt.active { background: var(--accent); color: var(--on-accent); }
+.filterdd__opt:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.filterdd__opt.active { background: #fff; color: #000; }
 .filterdd__optn { font-family: var(--mono); font-size: 11px; font-weight: 700; opacity: .55; font-variant-numeric: tabular-nums; }
 .filterdd__opt.active .filterdd__optn { opacity: .8; }
 .tabs__count { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-mute); margin: 18px 2px 28px; }
@@ -427,16 +432,16 @@ html[data-theme="light"] .cta--ghost:hover { color: var(--on-accent); border-col
 /* ---------- DATA: alle Filme (cat: politik | gesellschaft) ---------- */
 const FILMS = [
   { title: "Neujahr in Nordkorea", year: "2025", cat: "gesellschaft", broadcaster: "galileo", runtime: "", img: "assets/films/11_neujahr_nordkorea.webp", ext: "https://www.joyn.de/play/clip/neujahr-in-nordkorea-russische-touristen-bei-kim-jong-un" },
-  { title: "Russland: Putin will Kinder", year: "2026", cat: "politik", broadcaster: "arte", runtime: "", img: "assets/films/10_putin_will_kinder.webp", yt: "" },
+  { title: "Russland: Putin will Kinder", year: "2026", cat: "politik", broadcaster: "arte", runtime: "", img: "assets/films/10_putin_will_kinder.webp", yt: "Sj_Cbj1s1Sc", noembed: true },
   { title: "Wem gehört der Döner?", year: "2025", cat: "gesellschaft", broadcaster: "arte", runtime: "", img: "assets/films/12_wem_gehoert_der_doener.webp", yt: "n4fKc5pDYY8" },
-  { title: "Die Metro-Schule von Charkiw", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/glxe4OqOhj0/maxresdefault.jpg", ytid: "glxe4OqOhj0", yt: "glxe4OqOhj0" },
+  { title: "Die Metro-Schule von Charkiw", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/glxe4OqOhj0/maxresdefault.jpg", ytid: "glxe4OqOhj0", yt: "glxe4OqOhj0", noembed: true },
   { title: "Die Republik Moldau und der Einfluss Russlands", year: "2025", cat: "politik", broadcaster: "arte", runtime: "", img: "assets/films/13_moldau_russland.webp", yt: "o-XG00-xU7U" },
-  { title: "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/LeUvpPtV0u0/maxresdefault.jpg", ytid: "LeUvpPtV0u0", yt: "LeUvpPtV0u0" },
-  { title: "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!", year: "2025", cat: "gesellschaft", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/_bSn6xn5af0/maxresdefault.jpg", ytid: "_bSn6xn5af0", yt: "_bSn6xn5af0" },
-  { title: "Im Reich der Superreichen", year: "2025", cat: "gesellschaft", broadcaster: "galileo", runtime: "", img: "assets/films/14_reich_der_superreichen.webp", yt: "Obj0NRFE6sI" },
+  { title: "Hype um Wegwerf-Agenten: Was steckt hinter der russischen Spionage-Strategie?", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/LeUvpPtV0u0/maxresdefault.jpg", ytid: "LeUvpPtV0u0", yt: "LeUvpPtV0u0", noembed: true },
+  { title: "Autobahn kreuzt Seeweg?! Die verrückteste Straßenkreuzung der Welt!", year: "2025", cat: "gesellschaft", broadcaster: "galileo", runtime: "", img: "https://i.ytimg.com/vi/_bSn6xn5af0/maxresdefault.jpg", ytid: "_bSn6xn5af0", yt: "_bSn6xn5af0", noembed: true },
+  { title: "Im Reich der Superreichen", year: "2025", cat: "gesellschaft", broadcaster: "galileo", runtime: "", img: "assets/films/14_reich_der_superreichen.webp", yt: "Obj0NRFE6sI", noembed: true },
   { title: "Putins Helfer", year: "2023", cat: "politik", broadcaster: "zdf", runtime: "44:49", img: "assets/films/01_putins_helfer.avif", yt: "dGIUKCFdQJ0" },
   { title: "Im Land des Feindes", year: "2022", cat: "politik", broadcaster: "arte", runtime: "32:01", img: "assets/films/02_im_land_des_feindes.avif", yt: "" },
-  { title: "10 Fragen an eine politische Gefangene", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "11:32", img: "assets/films/03_politische_gefangene.webp", yt: "EtEYaXDx0IY" },
+  { title: "10 Fragen an eine politische Gefangene", year: "2024", cat: "politik", broadcaster: "galileo", runtime: "11:32", img: "assets/films/03_politische_gefangene.webp", yt: "EtEYaXDx0IY", noembed: true },
   { title: "Russland: Denunzieren um jeden Preis", year: "2022", cat: "politik", broadcaster: "arte", runtime: "12:33", img: "assets/films/04_denunzieren.webp", yt: "Kxf7oJbs4FQ" },
   { title: "Teilmobilmachung in Russland", year: "2022", cat: "politik", broadcaster: "galileo", runtime: "9:13", img: "assets/films/05_teilmobilmachung.webp", yt: "C7kgXe8R0vM" },
   { title: "Russland: Putins leise Gegnerin", year: "2024", cat: "politik", broadcaster: "arte", runtime: "12:33", img: "assets/films/06_putins_gegnerin.webp", yt: "f0agKxLEgWI" },
@@ -565,7 +570,7 @@ function buildFilmCard(item) {
       el("div", { class: "film__year" }, item.year || ""),
     ]),
   ]);
-  const open = item.yt ? (() => openLightbox(item.yt)) : (item.ext ? (() => window.open(item.ext, "_blank", "noopener")) : null);
+  const open = item.yt ? (item.noembed ? (() => window.open("https://www.youtube.com/watch?v=" + item.yt, "_blank", "noopener")) : (() => openLightbox(item.yt))) : (item.ext ? (() => window.open(item.ext, "_blank", "noopener")) : null);
   if (open) {
     card.style.cursor = "pointer";
     card.setAttribute("role", "button");
