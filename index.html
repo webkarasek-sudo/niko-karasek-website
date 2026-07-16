@@ -328,7 +328,9 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
   z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 22px 32px;
+  pointer-events: none;                 /* let taps pass through the empty bar to content below */
 }
+.nav__brand, .nav__right { pointer-events: auto; }   /* but keep the actual controls clickable */
 .nav__brand {
   font-family: var(--sans);
   font-weight: 900;
@@ -344,6 +346,7 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
 .nav__contact {
   padding: 11px 22px; border-radius: 999px;
   background: var(--yellow); color: #000;
+  border: 1px solid var(--bg);
   font-weight: 800; font-size: 13px; letter-spacing: 0.02em;
   transition: transform 0.2s, background 0.2s;
 }
@@ -759,11 +762,11 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--fg-dim);
+  color: #fff;
   text-decoration: none;
   display: inline-flex; align-items: center; gap: 8px;
   padding: 8px 14px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255,255,255,0.28);
   border-radius: 999px;
   transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
@@ -776,8 +779,10 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
   position: absolute;
   top: -44px; right: -4px;
   width: 36px; height: 36px;
-  background: var(--yellow);
-  color: #000;
+  background: rgba(0,0,0,0.4);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: #fff;
   border-radius: 50%;
   font-size: 22px;
   font-weight: 900;
@@ -1812,22 +1817,21 @@ html[data-theme="light"] .filmmap__watch{background:var(--accent);color:var(--on
 .mapteaser {
   position: relative; display: block; overflow: hidden;
   border-radius: var(--block-radius); border: 1px solid var(--line);
-  background: var(--bg-2); min-height: 360px; isolation: isolate;
+  background: var(--bg-2); min-height: 560px; isolation: isolate;
   transition: border-color 0.3s;
 }
-.mapteaser:hover { border-color: var(--fg-mute); }
 .mapteaser__map { position: absolute; inset: 0; z-index: 0; }
 .mapteaser__map svg { width: 100%; height: 100%; display: block; }
 .mapteaser::after {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.64) 42%, rgba(0,0,0,0.12) 78%, transparent 100%);
+  background: linear-gradient(0deg, var(--bg-2) 4%, rgba(18,18,18,0.72) 34%, rgba(18,18,18,0.18) 62%, transparent 88%);
 }
 html[data-theme="light"] .mapteaser::after {
-  background: linear-gradient(90deg, rgba(247,246,242,0.96) 0%, rgba(247,246,242,0.72) 42%, rgba(247,246,242,0.15) 80%, transparent 100%);
+  background: linear-gradient(0deg, var(--bg-2) 4%, rgba(239,238,233,0.78) 34%, rgba(239,238,233,0.2) 62%, transparent 88%);
 }
 .mapteaser__body {
-  position: relative; z-index: 2; max-width: 540px;
-  padding: 48px 44px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px;
+  position: absolute; left: 0; bottom: 0; z-index: 2; max-width: 640px;
+  padding: 0 0 48px 56px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px;
 }
 .mapteaser__kicker {
   display: inline-flex; align-items: center; gap: 10px;
@@ -1845,8 +1849,8 @@ html[data-theme="light"] .mapteaser__kicker i { border-left-color: var(--accent)
   transition: transform 0.25s cubic-bezier(.2,.7,.1,1), background 0.25s, border-color 0.25s;
 }
 .mapteaser__cta svg { width: 16px; height: 16px; transition: transform 0.25s; }
-.mapteaser:hover .mapteaser__cta { transform: translateY(-2px); border-color: var(--fg-mute); background: var(--bg-3); }
-.mapteaser:hover .mapteaser__cta svg { transform: translateX(3px); }
+.mapteaser__cta:hover { transform: translateY(-2px); border-color: var(--fg-mute); background: var(--bg-3); }
+.mapteaser__cta:hover svg { transform: translateX(3px); }
 .mt-pin__dot { fill: var(--yellow); opacity: 0.5; }
 html[data-theme="light"] .mt-pin__dot { fill: var(--accent); opacity: 0.55; }
 .mt-pin__pulse { fill: var(--yellow); opacity: 0; transform-origin: center; animation: mtPulse 3s ease-out infinite; }
@@ -1854,10 +1858,15 @@ html[data-theme="light"] .mt-pin__pulse { fill: var(--accent); }
 @keyframes mtPulse { 0% { r: 2.5px; opacity: 0.24; } 100% { r: 12px; opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .mt-pin__pulse { animation: none; opacity: 0; } }
 @media (max-width: 640px) {
-  .mapteaser { min-height: 430px; }
-  .mapteaser__body { position: absolute; inset: 0; max-width: none; padding: 30px 20px; justify-content: flex-end; }
-  .mapteaser::after { background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.55) 46%, rgba(0,0,0,0.88) 100%); }
-  html[data-theme="light"] .mapteaser::after { background: linear-gradient(180deg, rgba(247,246,242,0.28) 0%, rgba(247,246,242,0.62) 46%, rgba(247,246,242,0.94) 100%); }
+  /* stacked: map band on top (dots visible), text below */
+  .mapteaser { min-height: 520px; display: flex; flex-direction: column; }
+  .mapteaser__map {
+    position: relative; inset: auto; flex: 0 0 auto; height: 260px; width: 100%;
+    -webkit-mask-image: linear-gradient(180deg, #000 80%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 80%, transparent 100%);
+  }
+  .mapteaser__body { position: relative; inset: auto; max-width: none; padding: 26px 22px 32px; justify-content: flex-start; }
+  .mapteaser::after { display: none; }
 }
 </style>
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
@@ -2053,7 +2062,10 @@ html[data-theme="light"] .mt-pin__pulse { fill: var(--accent); }
         <div class="foot__media-placeholder">
           <span>still 16:9 — feldarbeit</span>
         </div>
-        <img class="foot__media-gif" src="assets/footer.gif" alt="Behind the scenes" width="480" height="270" loading="lazy" decoding="async" />
+        <picture>
+          <source media="(min-width: 861px)" srcset="assets/footer.gif" />
+          <img class="foot__media-gif" src="assets/footer-still.jpg" alt="Behind the scenes" width="480" height="270" loading="lazy" decoding="async" />
+        </picture>
       </div>
     </div>
   </div>
@@ -2439,7 +2451,7 @@ function openLightbox(ytId) {
   const overlay = el("div", { class: "lightbox", onclick: closeLightbox });
   const inner = el("div", { class: "lightbox__inner", onclick: (e) => e.stopPropagation() });
   const iframe = el("iframe", {
-    src: "https://www.youtube.com/embed/" + ytId + "?autoplay=1&rel=0",
+    src: "https://www.youtube-nocookie.com/embed/" + ytId + "?autoplay=1&rel=0",
     allow: "autoplay; encrypted-media; fullscreen",
     allowfullscreen: "true",
     frameborder: "0",
@@ -2544,9 +2556,7 @@ function buildFilmCard(item, index) {
     ]),
   ]);
   const open = item.yt
-    ? (item.noembed
-        ? (() => window.open("https://www.youtube.com/watch?v=" + item.yt, "_blank", "noopener"))
-        : (() => openLightbox(item.yt)))
+    ? (() => openLightbox(item.yt))
     : (item.ext ? (() => window.open(item.ext, "_blank", "noopener")) : null);
   if (open) {
     card.style.cursor = "pointer";
@@ -3166,38 +3176,78 @@ function buildFilmCard(item, index) {
   const host = document.getElementById("mapTeaserMap");
   if (!host) return;
   if (typeof d3 === "undefined" || typeof topojson === "undefined") { window.addEventListener("load", mapTeaser, { once: true }); return; }
-  const SVGNS = "http://www.w3.org/2000/svg";
-  const REGION = { type: "MultiPoint", coordinates: [[-11, 36], [148, 36], [148, 72], [-11, 72]] };
   const PINS = [[125.76,39.04],[36.23,49.99],[28.86,47.01],[13.40,52.52],[4.90,52.37],[8.31,54.91],[129.73,62.03],[30.36,59.93],[37.85,60.03]];
-  let world = null;
-  const svg = document.createElementNS(SVGNS, "svg"); host.appendChild(svg);
-  function el(n, a) { const e = document.createElementNS(SVGNS, n); for (const k in a) e.setAttribute(k, a[k]); return e; }
-  function render() {
-    if (!world) return;
-    const r = host.getBoundingClientRect(), w = r.width, h = r.height;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canvas = document.createElement("canvas");
+  canvas.style.width = "100%"; canvas.style.height = "100%"; canvas.style.display = "block";
+  host.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+  const proj = d3.geoOrthographic().rotate([-58, -50]).clipAngle(90);
+  const path = d3.geoPath(proj, ctx);
+  const graticule = d3.geoGraticule().step([15, 15])();
+  let world = null, w = 0, h = 0, dpr = 1, raf = null, last = 0, running = false;
+
+  function theme() {
+    const light = document.documentElement.getAttribute("data-theme") === "light";
+    const cs = getComputedStyle(document.documentElement);
+    const pin = (cs.getPropertyValue(light ? "--accent" : "--yellow") || "#f5f000").trim();
+    return light
+      ? { sphere: "#f2f1ec", land: "#e4e2db", stroke: "#cdcbc3", grat: "rgba(0,0,0,.06)", pin }
+      : { sphere: "#0e0e0e", land: "#1c1c1c", stroke: "#333", grat: "rgba(255,255,255,.05)", pin };
+  }
+
+  function resize() {
+    const r = host.getBoundingClientRect(); w = r.width; h = r.height;
     if (!w || !h) return;
-    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
-    const proj = d3.geoEquirectangular().fitExtent([[w * 0.02, h * 0.08], [w * 0.99, h * 0.92]], REGION);
-    const path = d3.geoPath(proj);
-    svg.appendChild(el("path", { d: path(d3.geoGraticule().step([10, 10])()) || "", class: "geo-grat" }));
-    world.features.forEach((f) => { const d = path(f); if (d) svg.appendChild(el("path", { d: d, class: "geo-land" })); });
-    PINS.forEach((p, i) => {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const R = w > 640 ? Math.min(w * 0.42, h * 0.62) : Math.min(w, h) / 2 * 0.92;
+    const cx = w / 2;                                              // layout 03: globe centered
+    const cy = h / 2;                                             // centered both axes
+    proj.scale(R).translate([cx, cy]);
+  }
+
+  function draw() {
+    if (!world || !w || !h) return;
+    const c = theme();
+    ctx.clearRect(0, 0, w, h);
+    ctx.beginPath(); path({ type: "Sphere" }); ctx.fillStyle = c.sphere; ctx.fill();
+    ctx.beginPath(); path(graticule); ctx.strokeStyle = c.grat; ctx.lineWidth = 0.6; ctx.stroke();
+    ctx.beginPath(); path(world); ctx.fillStyle = c.land; ctx.fill(); ctx.strokeStyle = c.stroke; ctx.lineWidth = 0.5; ctx.stroke();
+    const rot = proj.rotate(), center = [-rot[0], -rot[1]];
+    PINS.forEach((p) => {
+      if (d3.geoDistance(p, center) > Math.PI / 2) return;         // hide far-side pins
       const xy = proj(p); if (!xy) return;
-      const g = el("g", { transform: "translate(" + xy[0] + "," + xy[1] + ")" });
-      const pulse = el("circle", { class: "mt-pin__pulse", r: "2.5" });
-      pulse.style.animationDelay = (i * 0.3) + "s";
-      g.appendChild(pulse);
-      g.appendChild(el("circle", { class: "mt-pin__dot", r: "2.8" }));
-      svg.appendChild(g);
+      ctx.beginPath(); ctx.arc(xy[0], xy[1], 6, 0, 2 * Math.PI); ctx.fillStyle = c.pin; ctx.globalAlpha = 0.18; ctx.fill();
+      ctx.beginPath(); ctx.arc(xy[0], xy[1], 2.6, 0, 2 * Math.PI); ctx.globalAlpha = 0.9; ctx.fill(); ctx.globalAlpha = 1;
     });
   }
+
+  function tick(t) {
+    if (!running) return;
+    const dt = last ? (t - last) / 1000 : 0; last = t;
+    const rot = proj.rotate();
+    proj.rotate([rot[0] + dt * 6, rot[1]]);                        // ~6°/s
+    draw();
+    raf = requestAnimationFrame(tick);
+  }
+  function start() { if (running || reduce || !world) return; running = true; last = 0; raf = requestAnimationFrame(tick); }
+  function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = null; }
+
   fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json")
     .then((r) => r.json())
-    .then((topo) => { world = topojson.feature(topo, topo.objects.countries); render(); })
+    .then((topo) => { world = topojson.feature(topo, topo.objects.countries); resize(); draw(); start(); })
     .catch(() => {});
+
+  // only spin while the teaser is on screen; pause with the tab
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver((es) => { es.forEach((e) => e.isIntersecting ? start() : stop()); }, { threshold: 0.05 }).observe(host);
+  }
+  document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-accent"] });
   let rt = null;
-  window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(render, 160); });
+  window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { resize(); draw(); }, 160); });
 })();
 </script>
 

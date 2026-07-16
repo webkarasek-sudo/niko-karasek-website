@@ -61,14 +61,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .skip-link:focus-visible { top: 16px; outline: 2px solid var(--fg); outline-offset: 2px; }
 
 /* ============ NAV (wie Startseite) ============ */
-.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 22px 32px; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 22px 32px; pointer-events: none; }
+.nav__brand, .nav__right { pointer-events: auto; }
 .nav__brand { display: block; }
 .nav__logo { font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.03em; line-height: 0.95; color: var(--fg); }
 .nav__roles { list-style: none; margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; }
 .nav__roles li { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim); }
 .nav__roles li:not(:last-child)::after { content: "·"; margin: 0 12px; color: var(--fg-mute); font-weight: 700; }
 .nav__right { display: flex; align-items: center; gap: 10px; }
-.nav__contact { padding: 11px 22px; border-radius: 999px; background: var(--yellow); color: #000; font-weight: 800; font-size: 13px; letter-spacing: 0.02em; transition: transform 0.2s, background 0.2s; }
+.nav__contact { padding: 11px 22px; border-radius: 999px; background: var(--yellow); color: #000; border: 1px solid var(--bg); font-weight: 800; font-size: 13px; letter-spacing: 0.02em; transition: transform 0.2s, background 0.2s; }
 html[data-theme="light"] .nav__contact { background: var(--accent); color: var(--on-accent); }
 .nav__contact:hover { transform: translateY(-1px); }
 .nav__menu-pill { position: fixed; top: 78px; right: 16px; min-width: 220px; display: flex; flex-direction: column; background: rgba(18,18,18,0.94); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12); color: #fff; border-radius: 18px; padding: 10px; gap: 2px; transform: translateY(-12px) scale(0.98); opacity: 0; pointer-events: none; transition: opacity 0.22s, transform 0.28s cubic-bezier(.2,.7,.1,1); box-shadow: 0 24px 60px rgba(0,0,0,0.5); z-index: 200; }
@@ -188,7 +189,9 @@ html[data-theme="light"] .film__placeholder { background: repeating-linear-gradi
 .lightbox.in { opacity: 1; }
 .lightbox__inner { position: relative; width: min(1200px, 100%); aspect-ratio: 16/9; }
 .lightbox__inner iframe { width: 100%; height: 100%; border: 0; background: #000; }
-.lightbox__close { position: absolute; top: -44px; right: -4px; width: 36px; height: 36px; background: var(--yellow); color: #000; border-radius: 50%; font-size: 22px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center; }
+.lightbox__yt-fallback { position: absolute; bottom: -44px; left: 0; display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono, ui-monospace, monospace); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: #fff; border: 1px solid rgba(255,255,255,0.28); border-radius: 999px; padding: 8px 14px; transition: color 0.2s, border-color 0.2s, background 0.2s; }
+.lightbox__yt-fallback:hover { color: #000; background: var(--yellow); border-color: var(--yellow); }
+.lightbox__close { position: absolute; top: -44px; right: -4px; width: 36px; height: 36px; background: rgba(0,0,0,0.4); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.16); color: #fff; border-radius: 50%; font-size: 22px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center; }
 
 @media (max-width: 1024px) {
   .nav { padding: 18px 24px; }
@@ -527,9 +530,10 @@ function openLightbox(ytId) {
   lbLast = document.activeElement;
   const overlay = el("div", { class: "lightbox", onclick: closeLightbox });
   const inner = el("div", { class: "lightbox__inner", onclick: (e) => e.stopPropagation() });
-  const iframe = el("iframe", { src: "https://www.youtube.com/embed/" + ytId + "?autoplay=1&rel=0", allow: "autoplay; encrypted-media; fullscreen", allowfullscreen: "true" });
+  const iframe = el("iframe", { src: "https://www.youtube-nocookie.com/embed/" + ytId + "?autoplay=1&rel=0", allow: "autoplay; encrypted-media; fullscreen", allowfullscreen: "true" });
   const close = el("button", { class: "lightbox__close", "aria-label": "Close", onclick: closeLightbox }, "×");
-  inner.appendChild(iframe); inner.appendChild(close); overlay.appendChild(inner);
+  const yt = el("a", { class: "lightbox__yt-fallback", href: "https://www.youtube.com/watch?v=" + ytId, target: "_blank", rel: "noopener" }, "▶ Auf YouTube ansehen");
+  inner.appendChild(iframe); inner.appendChild(close); inner.appendChild(yt); overlay.appendChild(inner);
   document.body.appendChild(overlay);
   document.body.style.overflow = "hidden";
   requestAnimationFrame(() => { overlay.classList.add("in"); close.focus(); });
@@ -570,7 +574,7 @@ function buildFilmCard(item) {
       el("div", { class: "film__year" }, item.year || ""),
     ]),
   ]);
-  const open = item.yt ? (item.noembed ? (() => window.open("https://www.youtube.com/watch?v=" + item.yt, "_blank", "noopener")) : (() => openLightbox(item.yt))) : (item.ext ? (() => window.open(item.ext, "_blank", "noopener")) : null);
+  const open = item.yt ? (() => openLightbox(item.yt)) : (item.ext ? (() => window.open(item.ext, "_blank", "noopener")) : null);
   if (open) {
     card.style.cursor = "pointer";
     card.setAttribute("role", "button");
