@@ -595,24 +595,35 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
   width: min(1180px, 86vw);
   display: flex;
   flex-direction: column;
-  gap: 12px;
   opacity: 0;
   animation: fadeUp 1s ease forwards;
   animation-delay: 0.35s;
 }
 .hero__cover-label {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; flex-wrap: wrap;
-  font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 4px 10px; margin-bottom: 14px;
+  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 11px; text-transform: uppercase;
+}
+.hero__cover-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 700; letter-spacing: 0.18em;
   color: var(--fg);
 }
-.hero__cover-tag { display: inline-flex; align-items: center; gap: 8px; }
 .hero__cover-tri {
-  width: 0; height: 0; flex: 0 0 auto;
-  border-style: solid; border-width: 5px 0 5px 8px;
-  border-color: transparent transparent transparent #f4c20d;
+  width: 13px; height: 13px; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
 }
-.hero__cover-views { color: var(--fg-dim); font-weight: 500; }
+.hero__cover-tri::before {
+  content: ""; width: 0; height: 0;
+  border-style: solid; border-width: 5px 0 5px 8px;
+  border-color: transparent transparent transparent var(--yellow);
+}
+.hero__cover-views {
+  font-weight: 600; letter-spacing: 0.1em;
+  color: var(--fg-dim);
+  margin-left: auto;
+}
 .hero__reel {
   position: relative;
   width: 100%;
@@ -1609,8 +1620,7 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
 
   .hero { padding: 100px 16px 22px; min-height: 100svh; justify-content: center; }
   .hero__stage { flex: 0 1 auto; padding: 10px 0; }
-  .hero__cover { width: 92vw; gap: 10px; }
-  .hero__cover-label { font-size: 11px; gap: 10px; }
+  .hero__cover { width: 92vw; }
   .hero__reel-play { width: 60px; height: 60px; }
   .hero__reel-play::after { border-width: 7px 0 7px 12px; }
 
