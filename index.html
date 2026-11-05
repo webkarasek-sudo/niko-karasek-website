@@ -576,24 +576,25 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   animation: fadeUp 1s ease forwards;
   animation-delay: 0.35s;
 }
-/* ---- Hero intro: photo, name, roles, short line — centered above the video ---- */
-.hero__cover-intro { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 28px; }
+/* ---- Hero intro: photo + big two-line headline + roles — centered above the video ---- */
+.hero__cover-intro { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 36px; }
 .hero__cover-photo {
-  width: 104px; height: 104px; border-radius: 50%; overflow: hidden; flex: none;
-  margin-bottom: 20px; background: #0a0a0a;
+  width: 152px; height: 152px; border-radius: 50%; overflow: hidden; flex: none;
+  margin-bottom: 28px; background: #0a0a0a;
 }
 .hero__cover-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .hero__cover-name .letter { will-change: transform, filter, opacity; }
-.hero__cover-name {
-  font-family: var(--sans); font-weight: 800; font-size: clamp(30px, 5vw, 46px);
-  letter-spacing: -0.01em; color: var(--fg); margin: 0 0 10px; line-height: 1.1;
+.hero__cover-name, .hero__cover-tagline {
+  font-family: var(--sans); font-weight: 800; font-size: clamp(32px, 5.5vw, 56px);
+  letter-spacing: -0.01em; color: var(--fg); margin: 0; line-height: 1.15;
+  max-width: 18ch;
 }
+.hero__cover-tagline { margin-top: 4px; }
 .hero__cover-roles {
   font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
   font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--fg-dim); margin-bottom: 14px;
+  color: var(--fg-dim); margin-top: 22px;
 }
-.hero__cover-sub { color: var(--fg-dim); font-size: 18px; font-weight: 500; line-height: 1.5; max-width: 40ch; margin: 0; }
 
 /* ---- Scrims on the video itself: meta line on top, title/source on the bottom ---- */
 .hero__reel-scrim {
@@ -1900,8 +1901,8 @@ html[data-theme="light"] .mt-pin__pulse { fill: var(--accent); }
       <div class="hero__cover-intro">
         <div class="hero__cover-photo"><img src="assets/portrait.webp" alt="Niko Karasek" width="1280" height="854" /></div>
         <h1 class="hero__cover-name" id="heroLogo">Niko Karasek</h1>
-        <div class="hero__cover-roles">Reporter · Dok · TV · Speaker</div>
-        <p class="hero__cover-sub">Reportagen aus aller Welt. Fokus Osteuropa.</p>
+        <p class="hero__cover-tagline">Reportagen aus aller Welt. Fokus Osteuropa.</p>
+        <div class="hero__cover-roles">Reporter · Dok · TV · Speaker · Russland-Experte</div>
       </div>
       <div class="hero__reel" id="showreelBtn" role="button" tabindex="0" aria-label="Reportage ansehen: Workuta – Russlands vergessene Stadt in der Arktis">
         <div class="hero__reel-frame">
