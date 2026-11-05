@@ -576,23 +576,27 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   animation: fadeUp 1s ease forwards;
   animation-delay: 0.35s;
 }
-/* ---- Hero intro: photo beside the headline, roles below — centered above the video ---- */
+/* ---- Hero intro: big headline with the photo inline as a pill, tagline + roles below ---- */
 .hero__cover-intro { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 36px; }
-.hero__cover-row { display: flex; align-items: center; gap: 22px; text-align: left; }
-.hero__cover-photo {
-  width: 96px; height: 96px; border-radius: 50%; overflow: hidden; flex: none;
-  background: #0a0a0a;
+.hero__cover-name {
+  font-family: var(--sans); font-weight: 800; font-size: clamp(44px, 9vw, 104px);
+  letter-spacing: -0.02em; color: var(--fg); margin: 0; line-height: 1.05;
 }
-.hero__cover-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.hero__cover-name .letter { will-change: transform, filter, opacity; }
-.hero__cover-name, .hero__cover-tagline {
-  font-family: var(--sans); font-weight: 800; font-size: clamp(26px, 4.2vw, 42px);
-  letter-spacing: -0.01em; color: var(--fg); margin: 0; line-height: 1.2;
+.hero__cover-pill {
+  display: inline-flex; align-items: center; gap: 0.18em;
+  background: rgba(245,240,0,0.14); border: 1px solid rgba(245,240,0,0.3);
+  border-radius: 999px; padding: 0.08em 0.34em 0.08em 0.08em;
+  vertical-align: middle;
+}
+.hero__cover-pill img { width: 0.82em; height: 0.82em; border-radius: 50%; object-fit: cover; display: block; }
+.hero__cover-tagline {
+  font-family: var(--sans); font-weight: 500; font-size: clamp(16px, 2.2vw, 21px);
+  color: var(--fg-dim); margin: 18px 0 0; line-height: 1.5; max-width: 46ch;
 }
 .hero__cover-roles {
   font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
   font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--fg-dim); margin-top: 22px;
+  color: var(--fg-dim); margin-top: 20px;
 }
 
 /* ---- Scrims on the video itself: meta line on top, title/source on the bottom ---- */
@@ -1898,13 +1902,8 @@ html[data-theme="light"] .mt-pin__pulse { fill: var(--accent); }
   <div class="hero__stage">
     <div class="hero__cover">
       <div class="hero__cover-intro">
-        <div class="hero__cover-row">
-          <div class="hero__cover-photo"><img src="assets/portrait.webp" alt="Niko Karasek" width="1280" height="854" /></div>
-          <div>
-            <h1 class="hero__cover-name" id="heroLogo">Niko Karasek</h1>
-            <p class="hero__cover-tagline">Reportagen weltweit — Fokus Osteuropa.</p>
-          </div>
-        </div>
+        <h1 class="hero__cover-name">Niko <span class="hero__cover-pill"><img src="assets/portrait.webp" alt="" />Karasek</span></h1>
+        <p class="hero__cover-tagline">Reportagen weltweit — Fokus Osteuropa.</p>
         <div class="hero__cover-roles">Reporter · Dok · TV · Speaker · Russland-Experte</div>
       </div>
       <div class="hero__reel" id="showreelBtn" role="button" tabindex="0" aria-label="Reportage ansehen: Workuta – Russlands vergessene Stadt in der Arktis">
@@ -2246,15 +2245,6 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
   });
   return frag;
 }
-
-/* ---------- HERO LOGO LETTER REVEAL ---------- */
-(function heroLogo() {
-  const host = document.getElementById("heroLogo");
-  if (!host) return;
-  const text = host.textContent.trim();
-  host.textContent = "";
-  host.appendChild(buildLetters(text, 200, 60));
-})();
 
 /* ---------- NAV ---------- */
 (function nav() {
