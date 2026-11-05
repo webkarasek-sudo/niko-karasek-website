@@ -532,55 +532,32 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
   .section__title .rletter { opacity: 1; transform: none; filter: none; }
 }
 
-/* ---- Masthead: name-logo + role lines (top-left) ---- */
+/* ---- Masthead (top-left, nav) ---- */
 .hero__masthead {
   flex: 0 0 auto;
 }
-.hero__masthead .hero__roles {
-  opacity: 0;
-  animation: fadeUp 0.8s ease forwards;
-  animation-delay: 1s;
+
+/* nav mark — compact monogram badge (the name itself now lives in the big hero heading below) */
+.nav-logo { display: inline-flex; text-decoration: none; }
+.nav-logo__mark {
+  width: 40px; height: 40px; border-radius: 10px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: #0a0a0a; border: 1px solid rgba(255,255,255,0.14);
+  color: var(--yellow); font-family: var(--sans);
+  font-weight: 900; font-size: 15px; letter-spacing: 0.01em;
 }
-.hero__logo .letter { will-change: transform, filter, opacity; }
-.hero__logo {
-  font-family: var(--sans);
-  font-weight: 900;
-  font-size: clamp(26px, 3vw, 40px);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  color: var(--fg);
-}
-.hero__roles {
-  list-style: none;
-  margin-top: 14px;
-  display: flex; flex-wrap: wrap; align-items: center;
-}
-.hero__roles li {
-  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--fg-dim);
-}
-.hero__roles li:not(:last-child)::after {
-  content: "·"; margin: 0 12px; color: var(--fg-mute); font-weight: 700;
-}
-.hero__type::after {
-  content: "▌"; margin-left: 2px;
-  animation: caretBlink 1s steps(1, end) infinite;
-}
-@keyframes caretBlink { 50% { opacity: 0; } }
+html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rgba(0,0,0,0.1); }
 
 /* AAA 2.2.2 / 1.4.6: stop all auto-motion when the OS asks for reduced motion,
    and make sure animated-in content is visible (not stuck at opacity:0) */
 @media (prefers-reduced-motion: reduce) {
-  .letter, .rletter, .hero__logo .letter {
+  .letter, .rletter {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
   }
   .marquee__track { animation: none !important; }
-  .hero__type::after { animation: none !important; }
 }
 
 /* ---- Stage centers the showreel ---- */
@@ -599,32 +576,47 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
   animation: fadeUp 1s ease forwards;
   animation-delay: 0.35s;
 }
-.hero__cover-label {
-  display: flex; align-items: center; flex-wrap: wrap;
-  gap: 4px 10px; margin-bottom: 14px;
+/* ---- Hero intro: photo, name, roles, short line — centered above the video ---- */
+.hero__cover-intro { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 28px; }
+.hero__cover-photo {
+  width: 104px; height: 104px; border-radius: 50%; overflow: hidden; flex: none;
+  margin-bottom: 20px; background: #0a0a0a;
+}
+.hero__cover-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero__cover-name .letter { will-change: transform, filter, opacity; }
+.hero__cover-name {
+  font-family: var(--sans); font-weight: 800; font-size: clamp(30px, 5vw, 46px);
+  letter-spacing: -0.01em; color: var(--fg); margin: 0 0 10px; line-height: 1.1;
+}
+.hero__cover-roles {
+  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--fg-dim); margin-bottom: 14px;
+}
+.hero__cover-sub { color: var(--fg-dim); font-size: 18px; font-weight: 500; line-height: 1.5; max-width: 40ch; margin: 0; }
+
+/* ---- Scrims on the video itself: meta line on top, title/source on the bottom ---- */
+.hero__reel-scrim {
+  position: absolute; left: 0; right: 0; z-index: 4;
+  padding: 18px 22px;
+}
+.hero__reel-scrim--top {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px;
   font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
   font-size: 11px; text-transform: uppercase;
 }
-.hero__cover-tag {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-weight: 700; letter-spacing: 0.18em;
-  color: var(--fg);
+.hero__reel-scrim--bottom {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
 }
-.hero__cover-tri {
-  width: 13px; height: 13px; flex: 0 0 auto;
-  display: flex; align-items: center; justify-content: center;
-}
-.hero__cover-tri::before {
-  content: ""; width: 0; height: 0;
-  border-style: solid; border-width: 5px 0 5px 8px;
-  border-color: transparent transparent transparent var(--yellow);
-}
-html[data-theme="light"] .hero__cover-tri::before { border-left-color: var(--accent); }
-.hero__cover-views {
-  font-weight: 600; letter-spacing: 0.1em;
-  color: var(--fg-dim);
-  margin-left: auto;
-}
+.hero__cover-tag { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: 0.18em; color: #fff; }
+.hero__cover-tri { width: 0; height: 0; flex: none; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent var(--yellow); }
+.hero__cover-views { font-weight: 600; letter-spacing: 0.1em; color: rgba(255,255,255,0.65); margin-left: auto; }
+.hero__reel-title { font-weight: 700; font-size: 15px; color: #fff; line-height: 1.3; }
+.hero__reel-source { font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 4px; }
+@media (max-width: 640px) { .hero__reel-scrim { padding: 14px 16px; } .hero__reel-title { font-size: 13px; } }
 .hero__reel {
   position: relative;
   width: 100%;
@@ -1717,13 +1709,9 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
   .foot__media { max-width: 420px; margin-left: 0; }
 }
 @media (max-width: 640px) {
-  /* keep the bar compact: hide the static role words but KEEP the animated typewriter line under the name */
-  .hero__masthead .hero__roles { display: flex; margin-top: 11px; }
-  .hero__masthead .hero__roles li:not(:last-child) { display: none; }
   .nav__right { gap: 12px; }
   .lang__code, .lang__chev { display: none; }      /* flag-only language pill */
   .lang__btn { padding: 0; width: 44px; justify-content: center; gap: 0; }
-  .hero__logo { font-size: clamp(22px, 6.5vw, 30px); }
 }
 @media (max-width: 480px) {
   .foot__grid { grid-template-columns: 1fr; gap: 26px; }
@@ -1733,7 +1721,6 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
 }
 
 @media (max-width: 380px) {
-  .hero__logo { font-size: 24px; }
   .info-headline { font-size: 28px; }
   .section__title { font-size: 24px; }
   .info-stats__num { font-size: 38px; width: 84px; flex: 0 0 84px; }
@@ -1870,12 +1857,9 @@ html[data-theme="light"] .mt-pin__pulse { fill: var(--accent); }
 <!-- ============ NAV ============ -->
 <nav class="nav">
   <div class="hero__masthead nav__brand">
-    <h1 class="hero__logo" id="heroLogo">Niko Karasek</h1>
-    <ul class="hero__roles">
-      <li data-i18n="role.reportagen">Reportagen</li>
-      <li data-i18n="role.fernsehen">Fernsehen</li>
-      <li><span class="hero__type" id="roleType"></span></li>
-    </ul>
+    <a class="nav-logo" href="#main" data-nav="main" aria-label="Niko Karasek — Startseite">
+      <span class="nav-logo__mark" aria-hidden="true">NK</span>
+    </a>
   </div>
   <div class="nav__right">
     <div class="lang" id="langPick">
@@ -1913,14 +1897,24 @@ html[data-theme="light"] .mt-pin__pulse { fill: var(--accent); }
 <section class="hero" data-screen-label="Hero" id="main" tabindex="-1">
   <div class="hero__stage">
     <div class="hero__cover">
-      <div class="hero__cover-label">
-        <span class="hero__cover-tag"><i class="hero__cover-tri" aria-hidden="true"></i>Aktuell · Neueste Reportage</span>
-        <span class="hero__cover-views">1,7 Mio. Aufrufe auf YouTube</span>
+      <div class="hero__cover-intro">
+        <div class="hero__cover-photo"><img src="assets/portrait.webp" alt="Niko Karasek" width="1280" height="854" /></div>
+        <h1 class="hero__cover-name" id="heroLogo">Niko Karasek</h1>
+        <div class="hero__cover-roles">Reporter · Dok · TV · Speaker</div>
+        <p class="hero__cover-sub">Reportagen aus aller Welt. Fokus Osteuropa.</p>
       </div>
       <div class="hero__reel" id="showreelBtn" role="button" tabindex="0" aria-label="Reportage ansehen: Workuta – Russlands vergessene Stadt in der Arktis">
         <div class="hero__reel-frame">
           <img class="hero__reel-screen" src="assets/hero-cover.jpg" alt="Werksgelände der Kohlegrube Schachta Sewernaja in Workuta, Russland – Luftaufnahme aus der Reportage" width="1600" height="910" fetchpriority="high" />
           <div class="hero__reel-play"></div>
+          <div class="hero__reel-scrim hero__reel-scrim--top">
+            <span class="hero__cover-tag"><i class="hero__cover-tri" aria-hidden="true"></i>Aktuell · Neueste Reportage</span>
+            <span class="hero__cover-views">1,7 Mio. Aufrufe auf YouTube</span>
+          </div>
+          <div class="hero__reel-scrim hero__reel-scrim--bottom">
+            <div class="hero__reel-title">Workuta — Russlands vergessene Stadt in der Arktis</div>
+            <div class="hero__reel-source">ARTE Re: · Reportage</div>
+          </div>
         </div>
       </div>
     </div>
@@ -2307,44 +2301,7 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
 })();
 
 /* ---------- HERO ---------- */
-/* Hero masthead now lives in the nav; showreel frame opens the lightbox via
-   the #showreelBtn click handler defined below. */
-(function roleTyper() {
-  const el = document.getElementById("roleType");
-  if (!el) return;
-  let words = ["Russland-Experte", "Keynote Speaker"];
-  let baseWords = words.slice();
-  function activeWords() {
-    const mobile = window.matchMedia("(max-width: 640px)").matches;
-    const extra = Array.isArray(window.__roleExtra) ? window.__roleExtra : [];
-    // On mobile the static "Reportagen · Fernsehen" line is hidden, so fold those
-    // two words into the typewriter cycle — and show them first.
-    return (mobile && extra.length) ? extra.concat(baseWords) : baseWords;
-  }
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let t = null;
-  function run() {
-    clearTimeout(t);
-    if (reduce) { el.textContent = words[0]; return; }
-    let wi = 0, ci = 0, deleting = false;
-    function step() {
-      const w = words[wi];
-      ci += deleting ? -1 : 1;
-      el.textContent = w.slice(0, ci);
-      if (!deleting && ci === w.length) { deleting = true; t = setTimeout(step, 1700); return; }
-      if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; t = setTimeout(step, 350); return; }
-      t = setTimeout(step, deleting ? 45 : 95);
-    }
-    step();
-  }
-  window.__setRoleWords = function (w) { if (Array.isArray(w) && w.length) { baseWords = w; words = activeWords(); run(); } };
-  const mqRole = window.matchMedia("(max-width: 640px)");
-  const onMqRole = function () { words = activeWords(); run(); };
-  if (mqRole.addEventListener) mqRole.addEventListener("change", onMqRole);
-  else if (mqRole.addListener) mqRole.addListener(onMqRole);
-  words = activeWords();
-  run();
-})();
+/* Showreel frame opens the lightbox via the #showreelBtn click handler defined below. */
 
 /* ---------- MARQUEE ---------- */
 const LOGO_FILES = [
@@ -2852,7 +2809,6 @@ function buildFilmCard(item, index) {
     if (langFlag) langFlag.textContent = FLAGS[lang];
     if (langCode) langCode.textContent = CODES[lang];
     if (langMenu) langMenu.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
-    if (window.__setRoleWords) { window.__roleExtra = [d["role.reportagen"], d["role.fernsehen"]]; window.__setRoleWords(d.typeWords); }
     if (window.__footerWave) window.__footerWave();
     try { localStorage.setItem("nk-lang", lang); } catch (e) {}
   }
