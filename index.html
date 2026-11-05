@@ -123,11 +123,10 @@ html[data-theme="light"] .nav__hamburger { background: rgba(0,0,0,0.05); border-
 html[data-theme="light"] .nav__hamburger span { background: #0f0f0f; }
 /* film placeholder stripes */
 html[data-theme="light"] .film__placeholder { background: repeating-linear-gradient(45deg, #e7e5df 0 14px, #efeee9 14px 28px); }
-/* press-bar logos: force every mark (whatever its native colors) into a crisp
-   solid silhouette — white on the dark page, black on the light one — so the whole
-   row reads as one consistent, clearly visible set instead of a muddy partial-color mix. */
-html[data-theme="light"] .logo--img img { filter: brightness(0); }
-html[data-theme="light"] .logo--img.is-native img { filter: none; }
+/* press-bar logos render in their real colors (see .logo--img below). The plain
+   white-only marks (ntv/ard/mdr have no color at all) still need flipping to black
+   on the light page, or they vanish. */
+html[data-theme="light"] .logo--img.is-mono img { filter: invert(1); }
 
 /* ===== LIGHT THEME: yellow blocks become dark accent blocks ===== */
 html[data-theme="light"] .foot { background: var(--accent); color: var(--on-accent); }
@@ -585,7 +584,7 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
 }
 .hero__cover-name {
   display: inline-flex; align-items: center; gap: 0.2em;
-  font-family: var(--sans); font-weight: 800; font-size: clamp(40px, 8.5vw, 96px);
+  font-family: var(--sans); font-weight: 800; font-size: clamp(50px, 8.5vw, 96px);
   letter-spacing: -0.02em; color: var(--fg); line-height: 1.05;
   background: var(--card); border: 1px solid var(--line);
   border-radius: 999px; padding: 0.12em 0.55em 0.12em 0.12em;
@@ -697,21 +696,16 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   max-height: 44px;
   object-fit: contain;
   opacity: 0.85;
-  filter: brightness(0) invert(1);
   transition: opacity 0.3s, transform 0.3s;
 }
 .logo--img:hover img { opacity: 1; transform: scale(1.05); }
 /* Square badge-style marks (ProSieben, Galileo) are drawn edge-to-edge with no inner
    padding, so at the same height as the wordmarks they read much heavier/denser. */
-.logo--img.is-badge img { max-height: 30px; }
-.logo--img.is-badge-lg img { max-height: 38px; }
+.logo--img.is-badge img { max-height: 24px; }
+.logo--img.is-badge-lg img { max-height: 36px; }
 /* RTL's source graphic is three solid tiles with almost no side padding, so at a shared
    height it ends up far wider than every other logo. Cap by width instead. */
 .logo--img.is-wide img { max-height: none; height: 16px; width: auto; }
-/* RTL's file has no transparency — its colored tiles and white letters are opaque,
-   so forcing it through the same silhouette filter turns it into one solid gray
-   block with the letters gone. Leave it in its native colors instead. */
-.logo--img.is-native img { filter: none; }
 
 /* ============ LIGHTBOX ============ */
 .lightbox {
@@ -2282,11 +2276,11 @@ const LOGO_FILES = [
   { src: "assets/logos/prosieben.svg", alt: "ProSieben", badge: true },
   { src: "assets/logos/galileo.webp", alt: "Galileo", badgeLg: true },
   { src: "assets/logos/zdf.svg", alt: "ZDF" },
-  { src: "assets/logos/ntv.svg", alt: "n-tv" },
-  { src: "assets/logos/ard.svg", alt: "ARD" },
-  { src: "assets/logos/mdr.svg", alt: "MDR" },
+  { src: "assets/logos/ntv.svg", alt: "n-tv", mono: true },
+  { src: "assets/logos/ard.svg", alt: "ARD", mono: true },
+  { src: "assets/logos/mdr.svg", alt: "MDR", mono: true },
   { src: "assets/logos/stern-tv.png", alt: "Stern TV" },
-  { src: "assets/logos/rtl.webp", alt: "RTL", wide: true, native: true },
+  { src: "assets/logos/rtl.webp", alt: "RTL", wide: true },
 ];
 (function marquee() {
   const track = document.getElementById("marqueeTrack");
@@ -2296,7 +2290,7 @@ const LOGO_FILES = [
     if (l.badge) cls += " is-badge";
     if (l.badgeLg) cls += " is-badge-lg";
     if (l.wide) cls += " is-wide";
-    if (l.native) cls += " is-native";
+    if (l.mono) cls += " is-mono";
     const wrap = el("div", { class: cls });
     wrap.appendChild(el("img", { src: l.src, alt: l.alt }));
     track.appendChild(wrap);
