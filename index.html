@@ -123,10 +123,9 @@ html[data-theme="light"] .nav__hamburger { background: rgba(0,0,0,0.05); border-
 html[data-theme="light"] .nav__hamburger span { background: #0f0f0f; }
 /* film placeholder stripes */
 html[data-theme="light"] .film__placeholder { background: repeating-linear-gradient(45deg, #e7e5df 0 14px, #efeee9 14px 28px); }
-/* press-bar logos: render dark on the light page (keep internal detail, no blobs) */
-html[data-theme="light"] .logo--img img { filter: invert(1); }
-html[data-theme="light"] .logo--img.is-dark img { filter: brightness(0); }
-html[data-theme="light"] .logo--img.is-color img { filter: grayscale(1) brightness(0.5) contrast(1.1); }
+/* press-bar logos: shown in their native colors. Only the plain white-only marks
+   (ntv/ard/mdr) need flipping to black so they don't vanish on the light page. */
+html[data-theme="light"] .logo--img.is-mono img { filter: invert(1); }
 
 /* ===== LIGHT THEME: yellow blocks become dark accent blocks ===== */
 html[data-theme="light"] .foot { background: var(--accent); color: var(--on-accent); }
@@ -147,7 +146,6 @@ html[data-theme="light"] .foot__tel { color: var(--on-accent); }
 /* info panel becomes a dark accent block */
 html[data-theme="light"] .infb { background: var(--accent); }
 html[data-theme="light"] .infb__title,
-html[data-theme="light"] .infb__corner,
 html[data-theme="light"] .infb__yr-k { color: var(--on-accent); }
 html[data-theme="light"] .infb__mute,
 html[data-theme="light"] .infb__text,
@@ -700,15 +698,6 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   transition: opacity 0.3s, transform 0.3s;
 }
 .logo--img:hover img { opacity: 1; transform: scale(1.05); }
-/* Color assets (ZDF multi-color SVG, Stern TV color bitmap) — desaturate so they match the all-white press-bar */
-.logo--img.is-color img {
-  filter: grayscale(1) brightness(1.4) contrast(1.2);
-}
-/* arte.svg has no fill attribute (paths render black by default).
-   On a black bg they'd be invisible — invert + grayscale to render them white. */
-.logo--img.is-dark img {
-  filter: brightness(0) invert(1);
-}
 /* Square badge-style marks (ProSieben, Galileo) are drawn edge-to-edge with no inner
    padding, so at the same height as the wordmarks they read much heavier/denser. */
 .logo--img.is-badge img { max-height: 30px; }
@@ -1135,16 +1124,6 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
   position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(180deg, rgba(0,0,0,.4), transparent 30%, transparent 60%, rgba(0,0,0,.55));
 }
-.infb__corner {
-  position: absolute; z-index: 2;
-  font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
-  font-size: 11px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.18em; color: #fff;
-  background: rgba(0,0,0,.5); backdrop-filter: blur(6px);
-  padding: 7px 12px;
-}
-.infb__corner--tl { top: 24px; left: 24px; }
-.infb__corner--bl { bottom: 24px; left: 24px; }
 .infb__panel {
   background: transparent;
   padding: 6px 0;
@@ -1962,8 +1941,6 @@ html[data-theme="light"] .mt-pin__pulse { fill: var(--accent); }
     <div class="infb__img">
       <img src="assets/portrait.webp" alt="Niko Karasek" width="1280" height="854" />
       <div class="infb__grain"></div>
-      <span class="infb__corner infb__corner--tl" data-i18n="info.corner1">Info</span>
-      <span class="infb__corner infb__corner--bl" data-i18n="info.corner2">Reporter · Dok · TV</span>
     </div>
 
     <div class="infb__panel">
@@ -2293,23 +2270,22 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
 
 /* ---------- MARQUEE ---------- */
 const LOGO_FILES = [
-  { src: "assets/logos/arte.svg", alt: "Arte", dark: true },
-  { src: "assets/logos/prosieben.svg", alt: "ProSieben", color: true, badge: true },
-  { src: "assets/logos/galileo.webp", alt: "Galileo", color: true, badge: true },
-  { src: "assets/logos/zdf.svg", alt: "ZDF", color: true },
-  { src: "assets/logos/ntv.svg", alt: "n-tv" },
-  { src: "assets/logos/ard.svg", alt: "ARD" },
-  { src: "assets/logos/mdr.svg", alt: "MDR" },
-  { src: "assets/logos/stern-tv.png", alt: "Stern TV", color: true },
-  { src: "assets/logos/rtl.webp", alt: "RTL", color: true, wide: true },
+  { src: "assets/logos/arte.svg", alt: "Arte" },
+  { src: "assets/logos/prosieben.svg", alt: "ProSieben", badge: true },
+  { src: "assets/logos/galileo.webp", alt: "Galileo", badge: true },
+  { src: "assets/logos/zdf.svg", alt: "ZDF" },
+  { src: "assets/logos/ntv.svg", alt: "n-tv", mono: true },
+  { src: "assets/logos/ard.svg", alt: "ARD", mono: true },
+  { src: "assets/logos/mdr.svg", alt: "MDR", mono: true },
+  { src: "assets/logos/stern-tv.png", alt: "Stern TV" },
+  { src: "assets/logos/rtl.webp", alt: "RTL", wide: true },
 ];
 (function marquee() {
   const track = document.getElementById("marqueeTrack");
   /* static press bar: render each logo exactly once */
   LOGO_FILES.forEach((l) => {
     let cls = "logo logo--img";
-    if (l.color) cls += " is-color";
-    if (l.dark) cls += " is-dark";
+    if (l.mono) cls += " is-mono";
     if (l.badge) cls += " is-badge";
     if (l.wide) cls += " is-wide";
     const wrap = el("div", { class: cls });
