@@ -543,7 +543,7 @@ html[data-theme="light"] .pl__bar-fill { background: var(--accent); }
   width: 40px; height: 40px; border-radius: 10px; flex: none;
   display: flex; align-items: center; justify-content: center;
   background: #0a0a0a; border: 1px solid rgba(255,255,255,0.14);
-  color: var(--yellow); font-family: var(--sans);
+  color: #fff; font-family: var(--sans);
   font-weight: 900; font-size: 15px; letter-spacing: 0.01em;
 }
 html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rgba(0,0,0,0.1); }
@@ -610,7 +610,7 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   font-size: 11px; text-transform: uppercase;
 }
 .hero__cover-tag { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: 0.18em; color: #fff; }
-.hero__cover-tri { width: 0; height: 0; flex: none; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent var(--yellow); }
+.hero__cover-tri { width: 0; height: 0; flex: none; border-style: solid; border-width: 5px 0 5px 8px; border-color: transparent transparent transparent #fff; }
 .hero__cover-views { font-weight: 600; letter-spacing: 0.1em; color: rgba(255,255,255,0.65); margin-left: auto; }
 @media (max-width: 640px) { .hero__reel-scrim { padding: 14px 16px; } }
 .hero__reel {
@@ -709,6 +709,12 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
 .logo--img.is-dark img {
   filter: brightness(0) invert(1);
 }
+/* Square badge-style marks (ProSieben, Galileo) are drawn edge-to-edge with no inner
+   padding, so at the same height as the wordmarks they read much heavier/denser. */
+.logo--img.is-badge img { max-height: 30px; }
+/* RTL's source graphic is three solid tiles with almost no side padding, so at a shared
+   height it ends up far wider than every other logo. Cap by width instead. */
+.logo--img.is-wide img { max-height: none; height: 16px; width: auto; }
 
 /* ============ LIGHTBOX ============ */
 .lightbox {
@@ -2288,14 +2294,14 @@ function buildLetters(text, baseDelay, stagger, opts = {}) {
 /* ---------- MARQUEE ---------- */
 const LOGO_FILES = [
   { src: "assets/logos/arte.svg", alt: "Arte", dark: true },
-  { src: "assets/logos/prosieben.svg", alt: "ProSieben", color: true },
-  { src: "assets/logos/galileo.webp", alt: "Galileo", color: true },
+  { src: "assets/logos/prosieben.svg", alt: "ProSieben", color: true, badge: true },
+  { src: "assets/logos/galileo.webp", alt: "Galileo", color: true, badge: true },
   { src: "assets/logos/zdf.svg", alt: "ZDF", color: true },
   { src: "assets/logos/ntv.svg", alt: "n-tv" },
   { src: "assets/logos/ard.svg", alt: "ARD" },
   { src: "assets/logos/mdr.svg", alt: "MDR" },
   { src: "assets/logos/stern-tv.png", alt: "Stern TV", color: true },
-  { src: "assets/logos/rtl.webp", alt: "RTL", color: true },
+  { src: "assets/logos/rtl.webp", alt: "RTL", color: true, wide: true },
 ];
 (function marquee() {
   const track = document.getElementById("marqueeTrack");
@@ -2304,6 +2310,8 @@ const LOGO_FILES = [
     let cls = "logo logo--img";
     if (l.color) cls += " is-color";
     if (l.dark) cls += " is-dark";
+    if (l.badge) cls += " is-badge";
+    if (l.wide) cls += " is-wide";
     const wrap = el("div", { class: cls });
     wrap.appendChild(el("img", { src: l.src, alt: l.alt }));
     track.appendChild(wrap);
