@@ -675,7 +675,10 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   padding: 4px 0 0;
   position: relative;
 }
-/* Static press bar — logos sit still, centered, wrapping as needed */
+/* Static press bar — logos sit still, centered, wrapping as needed.
+   .marquee__set is a plain grouping wrapper (not a layout box) so its logos sit
+   directly in the .marquee__track flex row; the duplicate set only matters for the
+   mobile scrolling ticker and stays hidden everywhere else. */
 .marquee__track {
   display: flex;
   flex-wrap: wrap;
@@ -683,6 +686,12 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   gap: 28px 56px;
   align-items: center;
   justify-content: center;
+}
+.marquee__set { display: contents; }
+.marquee__set--dup { display: none; }
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 .logo {
   flex: 0 0 auto;
@@ -1620,7 +1629,10 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
   .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   .hero { padding: 100px 16px 22px; min-height: 100svh; }
-  .hero__stage { flex: 1 1 auto; min-height: calc(100svh - 100px); padding: 10px 0; }
+  /* On mobile the press bar becomes a compact scrolling ticker and moves onto the
+     first screen itself (pinned to the bottom), instead of sitting on the next one —
+     so the stage only needs to leave room for that ~56px strip, not the full height. */
+  .hero__stage { flex: 1 1 auto; min-height: calc(100svh - 100px - 72px); padding: 10px 0; }
   .hero__cover { width: 92vw; }
   .hero__cover-intro { min-height: calc(50svh - 110px); }
   .hero__cover-views { margin-left: 0; }
@@ -1630,8 +1642,13 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
   .section { padding: 48px 16px; }
   .section__title { font-size: clamp(26px, 7.5vw, 32px); margin-bottom: 22px; }
 
-  .hero__press { padding: 16px 0 0; }
-  .marquee__track { gap: 16px 30px; }
+  .hero__press { padding: 16px 0; overflow: hidden; }
+  .marquee__track {
+    flex-wrap: nowrap; width: max-content;
+    gap: 30px;
+    animation: marqueeScroll 22s linear infinite;
+  }
+  .marquee__set--dup { display: contents; }
   .logo--img { height: 30px; padding: 0 2px; }
   .logo--img img { max-height: 30px; }
   .logo { font-size: 16px; height: 32px; }
@@ -2310,8 +2327,7 @@ const LOGO_FILES = [
 ];
 (function marquee() {
   const track = document.getElementById("marqueeTrack");
-  /* static press bar: render each logo exactly once */
-  LOGO_FILES.forEach((l) => {
+  function buildLogo(l) {
     let cls = "logo logo--img";
     if (l.badge) cls += " is-badge";
     if (l.badgeLg) cls += " is-badge-lg";
@@ -2321,8 +2337,20 @@ const LOGO_FILES = [
     if (l.mono) cls += " is-mono";
     const wrap = el("div", { class: cls });
     wrap.appendChild(el("img", { src: l.src, alt: l.alt }));
-    track.appendChild(wrap);
-  });
+    return wrap;
+  }
+  /* Real set: the logos that always render (static grid on desktop/tablet, first
+     half of the scrolling ticker on mobile). */
+  const set = el("div", { class: "marquee__set" });
+  LOGO_FILES.forEach((l) => set.appendChild(buildLogo(l)));
+  track.appendChild(set);
+  /* Duplicate set: hidden everywhere except the mobile ticker, where it's the second
+     half of the loop — the CSS animation scrolls exactly one set-width (-50%), so by
+     the time it wraps back to 0 this duplicate is sitting where the real set started,
+     making the loop seamless. aria-hidden since it's a visual repeat, not more content. */
+  const dup = el("div", { class: "marquee__set marquee__set--dup", "aria-hidden": "true" });
+  LOGO_FILES.forEach((l) => dup.appendChild(buildLogo(l)));
+  track.appendChild(dup);
 })();
 
 /* ---------- FOOTER LINK WAVE: split each link's text into per-character spans ---------- */
