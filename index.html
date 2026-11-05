@@ -559,10 +559,13 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   .marquee__track { animation: none !important; }
 }
 
-/* ---- Stage centers the showreel ---- */
+/* ---- Stage: text fills the top half of the first screen, video starts at the midpoint.
+   min-height (not just flex-grow) forces the stage to claim the full first screen even
+   when its content is shorter, so the press-logo bar always lands on the next screen. */
 .hero__stage {
   flex: 1 1 auto;
-  display: flex; align-items: center; justify-content: center;
+  min-height: calc(100vh - 124px);
+  display: flex; flex-direction: column; align-items: center;
   padding: 28px 0;
 }
 
@@ -576,7 +579,14 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
   animation-delay: 0.35s;
 }
 /* ---- Hero intro: eyebrow, then a huge headline with the photo as a neutral pill up front, big tagline ---- */
-.hero__cover-intro { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 36px; }
+.hero__cover-intro {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  /* Text fills the top half of the first screen; the video starts right where the
+     second half begins. 152px is .hero's + .hero__stage's combined top padding at
+     this breakpoint, subtracted so the 50vh line lands where it visually should. */
+  min-height: calc(50vh - 152px);
+}
 .hero__cover-roles {
   font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
   font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
@@ -584,8 +594,9 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
 }
 .hero__cover-name {
   display: inline-flex; align-items: center; gap: 0.2em;
-  font-family: var(--sans); font-weight: 800; font-size: clamp(50px, 8.5vw, 96px);
+  font-family: var(--sans); font-weight: 800; font-size: clamp(28px, 9.5vw, 96px);
   letter-spacing: -0.02em; color: var(--fg); line-height: 1.05;
+  white-space: nowrap;
   background: var(--card); border: 1px solid var(--line);
   border-radius: 999px; padding: 0.12em 0.55em 0.12em 0.12em;
   margin: 0;
@@ -691,21 +702,33 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
 .logo.serif-y { font-family: Georgia, serif; font-style: italic; font-weight: 400; font-size: 18px; }
 .logo:hover { opacity: 1; color: var(--fg); }
 .logo--img { height: 44px; padding: 0 6px; display: flex; align-items: center; }
+/* Bound every logo inside the same 80x40 box regardless of its native aspect ratio,
+   so wordmarks, wide lockups and square badges all land on a comparable footprint
+   instead of each needing its own one-off size rule. */
 .logo--img img {
-  height: 100%; width: auto;
-  max-height: 44px;
+  max-width: 80px; max-height: 40px;
+  width: auto; height: auto;
   object-fit: contain;
   opacity: 0.85;
   transition: opacity 0.3s, transform 0.3s;
 }
 .logo--img:hover img { opacity: 1; transform: scale(1.05); }
-/* Square badge-style marks (ProSieben, Galileo) are drawn edge-to-edge with no inner
-   padding, so at the same height as the wordmarks they read much heavier/denser. */
-.logo--img.is-badge img { max-height: 24px; }
-.logo--img.is-badge-lg img { max-height: 36px; }
-/* RTL's source graphic is three solid tiles with almost no side padding, so at a shared
-   height it ends up far wider than every other logo. Cap by width instead. */
-.logo--img.is-wide img { max-height: none; height: 16px; width: auto; }
+/* Square badge-style marks (ProSieben, Galileo, ARD) are drawn edge-to-edge with no
+   inner padding, so even inside the shared box they read much heavier/denser than
+   the wordmarks — shrink them further to match. */
+.logo--img.is-badge img { max-width: 24px; max-height: 24px; }
+.logo--img.is-badge-lg img { max-width: 36px; max-height: 36px; }
+/* n-tv and MDR are bold, saturated wordmarks that still read heavier than arte/zdf
+   even inside the same 80x40 box — shrink them further to match. */
+.logo--img.is-small img { max-width: 60px; max-height: 30px; }
+/* n-tv's bold saturated red still reads heavier than its neighbors even at that size —
+   shrink it further still. */
+.logo--img.is-xsmall img { max-width: 44px; max-height: 22px; }
+/* ARD's mark is a near-black navy (RGB 0,26,75) — practically invisible on the dark
+   page. Brighten it well past its native color there; on the light page the same
+   navy already has plenty of contrast against white, so leave it alone. */
+.logo--img.is-boost img { filter: brightness(3.2); }
+html[data-theme="light"] .logo--img.is-boost img { filter: none; }
 
 /* ============ LIGHTBOX ============ */
 .lightbox {
@@ -1513,6 +1536,8 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
   .info-grid { gap: 36px 40px; }
   .films { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .hero { padding: 110px 24px 56px; }
+  .hero__stage { min-height: calc(100vh - 110px); }
+  .hero__cover-intro { min-height: calc(50vh - 138px); }
   .hero__press { padding: 20px 0 0; }
   .marquee__track { gap: 56px; }
   .foot__grid { grid-template-columns: minmax(auto, 440px) 1fr; gap: 40px; }
@@ -1594,9 +1619,10 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
   .nav__hamburger.open span:nth-child(2) { opacity: 0; }
   .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  .hero { padding: 100px 16px 22px; min-height: 100svh; justify-content: center; }
-  .hero__stage { flex: 0 1 auto; padding: 10px 0; }
+  .hero { padding: 100px 16px 22px; min-height: 100svh; }
+  .hero__stage { flex: 1 1 auto; min-height: calc(100svh - 100px); padding: 10px 0; }
   .hero__cover { width: 92vw; }
+  .hero__cover-intro { min-height: calc(50svh - 110px); }
   .hero__cover-views { margin-left: 0; }
   .hero__reel-play { width: 60px; height: 60px; }
   .hero__reel-play::after { border-width: 7px 0 7px 12px; }
@@ -2276,11 +2302,11 @@ const LOGO_FILES = [
   { src: "assets/logos/prosieben.svg", alt: "ProSieben", badge: true },
   { src: "assets/logos/galileo.webp", alt: "Galileo", badgeLg: true },
   { src: "assets/logos/zdf.svg", alt: "ZDF" },
-  { src: "assets/logos/ntv.webp", alt: "n-tv" },
-  { src: "assets/logos/ard.webp", alt: "ARD", badgeLg: true },
-  { src: "assets/logos/mdr.webp", alt: "MDR" },
+  { src: "assets/logos/ntv.webp", alt: "n-tv", xsmall: true },
+  { src: "assets/logos/ard.webp", alt: "ARD", badgeLg: true, boost: true },
+  { src: "assets/logos/mdr.webp", alt: "MDR", small: true },
   { src: "assets/logos/stern-tv.png", alt: "Stern TV" },
-  { src: "assets/logos/rtl.webp", alt: "RTL", wide: true },
+  { src: "assets/logos/rtl.webp", alt: "RTL" },
 ];
 (function marquee() {
   const track = document.getElementById("marqueeTrack");
@@ -2289,7 +2315,9 @@ const LOGO_FILES = [
     let cls = "logo logo--img";
     if (l.badge) cls += " is-badge";
     if (l.badgeLg) cls += " is-badge-lg";
-    if (l.wide) cls += " is-wide";
+    if (l.boost) cls += " is-boost";
+    if (l.small) cls += " is-small";
+    if (l.xsmall) cls += " is-xsmall";
     if (l.mono) cls += " is-mono";
     const wrap = el("div", { class: cls });
     wrap.appendChild(el("img", { src: l.src, alt: l.alt }));
