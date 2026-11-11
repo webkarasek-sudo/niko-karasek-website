@@ -12,7 +12,7 @@
 <meta name="description" content="Niko Karasek — freier Journalist und Reporter. Sechs Jahre Moskau, heute Hamburg. Reportagen und Dokumentationen für deutsche Fernsehsender, Experte für Russland, die Ukraine und Osteuropa." />
 <meta name="author" content="Niko Karasek" />
 <link rel="canonical" href="https://www.nikokarasek.com/" />
-<link rel="preload" as="image" href="assets/hero-cover.jpg" fetchpriority="high" />
+<link rel="preload" as="image" href="assets/hero-cover-2.jpg" fetchpriority="high" />
 <link rel="preconnect" href="https://www.youtube-nocookie.com" />
 <link rel="preconnect" href="https://i.ytimg.com" />
 
@@ -587,15 +587,21 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
      second half begins. 152px is .hero's + .hero__stage's combined top padding at
      this breakpoint, subtracted so the 50vh line lands where it visually should. */
   min-height: calc(50vh - 152px);
+  /* Single source of truth for the display-type scale: name and tagline are both
+     set in em below, so their size ratio (38/96 ≈ 0.396) stays identical at every
+     viewport width instead of drifting when their clamps hit floor/ceiling at
+     different points. */
+  font-size: clamp(28px, 9.5vw, 96px);
 }
 .hero__cover-roles {
   font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace);
   font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--fg-dim); margin-bottom: 18px;
 }
+.hero__cover-roles-br { display: none; }
 .hero__cover-name {
   display: inline-flex; align-items: center; gap: 0.2em;
-  font-family: var(--sans); font-weight: 800; font-size: clamp(28px, 9.5vw, 96px);
+  font-family: var(--sans); font-weight: 800; font-size: 1em;
   letter-spacing: -0.02em; color: var(--fg); line-height: 1.05;
   white-space: nowrap;
   background: var(--card); border: 1px solid var(--line);
@@ -604,7 +610,7 @@ html[data-theme="light"] .nav-logo__mark { background: #141414; border-color: rg
 }
 .hero__cover-name img { width: 0.85em; height: 0.85em; border-radius: 16px; object-fit: cover; flex: none; display: block; }
 .hero__cover-tagline {
-  font-family: var(--sans); font-weight: 700; font-size: clamp(18px, 3.2vw, 38px);
+  font-family: var(--sans); font-weight: 700; font-size: 0.396em;
   letter-spacing: -0.01em; color: var(--fg); margin: 16px 0 0; line-height: 1.25; max-width: 28ch;
 }
 
@@ -910,7 +916,7 @@ html[data-theme="light"] .logo--img.is-boost img { filter: none; }
   letter-spacing: -0.005em;
   margin-bottom: 4px;
 }
-.film__year { font-size: 11px; color: var(--fg-mute); font-weight: 600; }
+.film__year { font-size: 13px; color: var(--fg-mute); font-weight: 600; }
 
 /* films: archive button + grouped rows + category chip */
 .films-all { display: inline-flex; align-items: center; gap: 9px; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--line); font-weight: 800; font-size: 13px; letter-spacing: 0.02em; color: var(--fg); background: var(--bg-2); transition: background .2s, color .2s, border-color .2s, transform .2s; }
@@ -923,7 +929,7 @@ html[data-theme="light"] .logo--img.is-boost img { filter: none; }
 html[data-theme="light"] .films-group__title::before { background: none; border-left-color: var(--accent); }
 .film__caption { display: flex; flex-direction: column; align-items: flex-start; }
 .film__meta { position: absolute; top: 10px; left: 10px; z-index: 3; display: flex; flex-wrap: wrap; gap: 6px; }
-.film__cat, .film__chan { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 999px; font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border: 0; }
+.film__cat, .film__chan { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 2px; font-family: var(--mono, ui-monospace, "JetBrains Mono", monospace); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(0,0,0,0.62); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border: 0; }
 .film__cat { color: #fff; }
 .film__chan { color: #fff; }
 
@@ -1635,13 +1641,29 @@ html[data-theme="light"] .films-group__title::before { background: none; border-
      so the stage only needs to leave room for that ~56px strip, not the full height. */
   .hero__stage { flex: 1 1 auto; min-height: calc(100svh - 100px - 72px); padding: 10px 0; }
   .hero__cover { width: 92vw; gap: 40px; }
-  .hero__cover-intro { min-height: calc(50svh - 110px); }
-  .hero__cover-name { font-size: clamp(30px, 10.5vw, 96px); }
-  .hero__cover-roles { margin-bottom: 20px; }
+  /* No forced half-screen reservation here: the old centering trick left up
+     to ~100px of dead air between the tagline and the video, breaking the
+     20/20/40 spacing scale. The gap to the video is the 40px above, full stop. */
+  .hero__cover-intro { min-height: 0; font-size: clamp(30px, 10.5vw, 96px); }
+  .hero__cover-roles { font-size: 10px; margin-bottom: 20px; }
+  .hero__cover-roles-br { display: block; }
   .hero__cover-tagline { margin-top: 20px; }
-  .hero__cover-views { margin-left: 0; }
   .hero__reel-play { width: 60px; height: 60px; }
   .hero__reel-play::after { border-width: 7px 0 7px 12px; }
+  /* Below the video instead of overlaid on it, so colors follow the page
+     theme (the video is always dark, the page underneath isn't). */
+  .hero__reel-scrim--top {
+    position: static;
+    background: none;
+    padding: 12px 2px 0;
+    font-size: 10px;
+    flex-direction: column; align-items: flex-start; gap: 6px;
+  }
+  .hero__cover-tag { color: var(--fg); letter-spacing: 0.1em; }
+  .hero__cover-views {
+    color: var(--fg-dim); margin-left: 0;
+    text-transform: none; letter-spacing: 0; font-size: 10px; font-weight: 500;
+  }
 
   .section { padding: 48px 16px; }
   .section__title { font-size: clamp(26px, 7.5vw, 32px); margin-bottom: 22px; }
@@ -1928,18 +1950,18 @@ html[data-theme="light"] .mt-pin__pulse { fill: var(--accent); }
   <div class="hero__stage">
     <div class="hero__cover">
       <div class="hero__cover-intro">
-        <div class="hero__cover-roles">Reporter · Dok · TV · Speaker · Russland-Experte</div>
+        <div class="hero__cover-roles">Reporter · Dok · TV ·<br class="hero__cover-roles-br" /> Speaker · Russland-Experte</div>
         <h1 class="hero__cover-name"><img src="assets/portrait.webp" alt="" /> Niko Karasek</h1>
-        <p class="hero__cover-tagline">Reportagen aus aller Welt,<br />Fokus Osteuropa</p>
+        <p class="hero__cover-tagline">Reportagen aus aller Welt<br />Fokus Osteuropa</p>
       </div>
       <div class="hero__reel" id="showreelBtn" role="button" tabindex="0" aria-label="Reportage ansehen: Workuta – Russlands vergessene Stadt in der Arktis">
         <div class="hero__reel-frame">
-          <img class="hero__reel-screen" src="assets/hero-cover.jpg" alt="Werksgelände der Kohlegrube Schachta Sewernaja in Workuta, Russland – Luftaufnahme aus der Reportage" width="1600" height="910" fetchpriority="high" />
+          <img class="hero__reel-screen" src="assets/hero-cover-2.jpg" alt="Verfallene Plattenbauten in Workuta, Russland – Szene aus der Reportage" width="1600" height="892" fetchpriority="high" />
           <div class="hero__reel-play"></div>
-          <div class="hero__reel-scrim hero__reel-scrim--top">
-            <span class="hero__cover-tag"><i class="hero__cover-tri" aria-hidden="true"></i>Aktuell · Neueste Reportage</span>
-            <span class="hero__cover-views">1,7 Mio. Aufrufe auf YouTube</span>
-          </div>
+        </div>
+        <div class="hero__reel-scrim hero__reel-scrim--top">
+          <span class="hero__cover-tag"><i class="hero__cover-tri" aria-hidden="true"></i>Aktuell · Neueste Reportage</span>
+          <span class="hero__cover-views">1,7 Mio. Aufrufe auf YouTube</span>
         </div>
       </div>
     </div>
